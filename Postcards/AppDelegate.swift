@@ -7,15 +7,61 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
+    // Window property
     var window: UIWindow?
+    
+    // fetch number of postcards
+    fileprivate func fetchNumberOfElements(completion: @escaping ([String]) -> ()) {
+        
+        let db = Firestore.firestore()
+        
+        db.collection("postcards").getDocuments { (snapshot, error) in
+            
+            if let error = error{
+                print("ERROR!: \(error)")
+                return
+            }
+            
+            guard let snapshot = snapshot else {return}
+            
+            var postcards = [String]()
+            
+            for document in snapshot.documents{
+                guard let data = document.data() as? [String:String] else {
+                    print("ERROR!")
+                    return
+                }
+                let names = Array(data.values.map{$0})
+                postcards.append(contentsOf: names)
+            }
+            
+            completion(postcards)
+        }
+    }
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // Connect to Firebase when app launches
+        // Perform required configurations
+        FirebaseApp.configure()
+        
+        let pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout())
+        
+        fetchNumberOfElements { (postcards) in
+            pinterestPage.postcards = postcards
+        }
+       
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        
+        window?.rootViewController = pinterestPage
+        
         return true
     }
 

@@ -7,21 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3BBCDEC210421472F7E8EDE1 /* Pods_Postcards.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B5BF06A4FA62222F9D1627A /* Pods_Postcards.framework */; };
+		3E19DCB221F2D2B60093AA88 /* PinterestPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB121F2D2B60093AA88 /* PinterestPage.swift */; };
+		3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */; };
+		3E19DCB921F2D9FC0093AA88 /* PinterestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */; };
+		3E19DCBB21F2E1760093AA88 /* PinterestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCBA21F2E1760093AA88 /* PinterestHeader.swift */; };
+		3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */; };
+		3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */; };
+		3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A58121F582CC00A9CF2C /* RoundCorners.swift */; };
+		3EED9FC121F779D00011DB35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */; };
+		3EED9FC321F814840011DB35 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EED9FC221F814840011DB35 /* GradientView.swift */; };
 		3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6AF21EFD68000070540 /* AppDelegate.swift */; };
-		3EF2B6B221EFD68000070540 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6B121EFD68000070540 /* ViewController.swift */; };
-		3EF2B6B521EFD68000070540 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EF2B6B321EFD68000070540 /* Main.storyboard */; };
 		3EF2B6B721EFD68100070540 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EF2B6B621EFD68100070540 /* Assets.xcassets */; };
 		3EF2B6BA21EFD68100070540 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EF2B6B821EFD68100070540 /* LaunchScreen.storyboard */; };
+		3EF2B6C221EFD72C00070540 /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6C121EFD72C00070540 /* WelcomePage.swift */; };
+		3EF2B6C421EFD80500070540 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6C321EFD80500070540 /* ViewExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B5BF06A4FA62222F9D1627A /* Pods_Postcards.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Postcards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E19DCB121F2D2B60093AA88 /* PinterestPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestPage.swift; sourceTree = "<group>"; };
+		3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
+		3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestCell.swift; sourceTree = "<group>"; };
+		3E19DCBA21F2E1760093AA88 /* PinterestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestHeader.swift; sourceTree = "<group>"; };
+		3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationPage.swift; sourceTree = "<group>"; };
+		3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientExtension.swift; sourceTree = "<group>"; };
+		3E78A58121F582CC00A9CF2C /* RoundCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCorners.swift; sourceTree = "<group>"; };
+		3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3EED9FC221F814840011DB35 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3EF2B6AC21EFD68000070540 /* Postcards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Postcards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EF2B6AF21EFD68000070540 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3EF2B6B121EFD68000070540 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3EF2B6B421EFD68000070540 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3EF2B6B621EFD68100070540 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EF2B6B921EFD68100070540 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3EF2B6BB21EFD68100070540 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3EF2B6C121EFD72C00070540 /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
+		3EF2B6C321EFD80500070540 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		A19068A3CF679CD99F1151B5 /* Pods-Postcards.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Postcards.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Postcards/Pods-Postcards.debug.xcconfig"; sourceTree = "<group>"; };
+		C9C2F88B26AF128E335F0E1F /* Pods-Postcards.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Postcards.release.xcconfig"; path = "Pods/Target Support Files/Pods-Postcards/Pods-Postcards.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +51,73 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BBCDEC210421472F7E8EDE1 /* Pods_Postcards.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B3A459445B5BAF09BF61A61 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B5BF06A4FA62222F9D1627A /* Pods_Postcards.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3E19DCB521F2D5D10093AA88 /* PinterestLayout */ = {
+			isa = PBXGroup;
+			children = (
+				3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */,
+			);
+			path = PinterestLayout;
+			sourceTree = "<group>";
+		};
+		3E19DCB621F2D5E50093AA88 /* PinterestPage */ = {
+			isa = PBXGroup;
+			children = (
+				3E19DCB121F2D2B60093AA88 /* PinterestPage.swift */,
+				3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */,
+				3E19DCBA21F2E1760093AA88 /* PinterestHeader.swift */,
+			);
+			path = PinterestPage;
+			sourceTree = "<group>";
+		};
+		3E19DCB721F2D6020093AA88 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3EED9FC221F814840011DB35 /* GradientView.swift */,
+				3EF2B6C321EFD80500070540 /* ViewExtension.swift */,
+				3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */,
+				3E78A58121F582CC00A9CF2C /* RoundCorners.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		3E4ABF6F21F02CD7007D69FB /* Welcome Page */ = {
+			isa = PBXGroup;
+			children = (
+				3EF2B6C121EFD72C00070540 /* WelcomePage.swift */,
+			);
+			path = "Welcome Page";
+			sourceTree = "<group>";
+		};
+		3E4ABF7021F02CE6007D69FB /* Authentication Page */ = {
+			isa = PBXGroup;
+			children = (
+				3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */,
+			);
+			path = "Authentication Page";
+			sourceTree = "<group>";
+		};
 		3EF2B6A321EFD68000070540 = {
 			isa = PBXGroup;
 			children = (
 				3EF2B6AE21EFD68000070540 /* Postcards */,
 				3EF2B6AD21EFD68000070540 /* Products */,
+				45C7FF767E819FDCFB66D6E3 /* Pods */,
+				3B3A459445B5BAF09BF61A61 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +132,27 @@
 		3EF2B6AE21EFD68000070540 /* Postcards */ = {
 			isa = PBXGroup;
 			children = (
+				3E19DCB621F2D5E50093AA88 /* PinterestPage */,
+				3E4ABF7021F02CE6007D69FB /* Authentication Page */,
+				3E4ABF6F21F02CD7007D69FB /* Welcome Page */,
+				3E19DCB521F2D5D10093AA88 /* PinterestLayout */,
+				3E19DCB721F2D6020093AA88 /* Extensions */,
 				3EF2B6AF21EFD68000070540 /* AppDelegate.swift */,
-				3EF2B6B121EFD68000070540 /* ViewController.swift */,
-				3EF2B6B321EFD68000070540 /* Main.storyboard */,
+				3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */,
 				3EF2B6B621EFD68100070540 /* Assets.xcassets */,
 				3EF2B6B821EFD68100070540 /* LaunchScreen.storyboard */,
 				3EF2B6BB21EFD68100070540 /* Info.plist */,
 			);
 			path = Postcards;
+			sourceTree = "<group>";
+		};
+		45C7FF767E819FDCFB66D6E3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A19068A3CF679CD99F1151B5 /* Pods-Postcards.debug.xcconfig */,
+				C9C2F88B26AF128E335F0E1F /* Pods-Postcards.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +162,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3EF2B6BE21EFD68100070540 /* Build configuration list for PBXNativeTarget "Postcards" */;
 			buildPhases = (
+				DD800106946BC25F32BEDD5F /* [CP] Check Pods Manifest.lock */,
 				3EF2B6A821EFD68000070540 /* Sources */,
 				3EF2B6A921EFD68000070540 /* Frameworks */,
 				3EF2B6AA21EFD68000070540 /* Resources */,
+				5BD3185B42AC47603C467CCD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -124,33 +217,103 @@
 			files = (
 				3EF2B6BA21EFD68100070540 /* LaunchScreen.storyboard in Resources */,
 				3EF2B6B721EFD68100070540 /* Assets.xcassets in Resources */,
-				3EF2B6B521EFD68000070540 /* Main.storyboard in Resources */,
+				3EED9FC121F779D00011DB35 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5BD3185B42AC47603C467CCD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Postcards/Pods-Postcards-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Postcards/Pods-Postcards-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD800106946BC25F32BEDD5F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Postcards-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3EF2B6A821EFD68000070540 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EF2B6B221EFD68000070540 /* ViewController.swift in Sources */,
+				3EF2B6C221EFD72C00070540 /* WelcomePage.swift in Sources */,
+				3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */,
+				3EED9FC321F814840011DB35 /* GradientView.swift in Sources */,
+				3E19DCB221F2D2B60093AA88 /* PinterestPage.swift in Sources */,
+				3E19DCB921F2D9FC0093AA88 /* PinterestCell.swift in Sources */,
+				3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */,
+				3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */,
+				3EF2B6C421EFD80500070540 /* ViewExtension.swift in Sources */,
+				3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */,
 				3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */,
+				3E19DCBB21F2E1760093AA88 /* PinterestHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3EF2B6B321EFD68000070540 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3EF2B6B421EFD68000070540 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3EF2B6B821EFD68100070540 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -280,9 +443,11 @@
 		};
 		3EF2B6BF21EFD68100070540 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A19068A3CF679CD99F1151B5 /* Pods-Postcards.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 74Q66W826L;
 				INFOPLIST_FILE = Postcards/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -297,9 +462,11 @@
 		};
 		3EF2B6C021EFD68100070540 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9C2F88B26AF128E335F0E1F /* Pods-Postcards.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 74Q66W826L;
 				INFOPLIST_FILE = Postcards/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
