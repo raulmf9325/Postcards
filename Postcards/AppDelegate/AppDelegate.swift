@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     // fetch number of postcards
-    fileprivate func fetchNumberOfElements(completion: @escaping ([String]) -> ()) {
+    fileprivate func fetchNumberOfElements(completion: @escaping (QuerySnapshot) -> ()) {
         
         let db = Firestore.firestore()
         
@@ -29,18 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             guard let snapshot = snapshot else {return}
             
-            var postcards = [String]()
-            
-            for document in snapshot.documents{
-                guard let data = document.data() as? [String:String] else {
-                    print("ERROR!")
-                    return
-                }
-                let names = Array(data.values.map{$0})
-                postcards.append(contentsOf: names)
-            }
-            
-            completion(postcards)
+            completion(snapshot)
         }
     }
 
@@ -51,16 +40,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Perform required configurations
         FirebaseApp.configure()
         
-        let pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout())
+        let rootController = RootController()
         
-        fetchNumberOfElements { (postcards) in
-            pinterestPage.postcards = postcards
+        fetchNumberOfElements { (snapshot) in
+            rootController.snapshot = snapshot
         }
        
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        window?.rootViewController = pinterestPage
+        window?.rootViewController = UINavigationController(rootViewController: rootController)
         
         return true
     }

@@ -21,8 +21,6 @@ class PinterestCell: UICollectionViewCell{
                 return
             }
             
-            imagePlaceholder.startAnimating()
-            
             // reference to storage
             let storageRef = Storage.storage().reference()
             
@@ -69,7 +67,12 @@ class PinterestCell: UICollectionViewCell{
         // image placeholder
         addSubview(imagePlaceholder)
         imagePlaceholder.fillSuperview()
-        imagePlaceholder.frame = frame
+        imagePlaceholder.frame = self.bounds
+        imagePlaceholder.startAnimating()
+    }
+    
+    deinit {
+        print("deinit")
     }
     
     required init?(coder aDecoder: NSCoder) {

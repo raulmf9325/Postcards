@@ -16,7 +16,7 @@ class PinterestLayout: UICollectionViewFlowLayout{
     // 2
     fileprivate var numberOfColumns = 3
     fileprivate var cellPadding: CGFloat = 6
-    fileprivate var insets: UIEdgeInsets = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
+    fileprivate var insets: UIEdgeInsets = UIEdgeInsets(top: 90, left: 0, bottom: 40, right: 0)
     
     // 3
     fileprivate var cache = [UICollectionViewLayoutAttributes]()
@@ -43,6 +43,7 @@ class PinterestLayout: UICollectionViewFlowLayout{
         guard cache.isEmpty == true, let collectionView = collectionView else {
             return
         }
+        
         // 2
         let columnWidth = contentWidth / CGFloat(numberOfColumns)
         var xOffset = [CGFloat]()
@@ -78,6 +79,8 @@ class PinterestLayout: UICollectionViewFlowLayout{
             
             column = column < (numberOfColumns - 1) ? (column + 1) : 0
         }
+        
+        contentHeight += insets.bottom
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {

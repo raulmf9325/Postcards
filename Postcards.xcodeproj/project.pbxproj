@@ -8,13 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		3BBCDEC210421472F7E8EDE1 /* Pods_Postcards.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B5BF06A4FA62222F9D1627A /* Pods_Postcards.framework */; };
+		3E08539E21FBA435006BBF04 /* LocationsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E08539D21FBA435006BBF04 /* LocationsPage.swift */; };
+		3E0853A021FC29CD006BBF04 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E08539F21FC29CD006BBF04 /* AlbumCell.swift */; };
 		3E19DCB221F2D2B60093AA88 /* PinterestPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB121F2D2B60093AA88 /* PinterestPage.swift */; };
 		3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */; };
 		3E19DCB921F2D9FC0093AA88 /* PinterestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */; };
-		3E19DCBB21F2E1760093AA88 /* PinterestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCBA21F2E1760093AA88 /* PinterestHeader.swift */; };
 		3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */; };
 		3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */; };
 		3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A58121F582CC00A9CF2C /* RoundCorners.swift */; };
+		3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347321FA874D00E1EEE7 /* RootController.swift */; };
+		3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347621FA894100E1EEE7 /* BasePage.swift */; };
+		3ECD081E21FD1B0500C66319 /* AlbumDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */; };
 		3EED9FC121F779D00011DB35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */; };
 		3EED9FC321F814840011DB35 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EED9FC221F814840011DB35 /* GradientView.swift */; };
 		3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6AF21EFD68000070540 /* AppDelegate.swift */; };
@@ -26,13 +30,17 @@
 
 /* Begin PBXFileReference section */
 		1B5BF06A4FA62222F9D1627A /* Pods_Postcards.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Postcards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E08539D21FBA435006BBF04 /* LocationsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsPage.swift; sourceTree = "<group>"; };
+		3E08539F21FC29CD006BBF04 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
 		3E19DCB121F2D2B60093AA88 /* PinterestPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestPage.swift; sourceTree = "<group>"; };
 		3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestCell.swift; sourceTree = "<group>"; };
-		3E19DCBA21F2E1760093AA88 /* PinterestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestHeader.swift; sourceTree = "<group>"; };
 		3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationPage.swift; sourceTree = "<group>"; };
 		3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientExtension.swift; sourceTree = "<group>"; };
 		3E78A58121F582CC00A9CF2C /* RoundCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCorners.swift; sourceTree = "<group>"; };
+		3EBA347321FA874D00E1EEE7 /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
+		3EBA347621FA894100E1EEE7 /* BasePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePage.swift; sourceTree = "<group>"; };
+		3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetails.swift; sourceTree = "<group>"; };
 		3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3EED9FC221F814840011DB35 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3EF2B6AC21EFD68000070540 /* Postcards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Postcards.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,6 +74,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3E08539C21FBA3E3006BBF04 /* LocationsPage */ = {
+			isa = PBXGroup;
+			children = (
+				3E08539D21FBA435006BBF04 /* LocationsPage.swift */,
+				3E08539F21FC29CD006BBF04 /* AlbumCell.swift */,
+				3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */,
+			);
+			path = LocationsPage;
+			sourceTree = "<group>";
+		};
 		3E19DCB521F2D5D10093AA88 /* PinterestLayout */ = {
 			isa = PBXGroup;
 			children = (
@@ -79,7 +97,6 @@
 			children = (
 				3E19DCB121F2D2B60093AA88 /* PinterestPage.swift */,
 				3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */,
-				3E19DCBA21F2E1760093AA88 /* PinterestHeader.swift */,
 			);
 			path = PinterestPage;
 			sourceTree = "<group>";
@@ -111,6 +128,30 @@
 			path = "Authentication Page";
 			sourceTree = "<group>";
 		};
+		3EBA347121FA5D7100E1EEE7 /* RootController */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA347321FA874D00E1EEE7 /* RootController.swift */,
+			);
+			path = RootController;
+			sourceTree = "<group>";
+		};
+		3EBA347221FA5D7E00E1EEE7 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				3EF2B6AF21EFD68000070540 /* AppDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		3EBA347521FA893000E1EEE7 /* BasePage */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA347621FA894100E1EEE7 /* BasePage.swift */,
+			);
+			path = BasePage;
+			sourceTree = "<group>";
+		};
 		3EF2B6A321EFD68000070540 = {
 			isa = PBXGroup;
 			children = (
@@ -132,12 +173,15 @@
 		3EF2B6AE21EFD68000070540 /* Postcards */ = {
 			isa = PBXGroup;
 			children = (
+				3EBA347221FA5D7E00E1EEE7 /* AppDelegate */,
+				3EBA347121FA5D7100E1EEE7 /* RootController */,
+				3EBA347521FA893000E1EEE7 /* BasePage */,
 				3E19DCB621F2D5E50093AA88 /* PinterestPage */,
+				3E08539C21FBA3E3006BBF04 /* LocationsPage */,
 				3E4ABF7021F02CE6007D69FB /* Authentication Page */,
 				3E4ABF6F21F02CD7007D69FB /* Welcome Page */,
 				3E19DCB521F2D5D10093AA88 /* PinterestLayout */,
 				3E19DCB721F2D6020093AA88 /* Extensions */,
-				3EF2B6AF21EFD68000070540 /* AppDelegate.swift */,
 				3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */,
 				3EF2B6B621EFD68100070540 /* Assets.xcassets */,
 				3EF2B6B821EFD68100070540 /* LaunchScreen.storyboard */,
@@ -300,14 +344,18 @@
 				3EF2B6C221EFD72C00070540 /* WelcomePage.swift in Sources */,
 				3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */,
 				3EED9FC321F814840011DB35 /* GradientView.swift in Sources */,
+				3E0853A021FC29CD006BBF04 /* AlbumCell.swift in Sources */,
 				3E19DCB221F2D2B60093AA88 /* PinterestPage.swift in Sources */,
 				3E19DCB921F2D9FC0093AA88 /* PinterestCell.swift in Sources */,
+				3ECD081E21FD1B0500C66319 /* AlbumDetails.swift in Sources */,
+				3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */,
 				3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */,
 				3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */,
 				3EF2B6C421EFD80500070540 /* ViewExtension.swift in Sources */,
+				3E08539E21FBA435006BBF04 /* LocationsPage.swift in Sources */,
 				3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */,
 				3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */,
-				3E19DCBB21F2E1760093AA88 /* PinterestHeader.swift in Sources */,
+				3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
