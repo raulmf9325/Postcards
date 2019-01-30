@@ -23,6 +23,7 @@ class PinterestPage: BasePage{
     }
     
     override func viewDidLoad() {
+        navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
         collectionView.backgroundView = backgroundView
         setupHeader()
@@ -41,6 +42,25 @@ class PinterestPage: BasePage{
         }
         
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
+        let postcardDetails = PostcardDetails()
+        postcardDetails.postcard.image = cell.cellImage.image
+        let rootController = delegate as! RootController
+        postcardDetails.rootController = rootController
+        
+        let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
+       
+        var selectedFrame: CGRect = .zero
+        
+        if let frame = layoutAttributes?.frame{
+            selectedFrame = collectionView.convert(frame, to: collectionView.superview)
+        }
+
+        rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
     }
     
 }

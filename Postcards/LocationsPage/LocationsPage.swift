@@ -29,6 +29,7 @@ class LocationsPage: BasePage{
     var albums = [[String]]()
     
     override func viewDidLoad() {
+        navigationController?.isNavigationBarHidden = true
         collectionView.backgroundView = backgroundView
         collectionView.register(AlbumCell.self, forCellWithReuseIdentifier: "CellId")
         let layout = self.collectionViewLayout as! UICollectionViewFlowLayout
@@ -51,13 +52,18 @@ class LocationsPage: BasePage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("here \(indexPath.item)")
-        let pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout())
-        pinterestPage.postcards = albums[indexPath.item]
-        pinterestPage.headTitle = albums[indexPath.item][0]
+        let albumDetails = AlbumDetails(collectionViewLayout: PinterestLayout())
+        albumDetails.delegate = self.delegate
+        albumDetails.headTitle = albums[indexPath.item][0]
         
-//        let navigation = delegate as! RootController
-//        navigation.navigationController?.pushViewController(pinterestPage, animated: true)
+        var images = albums[indexPath.item]
+        images.remove(at: 0)
+        albumDetails.postcards = images
+        
+        let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
+        
+        let rootController = delegate as! RootController
+        rootController.pushController(selectedFrame: selectedFrame, vc: albumDetails)
     }
     
 }

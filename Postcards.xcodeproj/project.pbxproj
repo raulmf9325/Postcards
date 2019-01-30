@@ -26,6 +26,8 @@
 		3EF2B6BA21EFD68100070540 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EF2B6B821EFD68100070540 /* LaunchScreen.storyboard */; };
 		3EF2B6C221EFD72C00070540 /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6C121EFD72C00070540 /* WelcomePage.swift */; };
 		3EF2B6C421EFD80500070540 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6C321EFD80500070540 /* ViewExtension.swift */; };
+		3EF935AD2200D5BA008BBB53 /* PostcardDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF935AC2200D5BA008BBB53 /* PostcardDetails.swift */; };
+		3EF935B122012390008BBB53 /* TransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF935B022012390008BBB53 /* TransitionAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		3EF2B6BB21EFD68100070540 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EF2B6C121EFD72C00070540 /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
 		3EF2B6C321EFD80500070540 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		3EF935AC2200D5BA008BBB53 /* PostcardDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostcardDetails.swift; sourceTree = "<group>"; };
+		3EF935B022012390008BBB53 /* TransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimator.swift; sourceTree = "<group>"; };
 		A19068A3CF679CD99F1151B5 /* Pods-Postcards.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Postcards.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Postcards/Pods-Postcards.debug.xcconfig"; sourceTree = "<group>"; };
 		C9C2F88B26AF128E335F0E1F /* Pods-Postcards.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Postcards.release.xcconfig"; path = "Pods/Target Support Files/Pods-Postcards/Pods-Postcards.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,7 +177,9 @@
 		3EF2B6AE21EFD68000070540 /* Postcards */ = {
 			isa = PBXGroup;
 			children = (
+				3EF935AF2201237A008BBB53 /* TransitionAnimator */,
 				3EBA347221FA5D7E00E1EEE7 /* AppDelegate */,
+				3EF935AE220115CB008BBB53 /* PostcardDetails */,
 				3EBA347121FA5D7100E1EEE7 /* RootController */,
 				3EBA347521FA893000E1EEE7 /* BasePage */,
 				3E19DCB621F2D5E50093AA88 /* PinterestPage */,
@@ -188,6 +194,22 @@
 				3EF2B6BB21EFD68100070540 /* Info.plist */,
 			);
 			path = Postcards;
+			sourceTree = "<group>";
+		};
+		3EF935AE220115CB008BBB53 /* PostcardDetails */ = {
+			isa = PBXGroup;
+			children = (
+				3EF935AC2200D5BA008BBB53 /* PostcardDetails.swift */,
+			);
+			path = PostcardDetails;
+			sourceTree = "<group>";
+		};
+		3EF935AF2201237A008BBB53 /* TransitionAnimator */ = {
+			isa = PBXGroup;
+			children = (
+				3EF935B022012390008BBB53 /* TransitionAnimator.swift */,
+			);
+			path = TransitionAnimator;
 			sourceTree = "<group>";
 		};
 		45C7FF767E819FDCFB66D6E3 /* Pods */ = {
@@ -347,6 +369,8 @@
 				3E0853A021FC29CD006BBF04 /* AlbumCell.swift in Sources */,
 				3E19DCB221F2D2B60093AA88 /* PinterestPage.swift in Sources */,
 				3E19DCB921F2D9FC0093AA88 /* PinterestCell.swift in Sources */,
+				3EF935B122012390008BBB53 /* TransitionAnimator.swift in Sources */,
+				3EF935AD2200D5BA008BBB53 /* PostcardDetails.swift in Sources */,
 				3ECD081E21FD1B0500C66319 /* AlbumDetails.swift in Sources */,
 				3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */,
 				3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */,

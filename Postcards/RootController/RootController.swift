@@ -72,8 +72,12 @@ class RootController: UIViewController{
         return imageView
     }()
     
+    // selected frame
+    var selectedFrame: CGRect?
+    
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
+        navigationController?.delegate = self
         view.addSubview(backgroundView)
         backgroundView.fillSuperview()
         
@@ -112,4 +116,29 @@ extension RootController: TabBarDelegate{
     }
     
     
+}
+
+extension RootController: UINavigationControllerDelegate{
+    
+    func pushController(selectedFrame: CGRect, vc: UIViewController){
+        self.selectedFrame = selectedFrame
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func pop(animated: Bool){
+        navigationController?.popViewController(animated: animated)
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        guard let frame = selectedFrame else {return nil}
+        
+        switch operation{
+        case .push:
+            return TransitionAnimator(duration: 0.5, isPresenting: true, originFrame: frame)
+        default:
+            return TransitionAnimator(duration: 0.5, isPresenting: false, originFrame: frame)
+        }
+    }
+
 }

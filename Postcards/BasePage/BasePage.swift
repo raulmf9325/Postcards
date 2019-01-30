@@ -145,3 +145,4 @@ class BasePage: UICollectionViewController{
     }()
     
 }
+    
