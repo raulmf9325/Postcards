@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Firebase
 
 class WelcomePage: UIViewController{
-    
+
     let homeImageView: UIImageView = {
         let image = UIImage(named: "home")
         let imageView = UIImageView(image: image)
@@ -36,6 +37,7 @@ class WelcomePage: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.isNavigationBarHidden = true
         setupViews()
         let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(handleTimer), userInfo: nil, repeats: true)
     }
@@ -74,8 +76,33 @@ class WelcomePage: UIViewController{
         view.addSubview(welcomeLabel)
         view.addConstraintsWithFormat(format: "H:|-\(padding)-[v0]-\(padding)-|", views: welcomeLabel)
         view.addConstraintsWithFormat(format: "V:[v0(90)]-10-[v1]", views: welcomeLabel, loginButton)
-       
+        
+        loginButton.addTarget(self, action: #selector(handleTapLogin), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(handleTapSignUp), for: .touchUpInside)
     }
+    
+    @objc func handleTapLogin(){
+       proceedToLoginPage()
+    }
+    
+    @objc func handleTapSignUp(){
+       proceedToSignUpPage()
+    }
+    
+    fileprivate func proceedToLoginPage(){
+        let loginPage = AuthenticationPage()
+        loginPage.auth = .login
+        navigationController?.pushViewController(loginPage, animated: true)
+    }
+    
+    fileprivate func proceedToSignUpPage(){
+        let signupPage = AuthenticationPage()
+        signupPage.auth = .signUp
+        signupPage.loginLabel.text = "Sign Up"
+        signupPage.loginButton.setTitle("Sign Up", for: .normal)
+        navigationController?.pushViewController(signupPage, animated: true)
+    }
+    
     
     fileprivate func buttonForTitle(title: String) -> UIButton{
         let button = UIButton(type: .system)
@@ -96,16 +123,4 @@ class WelcomePage: UIViewController{
         }, completion: nil)
     }
     
-    /*
-        Print Family Fonts
-    */
-    func printFonts() {
-        let fontFamilyNames = UIFont.familyNames
-        for familyName in fontFamilyNames {
-            print("------------------------------")
-            print("Font Family Name = [\(familyName)]")
-            let names = UIFont.fontNames(forFamilyName: familyName)
-            print("Font Names = [\(names)]")
-        }
-    }
 }

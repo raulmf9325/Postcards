@@ -85,8 +85,8 @@ class BasePage: UICollectionViewController{
         
         view.addSubview(PinterestHeader)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: PinterestHeader)
-        view.addConstraintsWithFormat(format: "V:|[v0(90)]", views: PinterestHeader)
-        PinterestHeader.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 90)
+        view.addConstraintsWithFormat(format: "V:|[v0(100)]", views: PinterestHeader)
+        PinterestHeader.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
         
         PinterestHeader.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         PinterestHeader.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
@@ -95,8 +95,9 @@ class BasePage: UICollectionViewController{
     func setupTabBar(){
         view.addSubview(tabBar)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: tabBar)
-        view.addConstraintsWithFormat(format: "V:[v0(40)]|", views: tabBar)
-        tabBar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 40)
+        view.addConstraintsWithFormat(format: "V:[v0(50)]|", views: tabBar)
+        tabBar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        tabBar.alpha = 0.80
         
         tabBar.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         tabBar.roundCorners(corners: [.topLeft, .topRight], radius: 12)

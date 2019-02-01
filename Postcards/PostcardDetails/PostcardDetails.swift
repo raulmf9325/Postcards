@@ -71,12 +71,12 @@ class PostcardDetails: UIViewController{
         addBackButton()
         
         view.addSubview(Header)
-        Header.frame = CGRect(x: 0, y: -90, width: view.frame.width, height: 90)
+        Header.frame = CGRect(x: 0, y: -100, width: view.frame.width, height: 100)
         Header.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         Header.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
         
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseInOut, animations: {
-            self.Header.frame.origin.y += 90
+            self.Header.frame.origin.y += 100
         }) { (_) in
             
         }
@@ -91,12 +91,8 @@ class PostcardDetails: UIViewController{
     }
     
     @objc func handleTapBackButton(){
-//        UIView.animate(withDuration: 0.2, animations: {
-//            self.Header.frame.origin.y -= 90
-//        }) { (_) in
-            self.Header.removeFromSuperview()
-            self.rootController.pop(animated: true)
-//        }
+        self.Header.removeFromSuperview()
+        self.rootController.pop(originFrame: nil, animated: true)
     }
     
     let backButton: UIButton = {

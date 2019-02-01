@@ -125,7 +125,11 @@ extension RootController: UINavigationControllerDelegate{
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func pop(animated: Bool){
+    func pop(originFrame: CGRect?, animated: Bool){
+        if originFrame != nil{
+            self.selectedFrame = originFrame!
+        }
+        
         navigationController?.popViewController(animated: animated)
     }
     

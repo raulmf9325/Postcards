@@ -7,8 +7,17 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class AuthenticationPage: UIViewController{
+    
+    enum authentication{
+        case login
+        case signUp
+    }
+    
+    var auth: authentication?
     
     let logoImageView: UIImageView = {
         let image = UIImage(named: "tent")
@@ -41,6 +50,7 @@ class AuthenticationPage: UIViewController{
         field.autocorrectionType = .no
         field.autocapitalizationType = .none
         field.borderStyle = .roundedRect
+        field.isSecureTextEntry = true
         return field
     }()
     
@@ -51,6 +61,15 @@ class AuthenticationPage: UIViewController{
         button.backgroundColor = .phoenix
         button.layer.cornerRadius = 8
         return button
+    }()
+    
+    let wrongEmailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Incorrect username or password."
+        label.font = UIFont(name: "AvenirNext-Heavy", size: 14)
+        label.textColor = .red
+        label.textAlignment = .center
+        return label
     }()
     
     var logoConstraints: [NSLayoutConstraint]?
@@ -120,7 +139,6 @@ class AuthenticationPage: UIViewController{
     }
     
     fileprivate func enableButton(){
-
         loginButton.isUserInteractionEnabled = true
         loginButton.backgroundColor = .phoenix
     }
@@ -144,6 +162,7 @@ class AuthenticationPage: UIViewController{
         view.addSubview(usernameTextField)
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
+        view.addSubview(wrongEmailLabel)
         
         view.addConstraintsWithFormat(format: "H:|-\(horizontalPadding + 15)-[v0]-\(horizontalPadding + 15)-|", views: logoImageView)
         logoConstraints = [NSLayoutConstraint]()
@@ -156,8 +175,52 @@ class AuthenticationPage: UIViewController{
         view.addConstraintsWithFormat(format: "H:|-\(horizontalPadding)-[v0]-\(horizontalPadding)-|", views: passwordTextField)
         view.addConstraintsWithFormat(format: "V:[v0]-\(distanceBetweenTextFields)-[v1(\(textFieldHeight))]", views: usernameTextField, passwordTextField)
         view.addConstraintsWithFormat(format: "H:|-\(view.frame.width / 2 - buttonWidth / 2)-[v0(\(buttonWidth))]", views: loginButton)
-        view.addConstraintsWithFormat(format: "V:[v0]-\(elementsInset)-[v1(\(buttonHeight))]", views: passwordTextField, loginButton)
+        view.addConstraintsWithFormat(format: "V:[v0]-\(elementsInset / 2 - 10)-[v1(25)]-\(elementsInset / 2)-[v2(\(buttonHeight))]", views: passwordTextField, wrongEmailLabel, loginButton)
+        view.addConstraintsWithFormat(format: "H:|[v0]|", views: wrongEmailLabel)
         
+        wrongEmailLabel.alpha = 0
+        loginButton.addTarget(self, action: #selector(handleTapLogin), for: .touchUpInside)
+    }
+    
+    @objc func handleTapLogin(){
+        guard let email = usernameTextField.text else {return}
+        guard let password = passwordTextField.text else {return}
+        
+        if auth == .login{
+            // Sign In
+            Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+                if let error = error{
+                    print("Error with silent sign in: \(error)")
+                    self.wrongEmailLabel.alpha = 1
+                    self.usernameTextField.text = ""
+                    self.passwordTextField.text = ""
+                    return
+                }
+                guard let user = authResult?.user else {return}
+                print("User: \(user.email) signed in")
+            }
+        }
+        else{
+            // Sign Up
+            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                if let error = error{
+                    print(error)
+                    
+                    if password.count < 6{
+                        self.wrongEmailLabel.text = "The password must be 6 characters long or more."
+                    }
+                    else{
+                        self.wrongEmailLabel.text = "Incorrect username or password."
+                    }
+                    
+                    self.wrongEmailLabel.alpha = 1
+                    self.usernameTextField.text = ""
+                    self.passwordTextField.text = ""
+                    return
+                }
+                guard let user = authResult?.user else { return }
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

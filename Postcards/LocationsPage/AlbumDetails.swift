@@ -47,7 +47,7 @@ class AlbumDetails: PinterestPage{
     
     @objc func handleTapBackButton(){
         let rootController = delegate as! RootController
-        rootController.pop(animated: true)
+        rootController.pop(originFrame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height), animated: true)
     }
     
     let backButton: UIButton = {

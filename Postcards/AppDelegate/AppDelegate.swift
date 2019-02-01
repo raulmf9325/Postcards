@@ -15,10 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Window property
     var window: UIWindow?
     
+    // database
+    var db: Firestore?
+    
     // fetch number of postcards
     fileprivate func fetchNumberOfElements(completion: @escaping (QuerySnapshot) -> ()) {
         
-        let db = Firestore.firestore()
+        db = Firestore.firestore()
+        guard let db = db else {return}
         
         db.collection("postcards").getDocuments { (snapshot, error) in
             
@@ -49,7 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        window?.rootViewController = UINavigationController(rootViewController: rootController)
+        let welcomePage = WelcomePage()
+        
+        window?.rootViewController = UINavigationController(rootViewController: welcomePage)
         
         return true
     }

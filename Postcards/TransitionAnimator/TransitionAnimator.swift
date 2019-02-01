@@ -13,7 +13,6 @@ class TransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning{
     var duration : TimeInterval
     var isPresenting : Bool
     var originFrame : CGRect
-    var image: UIImage?
     
     init(duration : TimeInterval, isPresenting : Bool, originFrame : CGRect) {
         self.duration = duration
