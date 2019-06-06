@@ -10,7 +10,20 @@ import UIKit
 import Firebase
 
 class WelcomePage: UIViewController{
-
+    
+    // database
+    var db: Firestore?
+    
+    // login page reference
+    let loginPage = AuthenticationPage()
+    
+    // root controller
+    var rootController: RootController?{
+        didSet{
+            self.loginPage.rootController = rootController
+        }
+    }
+       
     let homeImageView: UIImageView = {
         let image = UIImage(named: "home")
         let imageView = UIImageView(image: image)
@@ -50,10 +63,10 @@ class WelcomePage: UIViewController{
         homeImageView.fillSuperview()
         
         // Login and Sign Up buttons
-        let buttonWidth: CGFloat = 85
-        let buttonHeight: CGFloat = 35
+        let buttonWidth: CGFloat = 120
+        let buttonHeight: CGFloat = 45
         let buttonHorizontalInset: CGFloat = 20
-        let buttonVerticalInset: CGFloat = 120
+        let buttonVerticalInset: CGFloat = 200
         let padding: CGFloat = (view.frame.width - 2 * buttonWidth - buttonHorizontalInset) / 2
         print(padding)
         
@@ -90,17 +103,19 @@ class WelcomePage: UIViewController{
     }
     
     fileprivate func proceedToLoginPage(){
-        let loginPage = AuthenticationPage()
+        loginPage.db = db
         loginPage.auth = .login
+        loginPage.loginLabel.text = "Log In"
+        loginPage.loginButton.setTitle("Log In", for: .normal)
         navigationController?.pushViewController(loginPage, animated: true)
     }
     
     fileprivate func proceedToSignUpPage(){
-        let signupPage = AuthenticationPage()
-        signupPage.auth = .signUp
-        signupPage.loginLabel.text = "Sign Up"
-        signupPage.loginButton.setTitle("Sign Up", for: .normal)
-        navigationController?.pushViewController(signupPage, animated: true)
+        loginPage.db = db
+        loginPage.auth = .signUp
+        loginPage.loginLabel.text = "Sign Up"
+        loginPage.loginButton.setTitle("Sign Up", for: .normal)
+        navigationController?.pushViewController(loginPage, animated: true)
     }
     
     

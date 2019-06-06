@@ -12,6 +12,12 @@ import FirebaseAuth
 
 class AuthenticationPage: UIViewController{
     
+    // database reference
+    var db: Firestore?
+    
+    // root controller
+    var rootController: RootController?
+    
     enum authentication{
         case login
         case signUp
@@ -37,7 +43,7 @@ class AuthenticationPage: UIViewController{
     
     let usernameTextField: UITextField = {
         let field = UITextField()
-        field.placeholder = "  username"
+        field.placeholder = "  email"
         field.borderStyle = .roundedRect
         field.autocorrectionType = .no
         field.autocapitalizationType = .none
@@ -66,24 +72,31 @@ class AuthenticationPage: UIViewController{
     let wrongEmailLabel: UILabel = {
         let label = UILabel()
         label.text = "Incorrect username or password."
-        label.font = UIFont(name: "AvenirNext-Heavy", size: 14)
+        label.font = UIFont(name: "AvenirNext-Heavy", size: 16)
         label.textColor = .red
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     
-    var logoConstraints: [NSLayoutConstraint]?
-    
+    let scrollView = UIScrollView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         setupViews()
-        registerListeners()
         disableButton()
         usernameTextField.delegate = self
         passwordTextField.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerListeners()
     }
     
     fileprivate func registerListeners(){
@@ -100,33 +113,18 @@ class AuthenticationPage: UIViewController{
     }
     
     @objc func keyboardWillShow(notification: NSNotification){
+        
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardInfo = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
         let keyboardSize = keyboardInfo.cgRectValue.size
         
-        let padding = view.frame.height - (loginButton.frame.origin.y + loginButton.frame.height) - 10
-        view.frame.origin.y = view.frame.origin.y - keyboardSize.height + padding
-        
-        guard let constraint = logoConstraints?[0] else {return}
-        
-        view.layoutIfNeeded()
-        UIView.animate(withDuration: 1) {
-            constraint.constant += 60
-            self.view.layoutIfNeeded()
-        }
-        
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.setContentOffset(CGPoint(x: 0, y: keyboardSize.height), animated: true)
     }
     
     @objc func keyboardWillHide(notification: NSNotification){
-        view.frame.origin.y = 0
-        
-        guard let constraint = logoConstraints?[0] else {return}
-        
-        view.layoutIfNeeded()
-        UIView.animate(withDuration: 1) {
-            constraint.constant -= 60
-            self.view.layoutIfNeeded()
-        }
+       scrollView.contentInset = .zero
     }
     
     @objc func dismissKeyboard(){
@@ -147,38 +145,42 @@ class AuthenticationPage: UIViewController{
     fileprivate func setupViews(){
         
         let horizontalPadding: CGFloat = 90
-        let verticalPadding: CGFloat = 100
         let distanceFromLogoToLabel: CGFloat = 80
-        let elementsInset: CGFloat = 40
+        let distanceFromLoginLabelToTextField: CGFloat = 20
         let distanceBetweenTextFields: CGFloat = 18
-        let labelHeight: CGFloat = 45
+        let distanceFromPasswordFieldToWrongEmailLabel: CGFloat = 20
+        let loginLabelHeight: CGFloat = 45
+        let loginLabelWidth: CGFloat = view.frame.width - 2 * horizontalPadding
         let buttonHeight: CGFloat = 45
         let buttonWidth: CGFloat = 140
         let textFieldHeight: CGFloat = 40
+        let textFieldWidth: CGFloat = 200
         let logoHeight: CGFloat = 130
+        let logoWidth: CGFloat = 160
         
-        view.addSubview(logoImageView)
-        view.addSubview(loginLabel)
-        view.addSubview(usernameTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(loginButton)
-        view.addSubview(wrongEmailLabel)
+        view.addSubview(scrollView)
+        scrollView.fillSuperview()
         
-        view.addConstraintsWithFormat(format: "H:|-\(horizontalPadding + 15)-[v0]-\(horizontalPadding + 15)-|", views: logoImageView)
-        logoConstraints = [NSLayoutConstraint]()
-        logoConstraints?.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(verticalPadding)-[v0(\(logoHeight))]", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": logoImageView]))
-        view.addConstraints(logoConstraints!)
-        view.addConstraintsWithFormat(format: "H:|-\(horizontalPadding)-[v0]-\(horizontalPadding)-|", views: loginLabel)
-        view.addConstraintsWithFormat(format: "V:|-\(verticalPadding + logoHeight + distanceFromLogoToLabel)-[v0(\(labelHeight))]", views: loginLabel)
-        view.addConstraintsWithFormat(format: "H:|-\(horizontalPadding)-[v0]-\(horizontalPadding)-|", views: usernameTextField)
-        view.addConstraintsWithFormat(format: "V:[v0]-\(elementsInset)-[v1(\(textFieldHeight))]", views: loginLabel, usernameTextField)
-        view.addConstraintsWithFormat(format: "H:|-\(horizontalPadding)-[v0]-\(horizontalPadding)-|", views: passwordTextField)
-        view.addConstraintsWithFormat(format: "V:[v0]-\(distanceBetweenTextFields)-[v1(\(textFieldHeight))]", views: usernameTextField, passwordTextField)
-        view.addConstraintsWithFormat(format: "H:|-\(view.frame.width / 2 - buttonWidth / 2)-[v0(\(buttonWidth))]", views: loginButton)
-        view.addConstraintsWithFormat(format: "V:[v0]-\(elementsInset / 2 - 10)-[v1(25)]-\(elementsInset / 2)-[v2(\(buttonHeight))]", views: passwordTextField, wrongEmailLabel, loginButton)
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: wrongEmailLabel)
+        scrollView.addSubview(logoImageView)
+        scrollView.addSubview(loginLabel)
+        scrollView.addSubview(usernameTextField)
+        scrollView.addSubview(passwordTextField)
+        scrollView.addSubview(loginButton)
+        scrollView.addSubview(wrongEmailLabel)
         
-        wrongEmailLabel.alpha = 0
+        loginLabel.centerInSuperview(size: CGSize(width: loginLabelWidth, height: loginLabelHeight))
+        
+        logoImageView.anchor(top: nil, leading: scrollView.leadingAnchor, bottom: loginLabel.topAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: (view.frame.width - logoWidth) / 2, bottom: distanceFromLogoToLabel, right: 0), size: CGSize(width: logoWidth, height: logoHeight))
+        
+        usernameTextField.anchor(top: loginLabel.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: nil, padding: UIEdgeInsets(top: distanceFromLoginLabelToTextField, left: (view.frame.width - textFieldWidth) / 2, bottom: 0, right: 0), size: CGSize(width: textFieldWidth, height: textFieldHeight))
+        
+        passwordTextField.anchor(top: usernameTextField.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: nil, padding: UIEdgeInsets(top: distanceBetweenTextFields, left: (view.frame.width - textFieldWidth) / 2, bottom: 0, right: 0), size: CGSize(width: textFieldWidth, height: textFieldHeight))
+        
+        wrongEmailLabel.anchor(top: passwordTextField.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: scrollView.trailingAnchor, padding: UIEdgeInsets(top: distanceFromPasswordFieldToWrongEmailLabel, left: 0, bottom: 0, right: 0), size: CGSize(width: view.frame.width, height: 45))
+        
+        loginButton.anchor(top: wrongEmailLabel.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: nil, padding: UIEdgeInsets(top: 18, left: (view.frame.width - buttonWidth) / 2, bottom: 0, right: 0), size: CGSize(width: buttonWidth, height: buttonHeight))
+        
+        wrongEmailLabel.alpha = 1
         loginButton.addTarget(self, action: #selector(handleTapLogin), for: .touchUpInside)
     }
     
@@ -198,6 +200,11 @@ class AuthenticationPage: UIViewController{
                 }
                 guard let user = authResult?.user else {return}
                 print("User: \(user.email) signed in")
+                
+                // Enable Swipe Back Navigation
+                guard let rootViewController = self.rootController else {return}
+                self.navigationController?.pushViewController(rootViewController, animated: true)
+               
             }
         }
         else{
@@ -219,6 +226,14 @@ class AuthenticationPage: UIViewController{
                     return
                 }
                 guard let user = authResult?.user else { return }
+                guard let email = user.email else {return}
+                print("user: \(email) successfully signed up")
+                
+                let data: [String : Any] = ["email" : email, "favorites": [String]()]
+                self.db?.collection("users").document("\(email)").setData(data)
+                
+                guard let rootViewController = self.rootController else {return}
+                self.navigationController?.pushViewController(rootViewController, animated: true)
             }
         }
     }
@@ -279,5 +294,13 @@ class DarkHighlightedButton: UIButton{
 
 extension UIColor{
     static var phoenix = UIColor(red: 0.05, green: 0.6, blue: 1, alpha: 1)
+}
+
+// Swipe back Pop View Controller
+extension AuthenticationPage: UIGestureRecognizerDelegate{
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+
+        return true
+    }
 }
 

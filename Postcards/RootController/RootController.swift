@@ -10,33 +10,8 @@ import UIKit
 import Firebase
 
 class RootController: UIViewController{
-    
-    // MARK: Properties
-    
-    // postcards
-    var snapshot: QuerySnapshot?{
-        didSet{
-            guard let pinterestPage = self.pinterestPage else {return}
-            guard let snapshot = snapshot else {return}
-            
-            var postcards = [String]()
-            
-            for document in snapshot.documents{
-                guard let data = document.data() as? [String:String] else {
-                    print("ERROR!")
-                    return
-                }
-                let names = Array(data.values.map{$0})
-                postcards.append(contentsOf: names)
-            }
-            
-            pinterestPage.postcards = postcards
-            
-            guard let locationsPage = self.locationsPage else {return}
-            locationsPage.snapshot = snapshot
-        }
-        
-    }
+    // database
+    var db: Firestore?
     
     enum pageState{
         case home
@@ -48,13 +23,13 @@ class RootController: UIViewController{
     var page: pageState!
     
     // Pinterest Page
-    var pinterestPage: PinterestPage!
+    var pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout())
     
     // Pinterest Controller View
     var pinterestView: UIView!
     
     // Locations Page
-    var locationsPage: LocationsPage!
+    var locationsPage = LocationsPage(collectionViewLayout: UICollectionViewFlowLayout())
     
     // Locations Controller View
     var locationsView: UIView!
@@ -75,17 +50,26 @@ class RootController: UIViewController{
     // selected frame
     var selectedFrame: CGRect?
     
+    init(){
+        super.init(nibName: nil, bundle: nil)
+        fetchAlbums { (snapshot) in
+            self.didFinishFetchingContent(snapshot: snapshot)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
         navigationController?.delegate = self
         view.addSubview(backgroundView)
         backgroundView.fillSuperview()
         
-        pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout())
         pinterestPage.delegate = self
         pinterestView = pinterestPage.view
         
-        locationsPage = LocationsPage(collectionViewLayout: UICollectionViewFlowLayout())
         locationsPage.delegate = self
         locationsView = locationsPage.view
         
@@ -93,6 +77,36 @@ class RootController: UIViewController{
         view.addSubview(locationsView)
         
         handleTapHome()
+    }
+    
+    // fetch albums
+    private func fetchAlbums(completion: @escaping (QuerySnapshot) -> ()) {
+        db = Firestore.firestore()
+        guard let db = db else {return}
+        
+        db.collection("postcards").getDocuments { (snapshot, error) in
+            if let error = error{
+                print("ERROR!: \(error)")
+                return
+            }
+            guard let snapshot = snapshot else {return}
+            completion(snapshot)
+        }
+    }
+    
+    private func didFinishFetchingContent(snapshot: QuerySnapshot){
+        var postcards = [String]()
+        var albums = [[String]]()
+        
+        for album in snapshot.documents{
+            guard let data = album.data() as? [String:String] else {return}
+            var images = Array(data.values.map{$0})
+            postcards.append(contentsOf: images)
+            images.insert(album.documentID, at: 0)
+            albums.append(images)
+        }
+        pinterestPage.postcards = postcards
+        locationsPage.snapshot = snapshot
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{

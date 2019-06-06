@@ -12,9 +12,6 @@ import FirebaseStorage
 import FirebaseFirestore
 
 class PinterestPage: BasePage{
-    
-    // MARK: -Properties
-   
     // postcards
     var postcards: [String]?{
         didSet{
