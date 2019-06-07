@@ -19,6 +19,8 @@ class RootController: UIViewController{
         case favorites
     }
     
+    let defaults = UserDefaults.standard
+    
     //page state
     var page: pageState!
     
@@ -62,6 +64,11 @@ class RootController: UIViewController{
     }
     
     override func viewDidLoad() {
+        checkAuthenticationStatus()
+        
+    }
+    
+    private func proceedToMainPage(){
         navigationController?.isNavigationBarHidden = true
         navigationController?.delegate = self
         view.addSubview(backgroundView)
@@ -77,6 +84,25 @@ class RootController: UIViewController{
         view.addSubview(locationsView)
         
         handleTapHome()
+    }
+    
+    private func checkAuthenticationStatus(){
+        let userIsLoggedin = defaults.bool(forKey: "auth")
+        if userIsLoggedin{
+            proceedToMainPage()
+        }
+        else{
+            
+        }
+    }
+    
+    private func presentWelcomePage(){
+        let welcomePage = WelcomePage()
+        welcomePage.rootController = self
+    }
+    
+    func handleSignUpFinished(){
+        
     }
     
     // fetch albums

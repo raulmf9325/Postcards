@@ -21,15 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         let rootController = RootController()
-        
-        let welcomePage = WelcomePage()
-        welcomePage.rootController = rootController
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        window?.rootViewController = UINavigationController(rootViewController: welcomePage)
-        
+        window?.rootViewController = UINavigationController(rootViewController: rootController)
         return true
     }
 

@@ -204,7 +204,6 @@ class AuthenticationPage: UIViewController{
                 // Enable Swipe Back Navigation
                 guard let rootViewController = self.rootController else {return}
                 self.navigationController?.pushViewController(rootViewController, animated: true)
-               
             }
         }
         else{
