@@ -94,6 +94,10 @@ class WelcomePage: UIViewController{
         signUpButton.addTarget(self, action: #selector(handleTapSignUp), for: .touchUpInside)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent
+    }
+    
     @objc func handleTapLogin(){
        proceedToLoginPage()
     }

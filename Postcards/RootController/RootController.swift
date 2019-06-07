@@ -95,18 +95,18 @@ class RootController: UIViewController{
     }
     
     private func didFinishFetchingContent(snapshot: QuerySnapshot){
-        var postcards = [String]()
-        var albums = [[String]]()
+        var albums = [Album]()
+        var grandAlbum = Album(name: "The Latest", images: [String]())
         
         for album in snapshot.documents{
             guard let data = album.data() as? [String:String] else {return}
             var images = Array(data.values.map{$0})
-            postcards.append(contentsOf: images)
-            images.insert(album.documentID, at: 0)
-            albums.append(images)
+            grandAlbum.images?.append(contentsOf: images)
+            let newAlbum = Album(name: album.documentID, images: images)
+            albums.append(newAlbum)
         }
-        pinterestPage.postcards = postcards
-        locationsPage.snapshot = snapshot
+        pinterestPage.album = grandAlbum
+        locationsPage.albums = albums
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{

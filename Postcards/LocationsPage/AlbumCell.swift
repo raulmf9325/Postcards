@@ -11,16 +11,13 @@ import Firebase
 
 class AlbumCell: UICollectionViewCell{
     
-    var album: [String]?{
+    var album: Album?{
         didSet{
-            
             guard let album = album else {return}
-            
             // reference to storage
             let storageRef = Storage.storage().reference()
-            
             // Reference to an image file in Firebase Storage
-            let reference = storageRef.child("postcards/\(album[1])")
+            let reference = storageRef.child("postcards/\(album.images?[0])")
             var imageURL: URL?
             
             reference.downloadURL { (url, error) in
@@ -36,8 +33,8 @@ class AlbumCell: UICollectionViewCell{
                     self.addSubview(self.albumImageView)
                     self.albumImageView.fillSuperview()
                     
-                    let attributedText = NSMutableAttributedString(string: "\(album[0])\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
-                    attributedText.append(NSAttributedString(string: "\(album.count - 1) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
+                    let attributedText = NSMutableAttributedString(string: "\(album.name)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
+                    attributedText.append(NSAttributedString(string: "\(album.images?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
                     
                     self.albumNameLabel.attributedText = attributedText
                     

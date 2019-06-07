@@ -12,15 +12,9 @@ import FirebaseStorage
 import FirebaseUI
 
 class PinterestCell: UICollectionViewCell{
-    
     var postcard: String?{
         didSet{
-            
-            guard let postcard = postcard else{
-                print("ERROR!")
-                return
-            }
-            
+            guard let postcard = postcard else{return}
             // reference to storage
             let storageRef = Storage.storage().reference()
             
@@ -30,20 +24,16 @@ class PinterestCell: UICollectionViewCell{
            
             reference.downloadURL { (url, error) in
                 imageURL = url
-               
                 self.cellImage.sd_setImage(with: imageURL) { (image, error, cache, url) in
-                    
                     if let error = error{
                         print("ERROR!: \(error)")
                         return
                     }
-        
                     self.addSubview(self.cellImage)
                     self.cellImage.fillSuperview()
                     self.imagePlaceholder.stopAnimating()
                 }
             }
-            
         }
     }
     

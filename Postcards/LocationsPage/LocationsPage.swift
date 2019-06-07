@@ -11,22 +11,28 @@ import Firebase
 
 class LocationsPage: BasePage{
     
-    var snapshot: QuerySnapshot?{
+//    var snapshot: QuerySnapshot?{
+//        didSet{
+//            guard let snapshot = snapshot else {return}
+//
+//            for album in snapshot.documents{
+//                guard let data = album.data() as? [String:String] else {return}
+//                var images = Array(data.values.map{$0})
+//                images.insert(album.documentID, at: 0)
+//                albums.append(images)
+//            }
+//
+//            self.collectionView.reloadData()
+//        }
+//    }
+//
+//    var albums = [[String]]()
+    
+    var albums: [Album]?{
         didSet{
-            guard let snapshot = snapshot else {return}
-            
-            for album in snapshot.documents{
-                guard let data = album.data() as? [String:String] else {return}
-                var images = Array(data.values.map{$0})
-                images.insert(album.documentID, at: 0)
-                albums.append(images)
-            }
-            
-            self.collectionView.reloadData()
+            collectionView.reloadData()
         }
     }
-    
-    var albums = [[String]]()
     
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
@@ -43,7 +49,7 @@ class LocationsPage: BasePage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return albums.count
+        return albums?.count ?? 0
     }
     
     fileprivate func headerSetup(){
@@ -54,11 +60,8 @@ class LocationsPage: BasePage{
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let albumDetails = AlbumDetails(collectionViewLayout: PinterestLayout())
         albumDetails.delegate = self.delegate
-        albumDetails.headTitle = albums[indexPath.item][0]
-        
-        var images = albums[indexPath.item]
-        images.remove(at: 0)
-        albumDetails.postcards = images
+        albumDetails.headTitle = albums?[indexPath.item].name ?? ""
+        albumDetails.album = albums?[indexPath.item]
         
         let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
         
@@ -72,7 +75,7 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! AlbumCell
-        cell.album = albums[indexPath.item]
+        cell.album = albums?[indexPath.item]
         return cell
     }
     
@@ -85,6 +88,10 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
-    
-    
+}
+
+// MARK: Album class
+struct Album{
+    var name: String?
+    var images: [String]?
 }

@@ -13,9 +13,9 @@ import FirebaseFirestore
 
 class PinterestPage: BasePage{
     // postcards
-    var postcards: [String]?{
+    var album: Album?{
         didSet{
-            self.collectionView.reloadData()
+           collectionView.reloadData()
         }
     }
     
@@ -28,16 +28,12 @@ class PinterestPage: BasePage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return postcards?.count ?? 0
+        return album?.images?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PinterestCell
-       
-        if postcards != nil{
-            cell.postcard = postcards?[indexPath.item]
-        }
-        
+        cell.postcard = album?.images?[indexPath.item]
         return cell
     }
     
