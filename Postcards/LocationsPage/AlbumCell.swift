@@ -13,11 +13,11 @@ class AlbumCell: UICollectionViewCell{
     
     var album: Album?{
         didSet{
-            guard let album = album else {return}
+            guard let album = album, let url = album.images?[0], let albumName = album.name else {return}
             // reference to storage
             let storageRef = Storage.storage().reference()
             // Reference to an image file in Firebase Storage
-            let reference = storageRef.child("postcards/\(album.images?[0])")
+            let reference = storageRef.child("postcards/\(url)")
             var imageURL: URL?
             
             reference.downloadURL { (url, error) in
@@ -33,7 +33,7 @@ class AlbumCell: UICollectionViewCell{
                     self.addSubview(self.albumImageView)
                     self.albumImageView.fillSuperview()
                     
-                    let attributedText = NSMutableAttributedString(string: "\(album.name)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
+                    let attributedText = NSMutableAttributedString(string: "\(albumName)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
                     attributedText.append(NSAttributedString(string: "\(album.images?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
                     
                     self.albumNameLabel.attributedText = attributedText
