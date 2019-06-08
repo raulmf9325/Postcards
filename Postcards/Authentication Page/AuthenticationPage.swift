@@ -26,6 +26,13 @@ class AuthenticationPage: UIViewController{
         case signUp
     }
     
+    enum keyboardState{
+        case visible
+        case notVisible
+    }
+    
+    var keyboard: keyboardState = .notVisible
+    
     var auth: authentication?
     
     init(auth: authentication){
@@ -68,6 +75,8 @@ class AuthenticationPage: UIViewController{
     }
     
     @objc func keyboardWillShow(notification: NSNotification){
+        if(keyboard == .visible) {return}
+        keyboard = .visible
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         UIView.animate(withDuration: 0.1) {
@@ -81,6 +90,7 @@ class AuthenticationPage: UIViewController{
         UIView.animate(withDuration: 0.1) {
             self.view.frame.origin.y += keyboardFrame.size.height
         }
+        keyboard = .notVisible
     }
     
     @objc func dismissKeyboard(){
@@ -170,11 +180,7 @@ class AuthenticationPage: UIViewController{
                 if let error = error{
                     self.usernameTextField.text = ""
                     self.passwordTextField.text = ""
-                    var err = error.localizedDescription
-                    if let startIndex = err.index(of: "."){
-                        let subrange = startIndex..<err.endIndex
-                        err.removeSubrange(subrange)
-                    }
+                    let err = self.formatErrorMessage(error: error.localizedDescription)
                     self.errorLabel.text = err
                     return
                 }
@@ -185,17 +191,10 @@ class AuthenticationPage: UIViewController{
             // Sign Up
             Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
                 if let error = error{
-                    print(error)
-                    
-                    if password.count < 6{
-                        self.errorLabel.text = "The password must be 6 characters long or more."
-                    }
-                    else{
-                        self.errorLabel.text = "\(error.localizedDescription)"
-                    }
-                    
                     self.usernameTextField.text = ""
                     self.passwordTextField.text = ""
+                    let err = self.formatErrorMessage(error: error.localizedDescription)
+                    self.errorLabel.text = err
                     return
                 }
                 guard let user = authResult?.user else { return }
@@ -206,6 +205,15 @@ class AuthenticationPage: UIViewController{
                 self.delegate?.handleLoginWasSuccessful()
             }
         }
+    }
+    
+    func formatErrorMessage(error: String) -> String{
+        var err = error
+        if let startIndex = err.index(of: "."){
+            let subrange = startIndex..<err.endIndex
+            err.removeSubrange(subrange)
+        }
+        return err
     }
     
     override func viewWillDisappear(_ animated: Bool) {
