@@ -10,21 +10,17 @@ import UIKit
 import Firebase
 
 class WelcomePage: UIViewController{
+    
+    var delegate: AuthenticationDelegate?
+    
     // login page reference
     var loginPage: AuthenticationPage!
     
-    enum AuthType{
+    enum authentication{
         case login
         case signup
     }
-    
-//    // root controller
-//    var rootController: RootController?{
-//        didSet{
-//            self.loginPage.rootController = rootController
-//        }
-//    }
-    
+
     let homeImageView: UIImageView = {
         let image = UIImage(named: "home")
         let imageView = UIImageView(image: image)
@@ -53,7 +49,7 @@ class WelcomePage: UIViewController{
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
         setupViews()
-        let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(handleTimer), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(handleTimer), userInfo: nil, repeats: true)
     }
     
     /*  setup views
@@ -104,28 +100,14 @@ class WelcomePage: UIViewController{
         proceedToAuthenticationPage(auth: .signup)
     }
     
-//    fileprivate func proceedToLoginPage(){
-//        loginPage.auth = .login
-//        loginPage.loginLabel.text = "Log In"
-//        loginPage.loginButton.setTitle("Log In", for: .normal)
-//        navigationController?.pushViewController(loginPage, animated: true)
-//    }
-//
-//    fileprivate func proceedToSignUpPage(){
-//        loginPage.auth = .signUp
-//        loginPage.loginLabel.text = "Sign Up"
-//        loginPage.loginButton.setTitle("Sign Up", for: .normal)
-//        navigationController?.pushViewController(loginPage, animated: true)
-//    }
-//
-    private func proceedToAuthenticationPage(auth: AuthType){
+    private func proceedToAuthenticationPage(auth: authentication){
         if auth == .login{
             loginPage = AuthenticationPage(auth: .login)
         }
         else{
             loginPage = AuthenticationPage(auth: .signUp)
         }
-        
+        loginPage.delegate = self
         navigationController?.pushViewController(loginPage, animated: true)
     }
     
@@ -149,4 +131,10 @@ class WelcomePage: UIViewController{
         }, completion: nil)
     }
     
+}
+
+extension WelcomePage: AuthenticationDelegate{
+    func handleLoginWasSuccessful() {
+        delegate?.handleLoginWasSuccessful()
+    }
 }

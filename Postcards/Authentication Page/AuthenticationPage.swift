@@ -19,8 +19,8 @@ class AuthenticationPage: UIViewController{
     // database reference
     var db: Firestore?
     
-    // root controller
-    var rootController: RootController?
+    // navigation delegate
+    var delegate: AuthenticationDelegate?
     
     enum authentication{
         case login
@@ -219,12 +219,7 @@ class AuthenticationPage: UIViewController{
                     self.passwordTextField.text = ""
                     return
                 }
-                guard let user = authResult?.user else {return}
-                print("User: \(user.email) signed in")
-                
-                // Enable Swipe Back Navigation
-                guard let rootViewController = self.rootController else {return}
-                self.navigationController?.pushViewController(rootViewController, animated: true)
+                self.delegate?.handleLoginWasSuccessful()
             }
         }
         else{
@@ -247,13 +242,10 @@ class AuthenticationPage: UIViewController{
                 }
                 guard let user = authResult?.user else { return }
                 guard let email = user.email else {return}
-                print("user: \(email) successfully signed up")
                 
                 let data: [String : Any] = ["email" : email, "favorites": [String]()]
                 self.db?.collection("users").document("\(email)").setData(data)
-                
-                guard let rootViewController = self.rootController else {return}
-                self.navigationController?.pushViewController(rootViewController, animated: true)
+                self.delegate?.handleLoginWasSuccessful()
             }
         }
     }

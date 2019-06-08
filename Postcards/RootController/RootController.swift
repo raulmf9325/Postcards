@@ -97,6 +97,7 @@ class RootController: UIViewController{
     
     private func presentWelcomePage(){
         let welcomePage = WelcomePage()
+        welcomePage.delegate = self
         navigationController?.pushViewController(welcomePage, animated: false)
     }
     
@@ -140,10 +141,8 @@ class RootController: UIViewController{
 }
 
 extension RootController: TabBarDelegate{
-    
     func handleTapHome() {
        view.bringSubviewToFront(pinterestView)
-       
     }
     
     func handleTapLocations() {
@@ -153,8 +152,13 @@ extension RootController: TabBarDelegate{
     func handleTapFavorites() {
         
     }
-    
-    
+}
+
+extension RootController: AuthenticationDelegate{
+    func handleLoginWasSuccessful() {
+        navigationController?.popToRootViewController(animated: false)
+        proceedToMainPage()
+    }
 }
 
 extension RootController: UINavigationControllerDelegate{
