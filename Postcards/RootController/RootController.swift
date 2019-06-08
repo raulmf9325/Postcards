@@ -126,7 +126,7 @@ class RootController: UIViewController{
         
         for album in snapshot.documents{
             guard let data = album.data() as? [String:String] else {return}
-            var images = Array(data.values.map{$0})
+            let images = Array(data.values.map{$0})
             grandAlbum.images?.append(contentsOf: images)
             let newAlbum = Album(name: album.documentID, images: images)
             albums.append(newAlbum)
@@ -156,6 +156,7 @@ extension RootController: TabBarDelegate{
 
 extension RootController: AuthenticationDelegate{
     func handleLoginWasSuccessful() {
+        defaults.set(true, forKey: "auth")
         navigationController?.popToRootViewController(animated: false)
         proceedToMainPage()
     }
