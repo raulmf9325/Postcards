@@ -28,8 +28,6 @@ class AuthenticationPage: UIViewController{
     
     var auth: authentication?
     
-  
-    
     init(auth: authentication){
         super.init(nibName: nil, bundle: nil)
         self.auth = auth
@@ -148,6 +146,17 @@ class AuthenticationPage: UIViewController{
         passwordTextField.rightAnchor == usernameTextField.rightAnchor
         passwordTextField.topAnchor == usernameTextField.bottomAnchor + 25
         passwordTextField.heightAnchor == loginButton.heightAnchor
+        
+        view.addSubview(backButton)
+        backButton.topAnchor == view.safeAreaLayoutGuide.topAnchor + 20
+        backButton.leftAnchor == view.leftAnchor + 20
+        backButton.widthAnchor == 20
+        backButton.heightAnchor == 20
+        backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+    }
+    
+    @objc func handleTapBackButton(){
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func handleTapLogin(){
@@ -250,6 +259,12 @@ class AuthenticationPage: UIViewController{
         label.textAlignment = .center
         label.numberOfLines = 2
         return label
+    }()
+    
+    let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Back"), for: .normal)
+        return button
     }()
     
 }
