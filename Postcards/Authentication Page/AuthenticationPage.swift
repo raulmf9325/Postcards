@@ -119,8 +119,8 @@ class AuthenticationPage: UIViewController{
         
         view.addSubview(errorLabel)
         errorLabel.bottomAnchor == view.safeAreaLayoutGuide.bottomAnchor - 20
-        errorLabel.leftAnchor == logoImageView.leftAnchor + 10
-        errorLabel.rightAnchor == logoImageView.rightAnchor - 10
+        errorLabel.leftAnchor == view.leftAnchor + 20
+        errorLabel.rightAnchor == view.rightAnchor - 20
         errorLabel.heightAnchor == 45
         
         view.addSubview(loginButton)
@@ -128,6 +128,7 @@ class AuthenticationPage: UIViewController{
         loginButton.rightAnchor == logoImageView.rightAnchor - 30
         loginButton.bottomAnchor == errorLabel.topAnchor - 10
         loginButton.heightAnchor == 50
+        loginButton.addTarget(self, action: #selector(handleTapLogin), for: .touchUpInside)
         
         view.addSubview(loginLabel)
         loginLabel.topAnchor == logoImageView.bottomAnchor + 50
@@ -169,6 +170,12 @@ class AuthenticationPage: UIViewController{
                 if let error = error{
                     self.usernameTextField.text = ""
                     self.passwordTextField.text = ""
+                    var err = error.localizedDescription
+                    if let startIndex = err.index(of: "."){
+                        let subrange = startIndex..<err.endIndex
+                        err.removeSubrange(subrange)
+                    }
+                    self.errorLabel.text = err
                     return
                 }
                 self.delegate?.handleLoginWasSuccessful()
