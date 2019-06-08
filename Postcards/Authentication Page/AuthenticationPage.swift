@@ -10,6 +10,10 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+protocol AuthenticationDelegate{
+    func handleLoginWasSuccessful()
+}
+
 class AuthenticationPage: UIViewController{
     
     // database reference
@@ -81,6 +85,15 @@ class AuthenticationPage: UIViewController{
     
     let scrollView = UIScrollView()
     
+    init(auth: authentication){
+        super.init(nibName: nil, bundle: nil)
+        self.auth = auth
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -91,7 +104,6 @@ class AuthenticationPage: UIViewController{
         passwordTextField.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -143,6 +155,15 @@ class AuthenticationPage: UIViewController{
     
     
     fileprivate func setupViews(){
+        
+        if auth == .login{
+            loginLabel.text = "Log in"
+            loginButton.setTitle("Log in", for: .normal)
+        }
+        else{
+            loginLabel.text = "Sign up"
+            loginButton.setTitle("Sign up", for: .normal)
+        }
         
         let horizontalPadding: CGFloat = 90
         let distanceFromLogoToLabel: CGFloat = 80

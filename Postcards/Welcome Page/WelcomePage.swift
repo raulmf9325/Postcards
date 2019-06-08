@@ -10,20 +10,21 @@ import UIKit
 import Firebase
 
 class WelcomePage: UIViewController{
-    
-    // database
-    var db: Firestore?
-    
     // login page reference
-    let loginPage = AuthenticationPage()
+    var loginPage: AuthenticationPage!
     
-    // root controller
-    var rootController: RootController?{
-        didSet{
-            self.loginPage.rootController = rootController
-        }
+    enum AuthType{
+        case login
+        case signup
     }
-       
+    
+//    // root controller
+//    var rootController: RootController?{
+//        didSet{
+//            self.loginPage.rootController = rootController
+//        }
+//    }
+    
     let homeImageView: UIImageView = {
         let image = UIImage(named: "home")
         let imageView = UIImageView(image: image)
@@ -74,10 +75,7 @@ class WelcomePage: UIViewController{
         loginButton = buttonForTitle(title: "Login")
         signUpButton = buttonForTitle(title: "Sign Up")
         
-        guard let loginButton = loginButton, let signUpButton = signUpButton else {
-            print("ERROR!: Couldn't Render Buttons")
-            return
-        }
+        guard let loginButton = loginButton, let signUpButton = signUpButton else {return}
         
         view.addSubview(loginButton)
         view.addSubview(signUpButton)
@@ -90,35 +88,44 @@ class WelcomePage: UIViewController{
         view.addConstraintsWithFormat(format: "H:|-\(padding)-[v0]-\(padding)-|", views: welcomeLabel)
         view.addConstraintsWithFormat(format: "V:[v0(90)]-10-[v1]", views: welcomeLabel, loginButton)
         
-        loginButton.addTarget(self, action: #selector(handleTapLogin), for: .touchUpInside)
-        signUpButton.addTarget(self, action: #selector(handleTapSignUp), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(handleTapLoginButton), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(handleTapSignUpButton), for: .touchUpInside)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
     
-    @objc func handleTapLogin(){
-       proceedToLoginPage()
+    @objc func handleTapLoginButton(){
+        proceedToAuthenticationPage(auth: .login)
     }
     
-    @objc func handleTapSignUp(){
-       proceedToSignUpPage()
+    @objc func handleTapSignUpButton(){
+        proceedToAuthenticationPage(auth: .signup)
     }
     
-    fileprivate func proceedToLoginPage(){
-        loginPage.db = db
-        loginPage.auth = .login
-        loginPage.loginLabel.text = "Log In"
-        loginPage.loginButton.setTitle("Log In", for: .normal)
-        navigationController?.pushViewController(loginPage, animated: true)
-    }
-    
-    fileprivate func proceedToSignUpPage(){
-        loginPage.db = db
-        loginPage.auth = .signUp
-        loginPage.loginLabel.text = "Sign Up"
-        loginPage.loginButton.setTitle("Sign Up", for: .normal)
+//    fileprivate func proceedToLoginPage(){
+//        loginPage.auth = .login
+//        loginPage.loginLabel.text = "Log In"
+//        loginPage.loginButton.setTitle("Log In", for: .normal)
+//        navigationController?.pushViewController(loginPage, animated: true)
+//    }
+//
+//    fileprivate func proceedToSignUpPage(){
+//        loginPage.auth = .signUp
+//        loginPage.loginLabel.text = "Sign Up"
+//        loginPage.loginButton.setTitle("Sign Up", for: .normal)
+//        navigationController?.pushViewController(loginPage, animated: true)
+//    }
+//
+    private func proceedToAuthenticationPage(auth: AuthType){
+        if auth == .login{
+            loginPage = AuthenticationPage(auth: .login)
+        }
+        else{
+            loginPage = AuthenticationPage(auth: .signUp)
+        }
+        
         navigationController?.pushViewController(loginPage, animated: true)
     }
     

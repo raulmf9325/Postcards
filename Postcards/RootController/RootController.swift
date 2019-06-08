@@ -65,7 +65,6 @@ class RootController: UIViewController{
     
     override func viewDidLoad() {
         checkAuthenticationStatus()
-        
     }
     
     private func proceedToMainPage(){
@@ -92,13 +91,13 @@ class RootController: UIViewController{
             proceedToMainPage()
         }
         else{
-            
+            presentWelcomePage()
         }
     }
     
     private func presentWelcomePage(){
         let welcomePage = WelcomePage()
-        welcomePage.rootController = self
+        navigationController?.pushViewController(welcomePage, animated: false)
     }
     
     func handleSignUpFinished(){
