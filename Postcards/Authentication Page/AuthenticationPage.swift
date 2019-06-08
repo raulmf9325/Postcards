@@ -28,6 +28,176 @@ class AuthenticationPage: UIViewController{
     
     var auth: authentication?
     
+  
+    
+    init(auth: authentication){
+        super.init(nibName: nil, bundle: nil)
+        self.auth = auth
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
+        setupViews()
+        disableButton()
+        usernameTextField.delegate = self
+        passwordTextField.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerListeners()
+    }
+    
+    fileprivate func registerListeners(){
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification){
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        UIView.animate(withDuration: 0.1) {
+            self.view.frame.origin.y -= keyboardFrame.size.height
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification){
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        UIView.animate(withDuration: 0.1) {
+            self.view.frame.origin.y += keyboardFrame.size.height
+        }
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+    }
+    
+    fileprivate func disableButton(){
+        loginButton.isUserInteractionEnabled = false
+        loginButton.backgroundColor = .darkGray
+    }
+    
+    fileprivate func enableButton(){
+        loginButton.isUserInteractionEnabled = true
+        loginButton.backgroundColor = .phoenix
+    }
+    
+    
+    fileprivate func setupViews(){
+        if auth == .login{
+            loginLabel.text = "Log in"
+            loginButton.setTitle("Log in", for: .normal)
+        }
+        else{
+            loginLabel.text = "Sign up"
+            loginButton.setTitle("Sign up", for: .normal)
+        }
+        
+        let horizontalPadding: CGFloat = 70
+        let verticalPadding: CGFloat = 40
+        
+        view.addSubview(logoImageView)
+        logoImageView.topAnchor == view.safeAreaLayoutGuide.topAnchor + verticalPadding
+        logoImageView.leftAnchor == view.leftAnchor + horizontalPadding
+        logoImageView.rightAnchor == view.rightAnchor - horizontalPadding
+        logoImageView.heightAnchor == 160
+        
+        view.addSubview(errorLabel)
+        errorLabel.bottomAnchor == view.safeAreaLayoutGuide.bottomAnchor - 20
+        errorLabel.leftAnchor == logoImageView.leftAnchor + 10
+        errorLabel.rightAnchor == logoImageView.rightAnchor - 10
+        errorLabel.heightAnchor == 45
+        
+        view.addSubview(loginButton)
+        loginButton.leftAnchor == logoImageView.leftAnchor + 30
+        loginButton.rightAnchor == logoImageView.rightAnchor - 30
+        loginButton.bottomAnchor == errorLabel.topAnchor - 10
+        loginButton.heightAnchor == 50
+        
+        view.addSubview(loginLabel)
+        loginLabel.topAnchor == logoImageView.bottomAnchor + 50
+        loginLabel.centerXAnchor == view.centerXAnchor
+        loginLabel.widthAnchor == loginButton.widthAnchor
+        loginLabel.heightAnchor == loginButton.heightAnchor
+        
+        view.addSubview(usernameTextField)
+        usernameTextField.leftAnchor == logoImageView.leftAnchor - 20
+        usernameTextField.rightAnchor == logoImageView.rightAnchor + 20
+        usernameTextField.topAnchor == loginLabel.bottomAnchor + 50
+        usernameTextField.heightAnchor == loginButton.heightAnchor
+        
+        view.addSubview(passwordTextField)
+        passwordTextField.leftAnchor == usernameTextField.leftAnchor
+        passwordTextField.rightAnchor == usernameTextField.rightAnchor
+        passwordTextField.topAnchor == usernameTextField.bottomAnchor + 25
+        passwordTextField.heightAnchor == loginButton.heightAnchor
+    }
+    
+    @objc func handleTapLogin(){
+        guard let email = usernameTextField.text else {return}
+        guard let password = passwordTextField.text else {return}
+        
+        if auth == .login{
+            // Sign In
+            Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+                if let error = error{
+                    self.usernameTextField.text = ""
+                    self.passwordTextField.text = ""
+                    return
+                }
+                self.delegate?.handleLoginWasSuccessful()
+            }
+        }
+        else{
+            // Sign Up
+            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                if let error = error{
+                    print(error)
+                    
+                    if password.count < 6{
+                        self.errorLabel.text = "The password must be 6 characters long or more."
+                    }
+                    else{
+                        self.errorLabel.text = "\(error.localizedDescription)"
+                    }
+                    
+                    self.usernameTextField.text = ""
+                    self.passwordTextField.text = ""
+                    return
+                }
+                guard let user = authResult?.user else { return }
+                guard let email = user.email else {return}
+                
+                let data: [String : Any] = ["email" : email, "favorites": [String]()]
+                self.db.collection("users").document("\(email)").setData(data)
+                self.delegate?.handleLoginWasSuccessful()
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // removing observer
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     let logoImageView: UIImageView = {
         let image = UIImage(named: "tent")
         let imageView = UIImageView(image: image)
@@ -72,188 +242,15 @@ class AuthenticationPage: UIViewController{
         return button
     }()
     
-    let wrongEmailLabel: UILabel = {
+    let errorLabel: UILabel = {
         let label = UILabel()
-        label.text = "Incorrect username or password."
+        label.text = ""
         label.font = UIFont(name: "AvenirNext-Heavy", size: 16)
         label.textColor = .red
         label.textAlignment = .center
         label.numberOfLines = 2
         return label
     }()
-    
-    let scrollView = UIScrollView()
-    
-    init(auth: authentication){
-        super.init(nibName: nil, bundle: nil)
-        self.auth = auth
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
-        setupViews()
-        disableButton()
-        usernameTextField.delegate = self
-        passwordTextField.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        registerListeners()
-    }
-    
-    fileprivate func registerListeners(){
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification){
-        
-        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardInfo = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
-        let keyboardSize = keyboardInfo.cgRectValue.size
-        
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-        scrollView.contentInset = contentInsets
-        scrollView.setContentOffset(CGPoint(x: 0, y: keyboardSize.height), animated: true)
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification){
-       scrollView.contentInset = .zero
-    }
-    
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-    }
-    
-    fileprivate func disableButton(){
-        loginButton.isUserInteractionEnabled = false
-        loginButton.backgroundColor = .darkGray
-    }
-    
-    fileprivate func enableButton(){
-        loginButton.isUserInteractionEnabled = true
-        loginButton.backgroundColor = .phoenix
-    }
-    
-    
-    fileprivate func setupViews(){
-        
-        if auth == .login{
-            loginLabel.text = "Log in"
-            loginButton.setTitle("Log in", for: .normal)
-        }
-        else{
-            loginLabel.text = "Sign up"
-            loginButton.setTitle("Sign up", for: .normal)
-        }
-        
-        let horizontalPadding: CGFloat = 90
-        let distanceFromLogoToLabel: CGFloat = 80
-        let distanceFromLoginLabelToTextField: CGFloat = 20
-        let distanceBetweenTextFields: CGFloat = 18
-        let distanceFromPasswordFieldToWrongEmailLabel: CGFloat = 20
-        let loginLabelHeight: CGFloat = 45
-        let loginLabelWidth: CGFloat = view.frame.width - 2 * horizontalPadding
-        let buttonHeight: CGFloat = 45
-        let buttonWidth: CGFloat = 140
-        let textFieldHeight: CGFloat = 40
-        let textFieldWidth: CGFloat = 200
-        let logoHeight: CGFloat = 130
-        let logoWidth: CGFloat = 160
-        
-        view.addSubview(scrollView)
-        scrollView.fillSuperview()
-        
-        scrollView.addSubview(logoImageView)
-        scrollView.addSubview(loginLabel)
-        scrollView.addSubview(usernameTextField)
-        scrollView.addSubview(passwordTextField)
-        scrollView.addSubview(loginButton)
-        scrollView.addSubview(wrongEmailLabel)
-        
-        loginLabel.centerInSuperview(size: CGSize(width: loginLabelWidth, height: loginLabelHeight))
-        
-        logoImageView.anchor(top: nil, leading: scrollView.leadingAnchor, bottom: loginLabel.topAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: (view.frame.width - logoWidth) / 2, bottom: distanceFromLogoToLabel, right: 0), size: CGSize(width: logoWidth, height: logoHeight))
-        
-        usernameTextField.anchor(top: loginLabel.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: nil, padding: UIEdgeInsets(top: distanceFromLoginLabelToTextField, left: (view.frame.width - textFieldWidth) / 2, bottom: 0, right: 0), size: CGSize(width: textFieldWidth, height: textFieldHeight))
-        
-        passwordTextField.anchor(top: usernameTextField.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: nil, padding: UIEdgeInsets(top: distanceBetweenTextFields, left: (view.frame.width - textFieldWidth) / 2, bottom: 0, right: 0), size: CGSize(width: textFieldWidth, height: textFieldHeight))
-        
-        wrongEmailLabel.anchor(top: passwordTextField.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: scrollView.trailingAnchor, padding: UIEdgeInsets(top: distanceFromPasswordFieldToWrongEmailLabel, left: 0, bottom: 0, right: 0), size: CGSize(width: view.frame.width, height: 45))
-        
-        loginButton.anchor(top: wrongEmailLabel.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: nil, padding: UIEdgeInsets(top: 18, left: (view.frame.width - buttonWidth) / 2, bottom: 0, right: 0), size: CGSize(width: buttonWidth, height: buttonHeight))
-        
-        wrongEmailLabel.alpha = 1
-        loginButton.addTarget(self, action: #selector(handleTapLogin), for: .touchUpInside)
-    }
-    
-    @objc func handleTapLogin(){
-        guard let email = usernameTextField.text else {return}
-        guard let password = passwordTextField.text else {return}
-        
-        if auth == .login{
-            // Sign In
-            Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
-                if let error = error{
-                    print("Error with silent sign in: \(error)")
-                    self.wrongEmailLabel.alpha = 1
-                    self.usernameTextField.text = ""
-                    self.passwordTextField.text = ""
-                    return
-                }
-                self.delegate?.handleLoginWasSuccessful()
-            }
-        }
-        else{
-            // Sign Up
-            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-                if let error = error{
-                    print(error)
-                    
-                    if password.count < 6{
-                        self.wrongEmailLabel.text = "The password must be 6 characters long or more."
-                    }
-                    else{
-                        self.wrongEmailLabel.text = "\(error.localizedDescription)"
-                    }
-                    
-                    self.wrongEmailLabel.alpha = 1
-                    self.usernameTextField.text = ""
-                    self.passwordTextField.text = ""
-                    return
-                }
-                guard let user = authResult?.user else { return }
-                guard let email = user.email else {return}
-                
-                let data: [String : Any] = ["email" : email, "favorites": [String]()]
-                self.db.collection("users").document("\(email)").setData(data)
-                self.delegate?.handleLoginWasSuccessful()
-            }
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        // removing observer
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
     
 }
 
