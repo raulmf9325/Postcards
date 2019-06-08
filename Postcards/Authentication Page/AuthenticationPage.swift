@@ -15,9 +15,8 @@ protocol AuthenticationDelegate{
 }
 
 class AuthenticationPage: UIViewController{
-    
     // database reference
-    var db: Firestore?
+    let db = Firestore.firestore()
     
     // navigation delegate
     var delegate: AuthenticationDelegate?
@@ -232,7 +231,7 @@ class AuthenticationPage: UIViewController{
                         self.wrongEmailLabel.text = "The password must be 6 characters long or more."
                     }
                     else{
-                        self.wrongEmailLabel.text = "Incorrect username or password."
+                        self.wrongEmailLabel.text = "\(error.localizedDescription)"
                     }
                     
                     self.wrongEmailLabel.alpha = 1
@@ -244,7 +243,7 @@ class AuthenticationPage: UIViewController{
                 guard let email = user.email else {return}
                 
                 let data: [String : Any] = ["email" : email, "favorites": [String]()]
-                self.db?.collection("users").document("\(email)").setData(data)
+                self.db.collection("users").document("\(email)").setData(data)
                 self.delegate?.handleLoginWasSuccessful()
             }
         }

@@ -14,6 +14,12 @@
 		3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */; };
 		3E19DCB921F2D9FC0093AA88 /* PinterestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */; };
 		3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */; };
+		3E5B791522AC459000A1F90D /* Anchorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B790F22AC459000A1F90D /* Anchorage.swift */; };
+		3E5B791622AC459000A1F90D /* Priority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B791022AC459000A1F90D /* Priority.swift */; };
+		3E5B791722AC459000A1F90D /* Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B791122AC459000A1F90D /* Internal.swift */; };
+		3E5B791822AC459000A1F90D /* AnchorGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B791222AC459000A1F90D /* AnchorGroupProvider.swift */; };
+		3E5B791922AC459000A1F90D /* NSLayoutAnchor+MultiplierConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B791322AC459000A1F90D /* NSLayoutAnchor+MultiplierConstraints.swift */; };
+		3E5B791A22AC459000A1F90D /* Compatability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B791422AC459000A1F90D /* Compatability.swift */; };
 		3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */; };
 		3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A58121F582CC00A9CF2C /* RoundCorners.swift */; };
 		3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347321FA874D00E1EEE7 /* RootController.swift */; };
@@ -38,6 +44,12 @@
 		3E19DCB321F2D5CB0093AA88 /* PinterestLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		3E19DCB821F2D9FC0093AA88 /* PinterestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestCell.swift; sourceTree = "<group>"; };
 		3E4ABF7121F02D04007D69FB /* AuthenticationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationPage.swift; sourceTree = "<group>"; };
+		3E5B790F22AC459000A1F90D /* Anchorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Anchorage.swift; sourceTree = "<group>"; };
+		3E5B791022AC459000A1F90D /* Priority.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Priority.swift; sourceTree = "<group>"; };
+		3E5B791122AC459000A1F90D /* Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Internal.swift; sourceTree = "<group>"; };
+		3E5B791222AC459000A1F90D /* AnchorGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnchorGroupProvider.swift; sourceTree = "<group>"; };
+		3E5B791322AC459000A1F90D /* NSLayoutAnchor+MultiplierConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutAnchor+MultiplierConstraints.swift"; sourceTree = "<group>"; };
+		3E5B791422AC459000A1F90D /* Compatability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compatability.swift; sourceTree = "<group>"; };
 		3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientExtension.swift; sourceTree = "<group>"; };
 		3E78A58121F582CC00A9CF2C /* RoundCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCorners.swift; sourceTree = "<group>"; };
 		3EBA347321FA874D00E1EEE7 /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
@@ -132,6 +144,19 @@
 			path = "Authentication Page";
 			sourceTree = "<group>";
 		};
+		3E5B790E22AC459000A1F90D /* Anchorage Source */ = {
+			isa = PBXGroup;
+			children = (
+				3E5B790F22AC459000A1F90D /* Anchorage.swift */,
+				3E5B791022AC459000A1F90D /* Priority.swift */,
+				3E5B791122AC459000A1F90D /* Internal.swift */,
+				3E5B791222AC459000A1F90D /* AnchorGroupProvider.swift */,
+				3E5B791322AC459000A1F90D /* NSLayoutAnchor+MultiplierConstraints.swift */,
+				3E5B791422AC459000A1F90D /* Compatability.swift */,
+			);
+			path = "Anchorage Source";
+			sourceTree = "<group>";
+		};
 		3EBA347121FA5D7100E1EEE7 /* RootController */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,6 +202,7 @@
 		3EF2B6AE21EFD68000070540 /* Postcards */ = {
 			isa = PBXGroup;
 			children = (
+				3E5B790E22AC459000A1F90D /* Anchorage Source */,
 				3EF935AF2201237A008BBB53 /* TransitionAnimator */,
 				3EBA347221FA5D7E00E1EEE7 /* AppDelegate */,
 				3EF935AE220115CB008BBB53 /* PostcardDetails */,
@@ -363,6 +389,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E5B791822AC459000A1F90D /* AnchorGroupProvider.swift in Sources */,
+				3E5B791A22AC459000A1F90D /* Compatability.swift in Sources */,
+				3E5B791622AC459000A1F90D /* Priority.swift in Sources */,
 				3EF2B6C221EFD72C00070540 /* WelcomePage.swift in Sources */,
 				3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */,
 				3EED9FC321F814840011DB35 /* GradientView.swift in Sources */,
@@ -373,12 +402,15 @@
 				3EF935AD2200D5BA008BBB53 /* PostcardDetails.swift in Sources */,
 				3ECD081E21FD1B0500C66319 /* AlbumDetails.swift in Sources */,
 				3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */,
+				3E5B791522AC459000A1F90D /* Anchorage.swift in Sources */,
 				3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */,
 				3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */,
+				3E5B791922AC459000A1F90D /* NSLayoutAnchor+MultiplierConstraints.swift in Sources */,
 				3EF2B6C421EFD80500070540 /* ViewExtension.swift in Sources */,
 				3E08539E21FBA435006BBF04 /* LocationsPage.swift in Sources */,
 				3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */,
 				3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */,
+				3E5B791722AC459000A1F90D /* Internal.swift in Sources */,
 				3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
