@@ -53,9 +53,10 @@ class PostcardDetails: UIViewController{
         view.addSubview(postcard)
         postcard.fillSuperview()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.setupHeader()
         }
+        
     }
     
     func setupHeader(){
@@ -75,10 +76,8 @@ class PostcardDetails: UIViewController{
         Header.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         Header.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
         
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.35) {
             self.Header.frame.origin.y += 100
-        }) { (_) in
-            
         }
     }
     
