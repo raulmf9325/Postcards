@@ -105,7 +105,11 @@ class BasePage: UICollectionViewController{
         let buttonStack = UIStackView(arrangedSubviews: [homeButton, locationButton, favoritesButton])
         buttonStack.distribution = .fillEqually
         tabBar.addSubview(buttonStack)
-        buttonStack.fillSuperview()
+        
+        buttonStack.leftAnchor == tabBar.leftAnchor
+        buttonStack.rightAnchor == tabBar.rightAnchor
+        buttonStack.topAnchor == tabBar.topAnchor
+        buttonStack.heightAnchor == tabBar.frame.height - 10
         
         homeButton.addTarget(self, action: #selector(handleHomeTap), for: .touchUpInside)
         locationButton.addTarget(self, action: #selector(handleLocationTap), for: .touchUpInside)
