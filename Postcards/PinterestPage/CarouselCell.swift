@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseStorage
 
 class CarouselCell: UICollectionViewCell{
     
@@ -14,16 +16,30 @@ class CarouselCell: UICollectionViewCell{
     var imagesURL: [String]?{
         didSet{
             guard let URLs = imagesURL else {return}
-            for url in URLs{
+            for (i, url) in URLs.enumerated(){
                 let imageView = UIImageView(image: nil)
                 imageView.backgroundColor = .darkGray
-                let imageURL = URL(string: url)
-                imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
-                    
+                
+                // reference to storage
+                let storageRef = Storage.storage().reference()
+                // Reference to an image file in Firebase Storage
+                let reference = storageRef.child("postcards/\(url)")
+                var imageURL: URL?
+                
+                reference.downloadURL { (url, error) in
+                    imageURL = url
+                    imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
+                        if i == URLs.count - 1{
+                            self.addImages()
+                            self.transformLayer.frame = self.bounds
+                            self.layer.addSublayer(self.transformLayer)
+                            
+                            self.turnCarousel()
+                        }
+                }
                 }
                 imageSet.append(imageView)
             }
-            addImages()
         }
     }
     
@@ -41,15 +57,7 @@ class CarouselCell: UICollectionViewCell{
     }
     
     func setupViews() {
-        backgroundColor = .black
         setupPanGesture()
-        
-        //addImages()
-        
-        transformLayer.frame = bounds
-        layer.addSublayer(transformLayer)
-        
-        turnCarousel()
     }
     
     fileprivate func addImages(){

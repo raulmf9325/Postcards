@@ -50,21 +50,33 @@ class PinterestPage: BasePage{
     var postcards = [postcard]()
     
     override func viewDidLoad() {
+        collectionView.collectionViewLayout = UICollectionViewFlowLayout()
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
+        collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: "CarouselCell")
         collectionView.backgroundView = backgroundView
         setupHeader()
         setupTabBar()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return postcards.count
+       // return postcards.count
+        return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PinterestCell
-        cell.postcard = postcards[indexPath.item].imageStringURL
-        cell.albumName = postcards[indexPath.item].albumName
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PinterestCell
+//        cell.postcard = postcards[indexPath.item].imageStringURL
+//        cell.albumName = postcards[indexPath.item].albumName
+//        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselCell", for: indexPath) as! CarouselCell
+        
+        var images = [String]()
+        guard let albumImages = albums?[0].images else {return cell}
+        for i in 0 ... 5{
+            images.append(albumImages[i])
+        }
+        cell.imagesURL = images
         return cell
     }
     
@@ -88,4 +100,16 @@ class PinterestPage: BasePage{
         rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
     }
     
+}
+
+extension PinterestPage: UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat = view.frame.width
+        let height: CGFloat = (view.frame.height - (150)) / 2
+        return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 200, left: 0, bottom: 0, right: 0)
+    }
 }
