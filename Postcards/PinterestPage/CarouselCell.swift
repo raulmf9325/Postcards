@@ -10,6 +10,23 @@ import UIKit
 
 class CarouselCell: UICollectionViewCell{
     
+    var imageSet = [UIImageView]()
+    var imagesURL: [String]?{
+        didSet{
+            guard let URLs = imagesURL else {return}
+            for url in URLs{
+                let imageView = UIImageView(image: nil)
+                imageView.backgroundColor = .darkGray
+                let imageURL = URL(string: url)
+                imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
+                    
+                }
+                imageSet.append(imageView)
+            }
+            addImages()
+        }
+    }
+    
     let transformLayer = CATransformLayer()
     var currentAngle: CGFloat = 0
     var currentOffset: CGFloat = 0
@@ -27,7 +44,7 @@ class CarouselCell: UICollectionViewCell{
         backgroundColor = .black
         setupPanGesture()
         
-        addImages()
+        //addImages()
         
         transformLayer.frame = bounds
         layer.addSublayer(transformLayer)
@@ -36,8 +53,10 @@ class CarouselCell: UICollectionViewCell{
     }
     
     fileprivate func addImages(){
-        for i in 1 ... 3{
-            addImageCard(name: "\(i)")
+        imageSet.forEach { (imageView) in
+            if let image = imageView.image{
+                addImageCard(image: image)
+            }
         }
     }
     
@@ -61,7 +80,7 @@ class CarouselCell: UICollectionViewCell{
         turnCarousel()
     }
     
-    fileprivate func addImageCard(name: String){
+    fileprivate func addImageCard(image: UIImage){
         
         let imageCardSize = CGSize(width: 200, height: 300)
         
@@ -70,7 +89,7 @@ class CarouselCell: UICollectionViewCell{
         
         imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        guard let imageCardImage = UIImage(named: name)?.cgImage else {return}
+        guard let imageCardImage = image.cgImage else {return}
         
         imageLayer.contents = imageCardImage
         imageLayer.contentsGravity = .resizeAspectFill
