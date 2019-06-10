@@ -52,6 +52,9 @@ class RootController: UIViewController{
     // selected frame
     var selectedFrame: CGRect?
     
+    // collapse animation
+    var collapseAnimation = false
+    
     init(){
         super.init(nibName: nil, bundle: nil)
         fetchAlbums { (snapshot) in
@@ -164,11 +167,11 @@ extension RootController: UINavigationControllerDelegate{
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func pop(originFrame: CGRect?, animated: Bool){
+    func pop(originFrame: CGRect?, animated: Bool, collapse: Bool = false){
         if originFrame != nil{
             self.selectedFrame = originFrame!
         }
-        
+        self.collapseAnimation = collapse
         navigationController?.popViewController(animated: animated)
     }
     
@@ -180,7 +183,7 @@ extension RootController: UINavigationControllerDelegate{
         case .push:
             return TransitionAnimator(duration: 0.5, isPresenting: true, originFrame: frame)
         default:
-            return TransitionAnimator(duration: 0.5, isPresenting: false, originFrame: frame)
+            return TransitionAnimator(duration: collapseAnimation ? 1: 0.6, isPresenting: false, originFrame: frame)
         }
     }
 
