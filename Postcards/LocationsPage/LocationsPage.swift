@@ -63,9 +63,11 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let horizontalPadding: CGFloat = 55
+        let horizontalPadding: CGFloat = 50
+        let width: CGFloat = view.frame.width - (2 * horizontalPadding)
         let verticalPadding: CGFloat = 50
-        return CGSize(width: view.frame.width - (2 * horizontalPadding), height: view.frame.height - (PinterestHeader.frame.height + tabBar.frame.height + 2 * verticalPadding))
+        let height: CGFloat = view.frame.height - (100 + 50 + 2 * verticalPadding)
+        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
