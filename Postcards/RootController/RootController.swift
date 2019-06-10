@@ -111,10 +111,7 @@ class RootController: UIViewController{
         guard let db = db else {return}
         
         db.collection("postcards").getDocuments { (snapshot, error) in
-            if let error = error{
-                print("ERROR!: \(error)")
-                return
-            }
+            if let error = error {return}
             guard let snapshot = snapshot else {return}
             completion(snapshot)
         }
@@ -122,16 +119,14 @@ class RootController: UIViewController{
     
     private func didFinishFetchingContent(snapshot: QuerySnapshot){
         var albums = [Album]()
-        var grandAlbum = Album(name: "The Latest", images: [String]())
         
         for album in snapshot.documents{
             guard let data = album.data() as? [String:String] else {return}
             let images = Array(data.values.map{$0})
-            grandAlbum.images?.append(contentsOf: images)
             let newAlbum = Album(name: album.documentID, images: images)
             albums.append(newAlbum)
         }
-        pinterestPage.album = grandAlbum
+        pinterestPage.albums = albums
         locationsPage.albums = albums
     }
     

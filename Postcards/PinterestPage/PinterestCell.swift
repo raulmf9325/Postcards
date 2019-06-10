@@ -12,6 +12,7 @@ import FirebaseStorage
 import FirebaseUI
 
 class PinterestCell: UICollectionViewCell{
+    var albumName: String?
     var postcard: String?{
         didSet{
             guard let postcard = postcard else{return}

@@ -11,23 +11,6 @@ import Firebase
 
 class LocationsPage: BasePage{
     
-//    var snapshot: QuerySnapshot?{
-//        didSet{
-//            guard let snapshot = snapshot else {return}
-//
-//            for album in snapshot.documents{
-//                guard let data = album.data() as? [String:String] else {return}
-//                var images = Array(data.values.map{$0})
-//                images.insert(album.documentID, at: 0)
-//                albums.append(images)
-//            }
-//
-//            self.collectionView.reloadData()
-//        }
-//    }
-//
-//    var albums = [[String]]()
-    
     var albums: [Album]?{
         didSet{
             collectionView.reloadData()
