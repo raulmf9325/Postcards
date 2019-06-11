@@ -30,11 +30,8 @@ class CarouselCell: UICollectionViewCell{
                     imageURL = url
                     imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
                         if i == URLs.count - 1{
-                            self.addImages()
-                            self.transformLayer.frame = self.bounds
-                            self.layer.addSublayer(self.transformLayer)
-                            
-                            self.turnCarousel()
+                           
+                           
                         }
                 }
                 }
@@ -57,15 +54,29 @@ class CarouselCell: UICollectionViewCell{
     }
     
     func setupViews() {
-        setupPanGesture()
+        backgroundColor = .white
+  //      setupPanGesture()
+        transformLayer.frame = CGRect(x: (frame.width / 2) - (frame.width - 40) / 2, y: 20, width: frame.width - 40, height: frame.height - 40)
+        layer.addSublayer(self.transformLayer)
+       
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            self.currentAngle += 0.1
+            self.turnCarousel()
+            print("here")
+        }
     }
     
-    fileprivate func addImages(){
-        imageSet.forEach { (imageView) in
-            if let image = imageView.image{
-                addImageCard(image: image)
-            }
+    func addImages(){
+//        imageSet.forEach { (imageView) in
+//            if let image = imageView.image{
+//                addImageCard(image: image)
+//            }
+//        }
+        for _ in 1 ... 6{
+            addImageCard(image: nil)
         }
+        turnCarousel()
+    
     }
     
     fileprivate func setupPanGesture(){
@@ -88,28 +99,26 @@ class CarouselCell: UICollectionViewCell{
         turnCarousel()
     }
     
-    fileprivate func addImageCard(image: UIImage){
+    fileprivate func addImageCard(image: UIImage?){
         
-        let imageCardSize = CGSize(width: 200, height: 300)
+        let imageCardSize = CGSize(width: 180, height: 200)
         
         let imageLayer = CALayer()
-        imageLayer.frame = CGRect(x: frame.width / 2 - imageCardSize.width / 2, y: frame.height / 2 - imageCardSize.height / 2, width: imageCardSize.width, height: imageCardSize.height)
+        imageLayer.frame = CGRect(x: (frame.width / 2 - 50), y: (transformLayer.bounds.height / 2 - 50), width: 100, height: 100)
         
-        imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        imageLayer.backgroundColor = UIColor.green.cgColor
         
-        guard let imageCardImage = image.cgImage else {return}
+       // imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        imageLayer.contents = imageCardImage
-        imageLayer.contentsGravity = .resizeAspectFill
-        imageLayer.masksToBounds = true
-        imageLayer.isDoubleSided = true
-        
-        imageLayer.borderColor = UIColor(white: 1, alpha: 0.5).cgColor
-        imageLayer.borderWidth = 5
-        imageLayer.cornerRadius = 10
+//        guard let imageCardImage = image.cgImage else {return}
+//
+//        imageLayer.contents = imageCardImage
+//        imageLayer.contentsGravity = .resizeAspectFill
+//        imageLayer.masksToBounds = true
+//        imageLayer.isDoubleSided = true
+//        imageLayer.cornerRadius = 10
         
         transformLayer.addSublayer(imageLayer)
-        
     }
     
     fileprivate func turnCarousel(){
@@ -129,12 +138,22 @@ class CarouselCell: UICollectionViewCell{
             transformMatrix = CATransform3DTranslate(transformMatrix, 0, 0, 200)
             
             CATransaction.setAnimationDuration(0)
+        
             
             layer.transform = transformMatrix
             
             angleOffset += segmentForImageCard
         }
         
+    }
+    
+   
+    
+    
+    func removeLayers(){
+        transformLayer.sublayers?.forEach({ (layer) in
+            layer.removeFromSuperlayer()
+        })
     }
     
     fileprivate func degreeToRadians(deg: CGFloat) -> CGFloat{

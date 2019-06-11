@@ -33,7 +33,7 @@ class PinterestPage: BasePage{
                 })
                 self.postcards.append(contentsOf: items ?? [])
             }
-            
+           
            collectionView.reloadData()
         }
     }
@@ -49,6 +49,8 @@ class PinterestPage: BasePage{
     
     var postcards = [postcard]()
     
+    var imagesRenderedForCarouselCell = [Bool]()
+    
     override func viewDidLoad() {
         collectionView.collectionViewLayout = UICollectionViewFlowLayout()
         navigationController?.isNavigationBarHidden = true
@@ -57,11 +59,15 @@ class PinterestPage: BasePage{
         collectionView.backgroundView = backgroundView
         setupHeader()
         setupTabBar()
+        
+        for _ in 0 ..< 15{
+            imagesRenderedForCarouselCell.append(false)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        // return postcards.count
-        return 1
+        return 10
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -71,12 +77,8 @@ class PinterestPage: BasePage{
 //        return cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselCell", for: indexPath) as! CarouselCell
         
-        var images = [String]()
-        guard let albumImages = albums?[0].images else {return cell}
-        for i in 0 ... 5{
-            images.append(albumImages[i])
-        }
-        cell.imagesURL = images
+        cell.removeLayers()
+        cell.addImages()
         return cell
     }
     
@@ -100,16 +102,25 @@ class PinterestPage: BasePage{
         rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
     }
     
+    
+    
 }
+
+
 
 extension PinterestPage: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = view.frame.width
-        let height: CGFloat = (view.frame.height - (150)) / 2
+        let height: CGFloat = (view.frame.height - (230)) / 2
         return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 200, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 120, left: 0, bottom: 90, right: 0)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 50
+    }
+    
 }
