@@ -66,8 +66,9 @@ class PinterestPage: BasePage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       // return postcards.count
-        return 10
+        let count = CGFloat(postcards.count)
+        let ceiling = ceil(count / CGFloat(6))
+        return Int(ceiling)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -79,6 +80,7 @@ class PinterestPage: BasePage{
         
         cell.removeLayers()
         cell.addImages()
+        cell.imagesURL = imagesURLForCellAt(indexPath: indexPath)
         return cell
     }
     
@@ -102,10 +104,34 @@ class PinterestPage: BasePage{
         rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
     }
     
-    
+    func imagesURLForCellAt(indexPath: IndexPath) -> [String]{
+//        if postcards.count == 0{
+//            return []
+//        }
+//
+//        var images = [String]()
+//        let index = (indexPath.item + 1) * 6
+//        var end = (index > postcards.count) ? postcards.count : index
+//        let begin = end - 6
+//        end -= 1
+//
+//        for i in begin ... end{
+//            images.append(postcards[i].imageStringURL)
+//        }
+//        return images
+        
+        var images = [String]()
+        var index = indexPath.item * 6
+        let endIndex = index + 6
+        while(index < endIndex && index < postcards.count){
+            images.append(postcards[index].imageStringURL)
+            index += 1
+        }
+        
+        return images
+    }
     
 }
-
 
 
 extension PinterestPage: UICollectionViewDelegateFlowLayout{

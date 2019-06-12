@@ -17,9 +17,8 @@ class CarouselCell: UICollectionViewCell{
         didSet{
             guard let URLs = imagesURL else {return}
             for (i, url) in URLs.enumerated(){
-                let imageView = UIImageView(image: nil)
-                imageView.backgroundColor = .darkGray
-                
+                let imageView = imageSet[i]
+               
                 // reference to storage
                 let storageRef = Storage.storage().reference()
                 // Reference to an image file in Firebase Storage
@@ -29,16 +28,22 @@ class CarouselCell: UICollectionViewCell{
                 reference.downloadURL { (url, error) in
                     imageURL = url
                     imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
-                        if i == URLs.count - 1{
-                           
-                           
+                        self.imagesDownloaded += 1
+                        if self.imagesDownloaded == self.imageSet.count{
+                            guard let layers = self.transformLayer.sublayers else {return}
+                            for(i, layer) in layers.enumerated(){
+                                layer.contents = self.imageSet[i].image?.cgImage
+                            }
                         }
+                        
                 }
                 }
-                imageSet.append(imageView)
+                
             }
         }
     }
+    
+    var imagesDownloaded = 0
     
     let transformLayer = CATransformLayer()
     var currentAngle: CGFloat = 0
@@ -62,21 +67,16 @@ class CarouselCell: UICollectionViewCell{
         let timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             self.currentAngle += 0.1
             self.turnCarousel()
-            print("here")
         }
     }
     
     func addImages(){
-//        imageSet.forEach { (imageView) in
-//            if let image = imageView.image{
-//                addImageCard(image: image)
-//            }
-//        }
-        for _ in 1 ... 6{
-            addImageCard(image: nil)
+        for i in 0 ..< 6{
+            imageSet.append(UIImageView(image: nil))
+            addImageCard(imageView: imageSet[i])
         }
+        
         turnCarousel()
-    
     }
     
     fileprivate func setupPanGesture(){
@@ -99,7 +99,7 @@ class CarouselCell: UICollectionViewCell{
         turnCarousel()
     }
     
-    fileprivate func addImageCard(image: UIImage?){
+    fileprivate func addImageCard(imageView: UIImageView?){
         
         let imageCardSize = CGSize(width: 180, height: 200)
         
@@ -113,10 +113,10 @@ class CarouselCell: UICollectionViewCell{
 //        guard let imageCardImage = image.cgImage else {return}
 //
 //        imageLayer.contents = imageCardImage
-//        imageLayer.contentsGravity = .resizeAspectFill
-//        imageLayer.masksToBounds = true
-//        imageLayer.isDoubleSided = true
-//        imageLayer.cornerRadius = 10
+        imageLayer.contentsGravity = .resizeAspectFill
+        imageLayer.masksToBounds = true
+        imageLayer.isDoubleSided = true
+        imageLayer.cornerRadius = 10
         
         transformLayer.addSublayer(imageLayer)
     }
@@ -154,6 +154,8 @@ class CarouselCell: UICollectionViewCell{
         transformLayer.sublayers?.forEach({ (layer) in
             layer.removeFromSuperlayer()
         })
+        imageSet = [UIImageView]()
+        imagesDownloaded = 0
     }
     
     fileprivate func degreeToRadians(deg: CGFloat) -> CGFloat{
