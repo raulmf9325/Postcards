@@ -29,10 +29,13 @@ class CarouselCell: UICollectionViewCell{
                     imageURL = url
                     imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
                         self.imagesDownloaded += 1
-                        if self.imagesDownloaded == self.imageSet.count{
-                            guard let layers = self.transformLayer.sublayers else {return}
+                        if self.imagesDownloaded == URLs.count{
+                            guard var layers = self.transformLayer.sublayers else {return}
                             for(i, layer) in layers.enumerated(){
                                 layer.contents = self.imageSet[i].image?.cgImage
+                            }
+                            for i in URLs.count ..< 6{
+                                layers[i].removeFromSuperlayer()
                             }
                         }
                         
