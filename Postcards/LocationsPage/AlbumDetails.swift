@@ -14,7 +14,7 @@ class AlbumDetails: PinterestPage{
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
         collectionView.backgroundView = backgroundView
-        setupHeader()
+        setupHeader(carouselAvailable: true)
         addBackButton()
     }
     

@@ -49,39 +49,48 @@ class PinterestPage: BasePage{
     
     var postcards = [postcard]()
     
-    var imagesRenderedForCarouselCell = [Bool]()
+    enum layout{
+        case pinterest
+        case carousel
+    }
+    
+    var layoutState: layout = .pinterest
     
     override func viewDidLoad() {
-        collectionView.collectionViewLayout = UICollectionViewFlowLayout()
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
         collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: "CarouselCell")
         collectionView.backgroundView = backgroundView
-        setupHeader()
+        setupHeader(carouselAvailable: true)
         setupTabBar()
-        
-        for _ in 0 ..< 15{
-            imagesRenderedForCarouselCell.append(false)
-        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = CGFloat(postcards.count)
-        let ceiling = ceil(count / CGFloat(6))
-        return Int(ceiling)
+        if layoutState == .carousel{
+            let count = CGFloat(postcards.count)
+            let ceiling = ceil(count / CGFloat(6))
+            return Int(ceiling)
+        }
+        else{
+            return postcards.count
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PinterestCell
-//        cell.postcard = postcards[indexPath.item].imageStringURL
-//        cell.albumName = postcards[indexPath.item].albumName
-//        return cell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselCell", for: indexPath) as! CarouselCell
-        
-        cell.removeLayers()
-        cell.addImages()
-        cell.imagesURL = imagesURLForCellAt(indexPath: indexPath)
-        return cell
+        if layoutState == .carousel{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselCell", for: indexPath) as! CarouselCell
+            
+            cell.removeLayers()
+            cell.addImages()
+            cell.imagesURL = imagesURLForCellAt(indexPath: indexPath)
+            return cell
+        }
+        else{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PinterestCell
+            cell.postcard = postcards[indexPath.item].imageStringURL
+            cell.albumName = postcards[indexPath.item].albumName
+            return cell
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -105,20 +114,6 @@ class PinterestPage: BasePage{
     }
     
     func imagesURLForCellAt(indexPath: IndexPath) -> [String]{
-//        if postcards.count == 0{
-//            return []
-//        }
-//
-//        var images = [String]()
-//        let index = (indexPath.item + 1) * 6
-//        var end = (index > postcards.count) ? postcards.count : index
-//        let begin = end - 6
-//        end -= 1
-//
-//        for i in begin ... end{
-//            images.append(postcards[i].imageStringURL)
-//        }
-//        return images
         
         var images = [String]()
         var index = indexPath.item * 6
@@ -131,6 +126,34 @@ class PinterestPage: BasePage{
         return images
     }
     
+    override func handleCubeTap() {
+        if layoutState == .pinterest{
+            cubeButton.setImage(UIImage(named: "cubeWhite"), for: .normal)
+            layoutState = .carousel
+           // collectionView.setCollectionViewLayout(UICollectionViewFlowLayout(), animated: false)
+            collectionView.collectionViewLayout = UICollectionViewFlowLayout()
+            collectionView.reloadData()
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
+        }
+        else{
+            cubeButton.setImage(UIImage(named: "cubeGray"), for: .normal)
+            layoutState = .pinterest
+            collectionView.setCollectionViewLayout(PinterestLayout(), animated: false)
+            collectionView.reloadData()
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
+        }
+        
+//        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
+//        UIView.animate(withDuration: 0.2) {
+//            self.collectionView.performBatchUpdates({
+//                let indexSet = IndexSet(integersIn: 0...0)
+//                self.collectionView.reloadSections(indexSet)
+//            }, completion: nil)
+//
+//            self.collectionView.layoutIfNeeded()
+//        }
+        
+    }
 }
 
 

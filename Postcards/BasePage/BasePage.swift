@@ -73,7 +73,7 @@ class BasePage: UICollectionViewController{
         setupTabBar()
     }
     
-    func setupHeader(){
+    func setupHeader(carouselAvailable: Bool = false){
         // Label
         let attributedText = NSMutableAttributedString(string: "\(headTitle)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
         attributedText.append(NSAttributedString(string: "welcome to postcards", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)]))
@@ -82,6 +82,15 @@ class BasePage: UICollectionViewController{
         PinterestHeader.addSubview(headerLabel)
         PinterestHeader.addConstraintsWithFormat(format: "H:|-20-[v0]", views: headerLabel)
         PinterestHeader.addConstraintsWithFormat(format: "V:[v0(60)]-2-|", views: headerLabel)
+        
+        if carouselAvailable{
+            PinterestHeader.addSubview(cubeButton)
+            cubeButton.bottomAnchor == PinterestHeader.bottomAnchor - 10
+            cubeButton.rightAnchor == PinterestHeader.rightAnchor - 20
+            cubeButton.widthAnchor == 25
+            cubeButton.heightAnchor == 25
+            cubeButton.addTarget(self, action: #selector(handleCubeTap), for: .touchUpInside)
+        }
         
         view.addSubview(PinterestHeader)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: PinterestHeader)
@@ -116,6 +125,8 @@ class BasePage: UICollectionViewController{
         favoritesButton.addTarget(self, action: #selector(handleFavoritesTap), for: .touchUpInside)
     }
     
+    @objc func handleCubeTap(){}
+    
     @objc func handleHomeTap(){
         delegate?.handleTapHome()
     }
@@ -127,6 +138,13 @@ class BasePage: UICollectionViewController{
     @objc func handleFavoritesTap(){
         delegate?.handleTapFavorites()
     }
+    
+    let cubeButton: UIButton = {
+        let button = UIButton()
+        let image = UIImage(named: "cubeGray")
+        button.setImage(image, for: .normal)
+        return button
+    }()
     
     let homeButton: UIButton = {
         let button = UIButton()
