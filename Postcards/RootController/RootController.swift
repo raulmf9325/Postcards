@@ -115,6 +115,10 @@ class RootController: UIViewController{
         activityIndicator.startAnimating()
     }
     
+    private func removeActivityIndicator(){
+        
+    }
+    
     private func checkAuthenticationStatus(){
         let userIsLoggedin = defaults.bool(forKey: "auth")
         if userIsLoggedin{
@@ -184,8 +188,14 @@ class RootController: UIViewController{
                             albums[i].images = images
                         }
                         if urlsDownloaded == totalNumberOfImageURL{
-                            self.pinterestPage.albums = albums
-                            self.locationsPage.albums = albums
+                            UIView.animate(withDuration: 0.3, animations: {
+                                self.activityIndicator.alpha = 0
+                            }, completion: { (_) in
+                                self.activityIndicator.stopAnimating()
+                                self.activityIndicatorContainer.removeFromSuperview()
+                                self.pinterestPage.albums = albums
+                                self.locationsPage.albums = albums
+                            })
                         }
                     }
                 }
