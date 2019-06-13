@@ -56,6 +56,8 @@ class PinterestPage: BasePage{
     
     var layoutState: layout = .pinterest
     
+    var topInset: CGFloat = 110
+    
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
@@ -137,7 +139,7 @@ class PinterestPage: BasePage{
         else{
             cubeButton.setImage(UIImage(named: "cubeGray"), for: .normal)
             layoutState = .pinterest
-            collectionView.setCollectionViewLayout(PinterestLayout(), animated: false)
+            collectionView.setCollectionViewLayout(PinterestLayout(topInset: topInset), animated: false)
             collectionView.reloadData()
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
         }

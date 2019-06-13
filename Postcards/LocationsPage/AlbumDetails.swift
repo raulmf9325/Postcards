@@ -10,6 +10,13 @@ import UIKit
 
 class AlbumDetails: PinterestPage{
     
+    override var topInset: CGFloat {
+        get{
+            return 70
+        }
+        set {}
+    }
+    
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")

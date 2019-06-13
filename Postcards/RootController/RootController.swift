@@ -25,7 +25,7 @@ class RootController: UIViewController{
     var page: pageState!
     
     // Pinterest Page
-    var pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout())
+    var pinterestPage = PinterestPage(collectionViewLayout: PinterestLayout(topInset: 110))
     
     // Pinterest Controller View
     var pinterestView: UIView!

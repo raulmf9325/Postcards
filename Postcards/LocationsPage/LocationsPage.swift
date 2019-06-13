@@ -41,7 +41,7 @@ class LocationsPage: BasePage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let albumDetails = AlbumDetails(collectionViewLayout: PinterestLayout())
+        let albumDetails = AlbumDetails(collectionViewLayout: PinterestLayout(topInset: 70))
         albumDetails.delegate = self.delegate
         albumDetails.headTitle = albums?[indexPath.item].name ?? ""
         albumDetails.album = albums?[indexPath.item]

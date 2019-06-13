@@ -37,6 +37,15 @@ class PinterestLayout: UICollectionViewFlowLayout{
         return CGSize(width: contentWidth, height: contentHeight)
     }
     
+    init(topInset: CGFloat) {
+            super.init()
+            self.insets.top = topInset
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     override func prepare() {
         // 1
