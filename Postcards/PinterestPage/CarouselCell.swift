@@ -59,7 +59,7 @@ class CarouselCell: UICollectionViewCell{
         transformLayer.frame = CGRect(x: (frame.width / 2) - (frame.width - 40) / 2, y: 20, width: frame.width - 40, height: frame.height - 40)
         layer.addSublayer(self.transformLayer)
     
-        let timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+        _ = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             self.currentAngle += 0.1
             self.turnCarousel()
         }
