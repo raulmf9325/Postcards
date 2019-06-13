@@ -68,17 +68,6 @@ class RootController: UIViewController{
         return view
     }()
     
-    init(){
-        super.init(nibName: nil, bundle: nil)
-        fetchAlbums { (snapshot) in
-            self.didFinishFetchingContent(snapshot: snapshot)
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         checkAuthenticationStatus()
     }
@@ -101,6 +90,10 @@ class RootController: UIViewController{
         handleTapHome()
         
         startActivityIndicator()
+        
+        fetchAlbums { (snapshot) in
+            self.didFinishFetchingContent(snapshot: snapshot)
+        }
     }
     
     private func startActivityIndicator(){
