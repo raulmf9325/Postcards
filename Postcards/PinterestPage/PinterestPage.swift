@@ -130,7 +130,6 @@ class PinterestPage: BasePage{
         if layoutState == .pinterest{
             cubeButton.setImage(UIImage(named: "cubeWhite"), for: .normal)
             layoutState = .carousel
-           // collectionView.setCollectionViewLayout(UICollectionViewFlowLayout(), animated: false)
             collectionView.collectionViewLayout = UICollectionViewFlowLayout()
             collectionView.reloadData()
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
