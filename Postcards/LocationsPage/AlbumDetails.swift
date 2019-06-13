@@ -13,6 +13,7 @@ class AlbumDetails: PinterestPage{
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
+        collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: "CarouselCell")
         collectionView.backgroundView = backgroundView
         setupHeader(carouselAvailable: true)
         addBackButton()
