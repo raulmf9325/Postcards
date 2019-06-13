@@ -16,7 +16,7 @@ class PinterestLayout: UICollectionViewFlowLayout{
     // 2
     fileprivate var numberOfColumns = 3
     fileprivate var cellPadding: CGFloat = 6
-    fileprivate var insets: UIEdgeInsets = UIEdgeInsets(top: 100, left: 0, bottom: 40, right: 0)
+    fileprivate var insets: UIEdgeInsets = UIEdgeInsets(top: 110, left: 0, bottom: 50, right: 0)
     
     // 3
     fileprivate var cache = [UICollectionViewLayoutAttributes]()

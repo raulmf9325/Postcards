@@ -103,14 +103,11 @@ class CarouselCell: UICollectionViewCell{
     }
     
     fileprivate func addImageCard(imageView: UIImageView?){
-        
         let imageLayer = CALayer()
         imageLayer.frame = CGRect(x: (frame.width / 2 - 50), y: (transformLayer.bounds.height / 2 - 50), width: 100, height: 100)
         
-      //  imageLayer.backgroundColor = UIColor.green.cgColor
-        
         imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-
+        
         imageLayer.contents = imageView?.image?.cgImage
         imageLayer.contentsGravity = .resizeAspectFill
         imageLayer.masksToBounds = true
