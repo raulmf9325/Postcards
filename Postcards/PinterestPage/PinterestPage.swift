@@ -84,7 +84,8 @@ class PinterestPage: BasePage{
             
             cell.removeLayers()
             cell.addImages()
-            cell.imagesURL = imagesURLForCellAt(indexPath: indexPath)
+            let carouselPostcards = postcardsForCarousellCellAt(indexPath: indexPath)
+            cell.postcards = carouselPostcards
             return cell
         }
         else{
@@ -96,6 +97,7 @@ class PinterestPage: BasePage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if layoutState == .carousel {return}
         
         let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
         let postcardDetails = PostcardDetails()
@@ -115,17 +117,17 @@ class PinterestPage: BasePage{
         rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
     }
     
-    func imagesURLForCellAt(indexPath: IndexPath) -> [String]{
+    func postcardsForCarousellCellAt(indexPath: IndexPath) -> [postcard]{
         
-        var images = [String]()
+        var postcardsForCell = [postcard]()
         var index = indexPath.item * 6
         let endIndex = index + 6
         while(index < endIndex && index < postcards.count){
-            images.append(postcards[index].imageStringURL)
+            postcardsForCell.append(postcards[index])
             index += 1
         }
         
-        return images
+        return postcardsForCell
     }
     
     override func handleCubeTap() {
@@ -142,16 +144,6 @@ class PinterestPage: BasePage{
         
         collectionView.reloadData()
         collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
-//        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
-//        UIView.animate(withDuration: 0.2) {
-//            self.collectionView.performBatchUpdates({
-//                let indexSet = IndexSet(integersIn: 0...0)
-//                self.collectionView.reloadSections(indexSet)
-//            }, completion: nil)
-//
-//            self.collectionView.layoutIfNeeded()
-//        }
-        
     }
 }
 

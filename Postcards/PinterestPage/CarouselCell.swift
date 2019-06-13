@@ -13,21 +13,21 @@ import FirebaseStorage
 class CarouselCell: UICollectionViewCell{
     
     var imageSet = [UIImageView]()
-    var imagesURL: [String]?{
+    var postcards: [postcard]?{
         didSet{
-            guard let URLs = imagesURL else {return}
-            for (i, url) in URLs.enumerated(){
+            guard let postcards = postcards else {return}
+            for (i, postcard) in postcards.enumerated(){
                 let imageView = imageSet[i]
-                let imageURL = URL(string: url)
+                let imageURL = URL(string: postcard.imageStringURL)
                 imageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
                     self.imagesDownloaded += 1
                     
-                    if self.imagesDownloaded == URLs.count{
+                    if self.imagesDownloaded == postcards.count{
                         guard var layers = self.transformLayer.sublayers else {return}
                         for(i, layer) in layers.enumerated(){
                             layer.contents = self.imageSet[i].image?.cgImage
                         }
-                        for i in URLs.count ..< 6{
+                        for i in postcards.count ..< 6{
                             layers[i].removeFromSuperlayer()
                         }
                     }
@@ -57,7 +57,7 @@ class CarouselCell: UICollectionViewCell{
   //      setupPanGesture()
         transformLayer.frame = CGRect(x: (frame.width / 2) - (frame.width - 40) / 2, y: 20, width: frame.width - 40, height: frame.height - 40)
         layer.addSublayer(self.transformLayer)
-       
+    
         let timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             self.currentAngle += 0.1
             self.turnCarousel()
@@ -66,11 +66,23 @@ class CarouselCell: UICollectionViewCell{
     
     func addImages(){
         for i in 0 ..< 6{
-            imageSet.append(UIImageView(image: UIImage(named: "picture")))
+            let imageView = UIImageView(image: UIImage(named: "picture"))
+            imageView.isUserInteractionEnabled = true
+            imageSet.append(imageView)
             addImageCard(imageView: imageSet[i])
         }
         
+        imageSet[0].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnImage)))
         turnCarousel()
+    }
+    
+    @objc func handleTapOnImage(sender: UITapGestureRecognizer){
+        guard let imageView = sender.view else {return}
+        imageSet.forEach { (view) in
+            if view == imageView{
+                print("this one")
+            }
+        }
     }
     
     fileprivate func setupPanGesture(){
@@ -133,9 +145,6 @@ class CarouselCell: UICollectionViewCell{
         }
         
     }
-    
-   
-    
     
     func removeLayers(){
         transformLayer.sublayers?.forEach({ (layer) in
