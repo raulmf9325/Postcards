@@ -54,8 +54,8 @@ class CarouselCell: UICollectionViewCell{
     }
     
     func setupViews() {
-        backgroundColor = .white
-  //    setupPanGesture()
+       // backgroundColor = .white
+ 
         transformLayer.frame = CGRect(x: (frame.width / 2) - (frame.width - 40) / 2, y: 20, width: frame.width - 40, height: frame.height - 40)
         layer.addSublayer(self.transformLayer)
     
@@ -73,42 +73,12 @@ class CarouselCell: UICollectionViewCell{
             addImageCard(imageView: imageSet[i])
         }
         
-        imageSet[0].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnImage)))
-        turnCarousel()
-    }
-    
-    @objc func handleTapOnImage(sender: UITapGestureRecognizer){
-        guard let imageView = sender.view else {return}
-        imageSet.forEach { (view) in
-            if view == imageView{
-                print("this one")
-            }
-        }
-    }
-    
-    fileprivate func setupPanGesture(){
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(performPanAction(recognizer:)))
-        addGestureRecognizer(panGesture)
-    }
-    
-    @objc func performPanAction(recognizer: UIPanGestureRecognizer){
-        
-        let xOffset = recognizer.translation(in: self).x
-        
-        if recognizer.state == .began{
-            currentOffset = 0
-        }
-        
-        let xDifference = xOffset * 0.6 - currentOffset
-        currentOffset += xDifference
-        currentAngle += xDifference
-        
         turnCarousel()
     }
     
     fileprivate func addImageCard(imageView: UIImageView?){
         let imageLayer = CALayer()
-        imageLayer.frame = CGRect(x: (frame.width / 2 - 50), y: (transformLayer.bounds.height / 2 - 50), width: 100, height: 100)
+        imageLayer.frame = CGRect(x: (frame.width / 2 - 60), y: (transformLayer.bounds.height / 2 - 65), width: 120, height: 130)
         
         imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
