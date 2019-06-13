@@ -46,6 +46,7 @@ class CarouselCell: UICollectionViewCell{
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        currentAngle = CGFloat.random(in: 0 ... 360)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,7 +55,7 @@ class CarouselCell: UICollectionViewCell{
     
     func setupViews() {
         backgroundColor = .white
-  //      setupPanGesture()
+  //    setupPanGesture()
         transformLayer.frame = CGRect(x: (frame.width / 2) - (frame.width - 40) / 2, y: 20, width: frame.width - 40, height: frame.height - 40)
         layer.addSublayer(self.transformLayer)
     

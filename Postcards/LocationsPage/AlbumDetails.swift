@@ -27,6 +27,8 @@ class AlbumDetails: PinterestPage{
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if layoutState == .carousel {return}
+        
         let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
         let postcardDetails = PostcardDetails()
         postcardDetails.postcard.image = cell.cellImage.image
