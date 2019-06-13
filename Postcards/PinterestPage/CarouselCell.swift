@@ -75,7 +75,7 @@ class CarouselCell: UICollectionViewCell{
     
     func addImages(){
         for i in 0 ..< 6{
-            imageSet.append(UIImageView(image: nil))
+            imageSet.append(UIImageView(image: UIImage(named: "picture")))
             addImageCard(imageView: imageSet[i])
         }
         
@@ -104,18 +104,14 @@ class CarouselCell: UICollectionViewCell{
     
     fileprivate func addImageCard(imageView: UIImageView?){
         
-        let imageCardSize = CGSize(width: 180, height: 200)
-        
         let imageLayer = CALayer()
         imageLayer.frame = CGRect(x: (frame.width / 2 - 50), y: (transformLayer.bounds.height / 2 - 50), width: 100, height: 100)
         
-        imageLayer.backgroundColor = UIColor.green.cgColor
+      //  imageLayer.backgroundColor = UIColor.green.cgColor
         
-       // imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
-//        guard let imageCardImage = image.cgImage else {return}
-//
-//        imageLayer.contents = imageCardImage
+        imageLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+
+        imageLayer.contents = imageView?.image?.cgImage
         imageLayer.contentsGravity = .resizeAspectFill
         imageLayer.masksToBounds = true
         imageLayer.isDoubleSided = true
