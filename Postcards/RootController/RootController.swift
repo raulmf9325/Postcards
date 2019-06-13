@@ -116,7 +116,7 @@ class RootController: UIViewController{
         guard let db = db else {return}
         
         db.collection("postcards").getDocuments { (snapshot, error) in
-            if let error = error {return}
+            if error != nil {return}
             guard let snapshot = snapshot else {return}
             completion(snapshot)
         }

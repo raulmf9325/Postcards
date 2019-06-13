@@ -13,40 +13,24 @@ class AlbumCell: UICollectionViewCell{
     
     var album: Album?{
         didSet{
-            guard let album = album, let url = album.images?[0], let albumName = album.name else {return}
-            // reference to storage
-            let storageRef = Storage.storage().reference()
-            // Reference to an image file in Firebase Storage
-            let reference = storageRef.child("postcards/\(url)")
-            var imageURL: URL?
-            
-            reference.downloadURL { (url, error) in
-                imageURL = url
-                
-                self.albumImageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
+            guard let album = album, let stringURL = album.images?[0], let albumName = album.name else {return}
+        
+            let imageURL = URL(string: stringURL)
+            albumImageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
+                if  error != nil {return}
+                self.addSubview(self.albumImageView)
+                self.albumImageView.fillSuperview()
                     
-                    if let error = error{
-                        print("ERROR!: \(error)")
-                        return
-                    }
-                    
-                    self.addSubview(self.albumImageView)
-                    self.albumImageView.fillSuperview()
-                    
-                    let attributedText = NSMutableAttributedString(string: "\(albumName)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
+                let attributedText = NSMutableAttributedString(string: "\(albumName)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
                     attributedText.append(NSAttributedString(string: "\(album.images?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
                     
-                    self.albumNameLabel.attributedText = attributedText
-                    
-                    self.addSubview(self.albumNameLabel)
-                    self.addConstraintsWithFormat(format: "H:|-16-[v0]|", views: self.albumNameLabel)
-                    self.addConstraintsWithFormat(format: "V:[v0(60)]-8-|", views: self.albumNameLabel)
-                    
-                    self.imagePlaceholder.stopAnimating()
+                self.albumNameLabel.attributedText = attributedText
+                self.addSubview(self.albumNameLabel)
+                self.addConstraintsWithFormat(format: "H:|-16-[v0]|", views: self.albumNameLabel)
+                self.addConstraintsWithFormat(format: "V:[v0(60)]-8-|", views: self.albumNameLabel)
+                self.imagePlaceholder.stopAnimating()
                 }
             }
-            
-        }
     }
     
     override init(frame: CGRect) {
