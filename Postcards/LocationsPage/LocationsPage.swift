@@ -51,7 +51,6 @@ class LocationsPage: BasePage{
         let rootController = delegate as! RootController
         rootController.pushController(selectedFrame: selectedFrame, vc: albumDetails)
     }
-    
 }
 
 extension LocationsPage: UICollectionViewDelegateFlowLayout{

@@ -11,4 +11,5 @@ target 'Postcards' do
     pod 'Firebase/Storage'
     pod 'FirebaseUI/Storage'
     pod 'Firebase/Auth'
+    pod 'NVActivityIndicatorView'
 end

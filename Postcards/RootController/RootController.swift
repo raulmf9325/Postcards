@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseStorage
 import FirebaseUI
+import NVActivityIndicatorView
 
 class RootController: UIViewController{
     // database
@@ -57,6 +58,16 @@ class RootController: UIViewController{
     // collapse animation
     var collapseAnimation = false
     
+    // activity indicator
+    var activityIndicator: NVActivityIndicatorView!
+    
+    // activity indicator container
+    let activityIndicatorContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     init(){
         super.init(nibName: nil, bundle: nil)
         fetchAlbums { (snapshot) in
@@ -88,6 +99,20 @@ class RootController: UIViewController{
         view.addSubview(locationsView)
         
         handleTapHome()
+        
+        startActivityIndicator()
+    }
+    
+    private func startActivityIndicator(){
+        activityIndicator = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80), type: .ballRotateChase, color: .white, padding: 17)
+        view.addSubview(activityIndicatorContainer)
+        activityIndicatorContainer.centerXAnchor == view.centerXAnchor
+        activityIndicatorContainer.centerYAnchor == view.centerYAnchor
+        activityIndicatorContainer.widthAnchor == 80
+        activityIndicatorContainer.heightAnchor == 80
+        
+        activityIndicatorContainer.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
     }
     
     private func checkAuthenticationStatus(){
