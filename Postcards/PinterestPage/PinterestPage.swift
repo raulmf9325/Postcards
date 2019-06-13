@@ -18,7 +18,7 @@ struct postcard{
 
 class PinterestPage: BasePage{
     /*
-        Pinterest Page is used for both, they entry page with all albums
+        Pinterest Page is used for both, the entry page with all albums
         and for album details. Therefore, it can have either 'albums' or 'album' (but not both)
      */
     
@@ -33,7 +33,7 @@ class PinterestPage: BasePage{
                 })
                 self.postcards.append(contentsOf: items ?? [])
             }
-           
+    
            collectionView.reloadData()
         }
     }
@@ -133,17 +133,15 @@ class PinterestPage: BasePage{
             cubeButton.setImage(UIImage(named: "cubeWhite"), for: .normal)
             layoutState = .carousel
             collectionView.collectionViewLayout = UICollectionViewFlowLayout()
-            collectionView.reloadData()
-            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
         }
         else{
             cubeButton.setImage(UIImage(named: "cubeGray"), for: .normal)
             layoutState = .pinterest
             collectionView.setCollectionViewLayout(PinterestLayout(topInset: topInset), animated: false)
-            collectionView.reloadData()
-            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
         }
         
+        collectionView.reloadData()
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
 //        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
 //        UIView.animate(withDuration: 0.2) {
 //            self.collectionView.performBatchUpdates({

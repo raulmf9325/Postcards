@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
+import FirebaseUI
 
 class RootController: UIViewController{
     // database
@@ -129,8 +131,42 @@ class RootController: UIViewController{
             let newAlbum = Album(name: album.documentID, images: images)
             albums.append(newAlbum)
         }
-        pinterestPage.albums = albums
-        locationsPage.albums = albums
+        
+        let storageRef = Storage.storage().reference()
+        var urlsDownloaded = 0
+        var totalNumberOfImageURL = 0
+        let map = albums.map { (album) -> Int in
+            return album.images?.count ?? 0
+        }
+        
+        map.forEach { (set) in
+            totalNumberOfImageURL += set
+        }
+        
+        for (i, album) in albums.enumerated(){
+            let numberOfImagesInAlbum = album.images?.count ?? 0
+            var urlsDownloadedInAlbum = 0
+            if var images = albums[i].images{
+                for (j, imageString) in images.enumerated(){
+                    let reference = storageRef.child("postcards/\(imageString)")
+                    reference.downloadURL { (url, error) in
+                        urlsDownloadedInAlbum += 1
+                        urlsDownloaded += 1
+                        if error == nil{
+                            images[j] = url?.absoluteString ?? ""
+                        }
+                        if urlsDownloadedInAlbum == numberOfImagesInAlbum{
+                            albums[i].images = images
+                        }
+                        if urlsDownloaded == totalNumberOfImageURL{
+                            self.pinterestPage.albums = albums
+                            self.locationsPage.albums = albums
+                        }
+                    }
+                }
+            }
+        }
+  
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{

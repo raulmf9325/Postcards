@@ -16,24 +16,12 @@ class PinterestCell: UICollectionViewCell{
     var postcard: String?{
         didSet{
             guard let postcard = postcard else{return}
-            // reference to storage
-            let storageRef = Storage.storage().reference()
-            
-            // Reference to an image file in Firebase Storage
-            let reference = storageRef.child("postcards/\(postcard)")
-            var imageURL: URL?
-           
-            reference.downloadURL { (url, error) in
-                imageURL = url
-                self.cellImage.sd_setImage(with: imageURL) { (image, error, cache, url) in
-                    if let error = error{
-                        print("ERROR!: \(error)")
-                        return
-                    }
-                    self.addSubview(self.cellImage)
-                    self.cellImage.fillSuperview()
-                    self.imagePlaceholder.stopAnimating()
-                }
+            let imageURL = URL(string: postcard)
+            cellImage.sd_setImage(with: imageURL) { (image, error, cache, url) in
+                if error != nil {return}
+                self.addSubview(self.cellImage)
+                self.cellImage.fillSuperview()
+                self.imagePlaceholder.stopAnimating()
             }
         }
     }
@@ -41,7 +29,7 @@ class PinterestCell: UICollectionViewCell{
     let imagePlaceholder = GradientView()
     
     let cellImage: UIImageView = {
-        let image = UIImage(named: "1")
+        let image = UIImage(named: "picture")
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 8
