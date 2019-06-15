@@ -39,6 +39,12 @@ class RootController: UIViewController{
     // Locations Controller View
     var locationsView: UIView!
     
+    // favorites page
+    var favoritesPage = FavoritesPage(collectionViewLayout: PinterestLayout(topInset: 110))
+    
+    // favorites controller view
+    var favoritesView: UIView!
+    
     // background view
     let backgroundView: UIImageView = {
         let image = UIImage(named: "wallpaper")
@@ -84,8 +90,12 @@ class RootController: UIViewController{
         locationsPage.delegate = self
         locationsView = locationsPage.view
         
+        favoritesPage.delegate = self
+        favoritesView = favoritesPage.view
+        
         view.addSubview(pinterestView)
         view.addSubview(locationsView)
+        view.addSubview(favoritesView)
         
         handleTapHome()
         
@@ -212,7 +222,7 @@ extension RootController: TabBarDelegate{
     }
     
     func handleTapFavorites() {
-        
+        view.bringSubviewToFront(favoritesView)
     }
 }
 

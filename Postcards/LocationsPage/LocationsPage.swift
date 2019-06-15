@@ -28,6 +28,7 @@ class LocationsPage: BasePage{
         
         homeButton.setImage(UIImage(named: "homeInactive"), for: .normal)
         locationButton.setImage(UIImage(named: "locationsActive"), for: .normal)
+        favoritesButton.setImage(UIImage(named: "favorites"), for: .normal)
         setupTabBar()
     }
     

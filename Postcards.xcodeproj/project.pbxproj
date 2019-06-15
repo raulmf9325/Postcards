@@ -26,6 +26,7 @@
 		3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347321FA874D00E1EEE7 /* RootController.swift */; };
 		3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347621FA894100E1EEE7 /* BasePage.swift */; };
 		3ECD081E21FD1B0500C66319 /* AlbumDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */; };
+		3EE60F9B22B5AD760028E873 /* FavoritesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE60F9A22B5AD760028E873 /* FavoritesPage.swift */; };
 		3EED9FC121F779D00011DB35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */; };
 		3EED9FC321F814840011DB35 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EED9FC221F814840011DB35 /* GradientView.swift */; };
 		3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2B6AF21EFD68000070540 /* AppDelegate.swift */; };
@@ -57,6 +58,7 @@
 		3EBA347321FA874D00E1EEE7 /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
 		3EBA347621FA894100E1EEE7 /* BasePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePage.swift; sourceTree = "<group>"; };
 		3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetails.swift; sourceTree = "<group>"; };
+		3EE60F9A22B5AD760028E873 /* FavoritesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPage.swift; sourceTree = "<group>"; };
 		3EED9FC021F779D00011DB35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3EED9FC221F814840011DB35 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		3EF2B6AC21EFD68000070540 /* Postcards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Postcards.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +186,14 @@
 			path = BasePage;
 			sourceTree = "<group>";
 		};
+		3EE60F9722B5AA120028E873 /* Favorites Page */ = {
+			isa = PBXGroup;
+			children = (
+				3EE60F9A22B5AD760028E873 /* FavoritesPage.swift */,
+			);
+			path = "Favorites Page";
+			sourceTree = "<group>";
+		};
 		3EF2B6A321EFD68000070540 = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +223,7 @@
 				3EBA347521FA893000E1EEE7 /* BasePage */,
 				3E19DCB621F2D5E50093AA88 /* PinterestPage */,
 				3E08539C21FBA3E3006BBF04 /* LocationsPage */,
+				3EE60F9722B5AA120028E873 /* Favorites Page */,
 				3E4ABF7021F02CE6007D69FB /* Authentication Page */,
 				3E4ABF6F21F02CD7007D69FB /* Welcome Page */,
 				3E19DCB521F2D5D10093AA88 /* PinterestLayout */,
@@ -410,6 +421,7 @@
 				3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */,
 				3E5B791522AC459000A1F90D /* Anchorage.swift in Sources */,
 				3E4ABF7221F02D04007D69FB /* AuthenticationPage.swift in Sources */,
+				3EE60F9B22B5AD760028E873 /* FavoritesPage.swift in Sources */,
 				3E19DCB421F2D5CB0093AA88 /* PinterestLayout.swift in Sources */,
 				3E5B791922AC459000A1F90D /* NSLayoutAnchor+MultiplierConstraints.swift in Sources */,
 				3EF2B6C421EFD80500070540 /* ViewExtension.swift in Sources */,
