@@ -113,6 +113,7 @@ class BasePage: UICollectionViewController{
         
         let buttonStack = UIStackView(arrangedSubviews: [homeButton, locationButton, favoritesButton])
         buttonStack.distribution = .fillEqually
+        buttonStack.alignment = .center
         tabBar.addSubview(buttonStack)
         
         buttonStack.leftAnchor == tabBar.leftAnchor
