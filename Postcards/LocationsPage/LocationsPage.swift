@@ -64,7 +64,7 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let horizontalPadding: CGFloat = 50
         let width: CGFloat = view.frame.width - (2 * horizontalPadding)
-        let verticalPadding: CGFloat = 50
+        let verticalPadding: CGFloat = (view.frame.height - 150) / 7
         let height: CGFloat = view.frame.height - (100 + 50 + 2 * verticalPadding)
         return CGSize(width: width, height: height)
     }
