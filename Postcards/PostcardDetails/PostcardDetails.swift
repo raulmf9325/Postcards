@@ -19,6 +19,7 @@ class PostcardDetails: UIViewController{
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -36,18 +37,13 @@ class PostcardDetails: UIViewController{
         return label
     }()
     
-    // background view
-    let backgroundView: UIImageView = {
-        let image = UIImage(named: "wallpaper")
-        let imageView = UIImageView(image: image)
-        
-        let blackOverlay = UIView()
-        blackOverlay.backgroundColor = .black
-        blackOverlay.alpha = 0.7
-        imageView.addSubview(blackOverlay)
-        blackOverlay.fillSuperview()
-        return imageView
-    }()
+    // header state
+    enum HeaderState{
+        case visible
+        case hidden
+    }
+    
+    var headerState: HeaderState = .hidden
     
     override func viewDidLoad() {
         view.addSubview(postcard)
@@ -56,7 +52,20 @@ class PostcardDetails: UIViewController{
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.setupHeader()
         }
-        
+    }
+    
+    private func presentHeader() {
+        headerState = .visible
+        UIView.animate(withDuration: 0.35) {
+            self.Header.frame.origin.y += 100
+        }
+    }
+    
+    private func hideHeader(){
+        headerState = .hidden
+        UIView.animate(withDuration: 0.35) {
+            self.Header.frame.origin.y -= 100
+        }
     }
     
     func setupHeader(){
@@ -68,16 +77,25 @@ class PostcardDetails: UIViewController{
         Header.addSubview(headerLabel)
         Header.addConstraintsWithFormat(format: "H:|-20-[v0]", views: headerLabel)
         Header.addConstraintsWithFormat(format: "V:[v0(60)]-2-|", views: headerLabel)
-        
+        view.addSubview(Header)
+      
         addBackButton()
         
-        view.addSubview(Header)
         Header.frame = CGRect(x: 0, y: -100, width: view.frame.width, height: 100)
         Header.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         Header.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
         
-        UIView.animate(withDuration: 0.35) {
-            self.Header.frame.origin.y += 100
+        presentHeader()
+        
+        postcard.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapImage)))
+    }
+    
+    @objc private func handleTapImage(){
+        if headerState == .hidden{
+            presentHeader()
+        }
+        else{
+            hideHeader()
         }
     }
     
@@ -104,15 +122,5 @@ class PostcardDetails: UIViewController{
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
-    
-    let cellImage: UIImageView = {
-        let image = UIImage(named: "1")
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 8
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
     
 }
