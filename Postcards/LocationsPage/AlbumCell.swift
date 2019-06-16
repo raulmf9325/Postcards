@@ -13,7 +13,7 @@ class AlbumCell: UICollectionViewCell{
     
     var album: Album?{
         didSet{
-            guard let album = album, let stringURL = album.images?[0], let albumName = album.name else {return}
+            guard let album = album, let stringURL = album.postcards?[0].imageStringURL, let albumName = album.name else {return}
         
             let imageURL = URL(string: stringURL)
             albumImageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
@@ -22,7 +22,7 @@ class AlbumCell: UICollectionViewCell{
                 self.albumImageView.fillSuperview()
                     
                 let attributedText = NSMutableAttributedString(string: "\(albumName)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
-                    attributedText.append(NSAttributedString(string: "\(album.images?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
+                    attributedText.append(NSAttributedString(string: "\(album.postcards?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
                     
                 self.albumNameLabel.attributedText = attributedText
                 self.addSubview(self.albumNameLabel)

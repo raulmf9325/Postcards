@@ -14,6 +14,7 @@ import FirebaseFirestore
 struct postcard{
     var albumName: String
     var imageStringURL: String
+    var imageName: String       // for cloud storage reference
 }
 
 class PinterestPage: BasePage{
@@ -28,22 +29,17 @@ class PinterestPage: BasePage{
             guard let albums = albums else {return}
             
             albums.forEach { (album) in
-               let items = album.images?.map({ (image) -> postcard in
-                    return postcard(albumName: album.name ?? "", imageStringURL: image)
-                })
-                self.postcards.append(contentsOf: items ?? [])
+                self.postcards.append(contentsOf: album.postcards ?? [])
             }
-    
-           collectionView.reloadData()
+            collectionView.reloadData()
         }
     }
     
     var album: Album?{
         didSet{
-            guard let albumName = album?.name else {return}
-            self.postcards = album?.images?.map({ (image) -> postcard in
-                return postcard(albumName: albumName, imageStringURL: image)
-            }) ?? []
+            guard let postcards = album?.postcards else {return}
+            self.postcards = postcards
+            collectionView.reloadData()
         }
     }
     

@@ -104,13 +104,11 @@ class RootController: UIViewController{
         
         startActivityIndicator()
         
-        fetchAlbums { (snapshot) in
-            self.didFinishFetchingContent(snapshot: snapshot)
-        }
+        fetchAlbums()
         
-        fetchFavorites { (postcards) in
-            
-        }
+//        fetchFavorites { (postcards) in
+//            
+//        }
     }
     
     private func startActivityIndicator(){
@@ -145,8 +143,8 @@ class RootController: UIViewController{
         
     }
     
-    // fetch albums
-    private func fetchAlbums(completion: @escaping (QuerySnapshot) -> ()) {
+    // fetch default albums
+    private func fetchDefaultAlbums(_ completion: @escaping (QuerySnapshot) -> ()) {
         db.collection("postcards").getDocuments { (snapshot, error) in
             if error != nil {return}
             guard let snapshot = snapshot else {return}
@@ -154,56 +152,81 @@ class RootController: UIViewController{
         }
     }
     
-    // fetch favorites
-    private func fetchFavorites(completion: @escaping ([postcard]) -> ()){
+    // fetch user albums
+    private func fetchUserAlbums(_ completion: @escaping (QuerySnapshot) -> ()){
         guard let user = Auth.auth().currentUser?.email else {return}
-        
-        let favorites = db.collection("users").document(user)
-        favorites.getDocument { (snapshot, error) in
+        let albumsCollection = db.collection("users").document(user).collection("album")
+        albumsCollection.getDocuments { (snapshot, error) in
             if error != nil {return}
             guard let snapshot = snapshot else {return}
-            guard let data = snapshot.data() as? [String: [String]] else {return}
-            let imagesArray = data.values.map{$0}
-            var images = [String]()
-            imagesArray.forEach({ (array) in
-                images.append(contentsOf: array)
-            })
-           
-            var urlsDownloaded = 0
-            let numberOfURLs = images.count
-            var postcards = [postcard]()
-            
-            images.forEach({ (imageString) in
-                let reference = self.storageRef.child("postcards/\(imageString)")
-                reference.downloadURL(completion: { (url, error) in
-                    urlsDownloaded += 1
-                    if let url = url?.absoluteString{
-                        postcards.append(postcard(albumName: "no name", imageStringURL: url))
-                    }
-                    
-                    if urlsDownloaded == numberOfURLs{
-                        self.favoritesPage.postcards = postcards
-                        self.favoritesPage.collectionView.reloadData()
-                    }
-                })
-            })
+            completion(snapshot)
         }
     }
     
-    private func didFinishFetchingContent(snapshot: QuerySnapshot){
+    // parse snapshot
+    private func parseSnapshot(snapshot: QuerySnapshot, rootDirectory: String) -> [Album]{
         var albums = [Album]()
         
         for album in snapshot.documents{
-            guard let data = album.data() as? [String:String] else {return}
-            let images = Array(data.values.map{$0})
-            let newAlbum = Album(name: album.documentID, images: images)
+            guard let data = album.data() as? [String:String] else {return []}
+            
+            let albumName = album.documentID
+            let imagesNames = Array(data.values.map{$0})
+            var postcards = [postcard]()
+            
+            imagesNames.forEach({ (imageName) in
+                postcards.append(postcard(albumName: albumName, imageStringURL: "", imageName: imageName))
+            })
+            
+            let newAlbum = Album(name: albumName, rootDirectory: rootDirectory, postcards: postcards)
             albums.append(newAlbum)
         }
         
+        return albums
+    }
+    
+    // fetch all albums
+    private func fetchAlbums() {
+        var allAlbums = [Album]()
+        var didFinishFetchingDefaultAlbums = false
+        var didFinishFetchingUserAlbums = false
+        
+        // default albums
+        fetchDefaultAlbums { (snapshot) in
+            didFinishFetchingDefaultAlbums = true
+           
+            let defaultAlbums = self.parseSnapshot(snapshot: snapshot, rootDirectory: "postcards")
+            allAlbums.append(contentsOf: defaultAlbums)
+            
+            if didFinishFetchingUserAlbums{
+                self.downloadImagesURLForAlbums(albums: allAlbums)
+            }
+        }
+        
+        // user albums
+        fetchUserAlbums { (snapshot) in
+            didFinishFetchingUserAlbums = true
+            
+            guard let user = Auth.auth().currentUser?.email else {return}
+            let rootDirectory = "users" + "/" + user
+            let userAlbums = self.parseSnapshot(snapshot: snapshot, rootDirectory: rootDirectory)
+            allAlbums.append(contentsOf: userAlbums)
+        }
+        
+        if didFinishFetchingDefaultAlbums{
+            self.downloadImagesURLForAlbums(albums: allAlbums)
+        }
+    }
+    
+    
+    
+    private func downloadImagesURLForAlbums(albums: [Album]){
+        var albums = albums
         var urlsDownloaded = 0
         var totalNumberOfImageURL = 0
+        
         let map = albums.map { (album) -> Int in
-            return album.images?.count ?? 0
+            return album.postcards?.count ?? 0
         }
         
         map.forEach { (set) in
@@ -211,20 +234,25 @@ class RootController: UIViewController{
         }
         
         for (i, album) in albums.enumerated(){
-            let numberOfImagesInAlbum = album.images?.count ?? 0
+            let numberOfImagesInAlbum = album.postcards?.count ?? 0
             var urlsDownloadedInAlbum = 0
-            if var images = albums[i].images{
-                for (j, imageString) in images.enumerated(){
-                    let reference = storageRef.child("postcards/\(imageString)")
+            
+            if var postcards = albums[i].postcards, let rootDirectory = albums[i].rootDirectory{
+                
+                for (j, postcard) in postcards.enumerated(){
+                    let reference = storageRef.child("\(rootDirectory)/\(postcard.imageName)")
                     reference.downloadURL { (url, error) in
                         urlsDownloadedInAlbum += 1
                         urlsDownloaded += 1
+                       
                         if error == nil{
-                            images[j] = url?.absoluteString ?? ""
+                           postcards[j].imageStringURL = url?.absoluteString ?? ""
                         }
+                        
                         if urlsDownloadedInAlbum == numberOfImagesInAlbum{
-                            albums[i].images = images
+                            albums[i].postcards = postcards
                         }
+                        
                         if urlsDownloaded == totalNumberOfImageURL{
                             UIView.animate(withDuration: 0.3, animations: {
                                 self.activityIndicator.alpha = 0
@@ -239,8 +267,43 @@ class RootController: UIViewController{
                 }
             }
         }
-  
     }
+    
+    // fetch favorites
+//    private func fetchFavorites(completion: @escaping ([postcard]) -> ()){
+//        guard let user = Auth.auth().currentUser?.email else {return}
+//
+//        let favorites = db.collection("users").document(user)
+//        favorites.getDocument { (snapshot, error) in
+//            if error != nil {return}
+//            guard let snapshot = snapshot else {return}
+//            guard let data = snapshot.data() as? [String: [String]] else {return}
+//            let imagesArray = data.values.map{$0}
+//            var images = [String]()
+//            imagesArray.forEach({ (array) in
+//                images.append(contentsOf: array)
+//            })
+//
+//            var urlsDownloaded = 0
+//            let numberOfURLs = images.count
+//            var postcards = [postcard]()
+//
+//            images.forEach({ (imageString) in
+//                let reference = self.storageRef.child("postcards/\(imageString)")
+//                reference.downloadURL(completion: { (url, error) in
+//                    urlsDownloaded += 1
+//                    if let url = url?.absoluteString{
+//                        postcards.append(postcard(albumName: "no name", imageStringURL: url))
+//                    }
+//
+//                    if urlsDownloaded == numberOfURLs{
+//                        self.favoritesPage.postcards = postcards
+//                        self.favoritesPage.collectionView.reloadData()
+//                    }
+//                })
+//            })
+//        }
+//    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent

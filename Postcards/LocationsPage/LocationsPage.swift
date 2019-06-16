@@ -78,5 +78,6 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
 // MARK: Album class
 struct Album{
     var name: String?
-    var images: [String]?
+    var rootDirectory: String? // directory in cloud storage
+    var postcards: [postcard]?
 }
