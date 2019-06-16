@@ -14,7 +14,10 @@ import NVActivityIndicatorView
 
 class RootController: UIViewController{
     // database
-    var db: Firestore?
+    let db: Firestore = Firestore.firestore()
+    
+    // storage reference
+    let storageRef = Storage.storage().reference()
     
     enum pageState{
         case home
@@ -104,6 +107,10 @@ class RootController: UIViewController{
         fetchAlbums { (snapshot) in
             self.didFinishFetchingContent(snapshot: snapshot)
         }
+        
+        fetchFavorites { (postcards) in
+            
+        }
     }
     
     private func startActivityIndicator(){
@@ -116,10 +123,6 @@ class RootController: UIViewController{
         
         activityIndicatorContainer.addSubview(activityIndicator)
         activityIndicator.startAnimating()
-    }
-    
-    private func removeActivityIndicator(){
-        
     }
     
     private func checkAuthenticationStatus(){
@@ -144,13 +147,46 @@ class RootController: UIViewController{
     
     // fetch albums
     private func fetchAlbums(completion: @escaping (QuerySnapshot) -> ()) {
-        db = Firestore.firestore()
-        guard let db = db else {return}
-        
         db.collection("postcards").getDocuments { (snapshot, error) in
             if error != nil {return}
             guard let snapshot = snapshot else {return}
             completion(snapshot)
+        }
+    }
+    
+    // fetch favorites
+    private func fetchFavorites(completion: @escaping ([postcard]) -> ()){
+        guard let user = Auth.auth().currentUser?.email else {return}
+        
+        let favorites = db.collection("users").document(user)
+        favorites.getDocument { (snapshot, error) in
+            if error != nil {return}
+            guard let snapshot = snapshot else {return}
+            guard let data = snapshot.data() as? [String: [String]] else {return}
+            let imagesArray = data.values.map{$0}
+            var images = [String]()
+            imagesArray.forEach({ (array) in
+                images.append(contentsOf: array)
+            })
+           
+            var urlsDownloaded = 0
+            let numberOfURLs = images.count
+            var postcards = [postcard]()
+            
+            images.forEach({ (imageString) in
+                let reference = self.storageRef.child("postcards/\(imageString)")
+                reference.downloadURL(completion: { (url, error) in
+                    urlsDownloaded += 1
+                    if let url = url?.absoluteString{
+                        postcards.append(postcard(albumName: "no name", imageStringURL: url))
+                    }
+                    
+                    if urlsDownloaded == numberOfURLs{
+                        self.favoritesPage.postcards = postcards
+                        self.favoritesPage.collectionView.reloadData()
+                    }
+                })
+            })
         }
     }
     
@@ -164,7 +200,6 @@ class RootController: UIViewController{
             albums.append(newAlbum)
         }
         
-        let storageRef = Storage.storage().reference()
         var urlsDownloaded = 0
         var totalNumberOfImageURL = 0
         let map = albums.map { (album) -> Int in
