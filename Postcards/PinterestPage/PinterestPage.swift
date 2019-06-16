@@ -61,6 +61,7 @@ class PinterestPage: BasePage{
         collectionView.backgroundView = backgroundView
         setupHeader(carouselAvailable: true)
         setupTabBar()
+        startActivityIndicator()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseStorage
 import FirebaseFirestore
+import NVActivityIndicatorView
 
 protocol TabBarDelegate{
     func handleTapHome()
@@ -64,6 +65,16 @@ class BasePage: UICollectionViewController{
         return imageView
     }()
     
+    // activity indicator
+    var activityIndicator: NVActivityIndicatorView!
+    
+    // activity indicator container
+    let activityIndicatorContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
@@ -71,6 +82,25 @@ class BasePage: UICollectionViewController{
     override func viewDidLoad() {
         setupHeader()
         setupTabBar()
+    }
+    
+    // start activity indicator
+    func startActivityIndicator(){
+        activityIndicator = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80), type: .ballRotateChase, color: .white, padding: 17)
+        view.addSubview(activityIndicatorContainer)
+        activityIndicatorContainer.centerXAnchor == view.centerXAnchor
+        activityIndicatorContainer.centerYAnchor == view.centerYAnchor
+        activityIndicatorContainer.widthAnchor == 80
+        activityIndicatorContainer.heightAnchor == 80
+        
+        activityIndicatorContainer.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+    }
+    
+    // remove activity indicator
+    func removeActivityIndicator(){
+        activityIndicator.stopAnimating()
+        activityIndicatorContainer.removeFromSuperview()
     }
     
     func setupHeader(carouselAvailable: Bool = false){

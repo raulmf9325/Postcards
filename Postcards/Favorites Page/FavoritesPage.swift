@@ -8,7 +8,9 @@
 
 import UIKit
 
+
 class FavoritesPage: PinterestPage{
+    
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
         collectionView.register(PinterestCell.self, forCellWithReuseIdentifier: "CellId")
@@ -21,5 +23,7 @@ class FavoritesPage: PinterestPage{
         locationButton.setImage(UIImage(named: "location"), for: .normal)
         favoritesButton.setImage(UIImage(named: "favoritesActive"), for: .normal)
         setupTabBar()
+        
+        startActivityIndicator()
     }
 }

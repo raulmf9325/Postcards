@@ -30,6 +30,8 @@ class LocationsPage: BasePage{
         locationButton.setImage(UIImage(named: "locationsActive"), for: .normal)
         favoritesButton.setImage(UIImage(named: "favorites"), for: .normal)
         setupTabBar()
+        
+        startActivityIndicator()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,6 +80,6 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
 // MARK: Album class
 struct Album{
     var name: String?
-    var rootDirectory: String? // directory in cloud storage
+    var storageDirectory: String? // directory in cloud storage
     var postcards: [postcard]?
 }
