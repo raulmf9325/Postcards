@@ -49,9 +49,7 @@ class PinterestLayout: UICollectionViewFlowLayout{
     
     override func prepare() {
         // 1
-        guard cache.isEmpty == true, let collectionView = collectionView else {
-            return
-        }
+        guard let collectionView = collectionView else {return}
         
         // 2
         let columnWidth = contentWidth / CGFloat(numberOfColumns)

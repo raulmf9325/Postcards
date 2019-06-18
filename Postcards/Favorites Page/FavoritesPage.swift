@@ -35,6 +35,6 @@ protocol LikeDelegate{
 extension FavoritesPage: LikeDelegate{
     func handleNewLike(postcard: postcard) {
         self.postcards.append(postcard)
-        self.collectionView.reloadData()
+        collectionView.reloadData()
     }
 }
