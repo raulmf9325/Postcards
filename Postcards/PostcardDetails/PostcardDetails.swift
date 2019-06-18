@@ -14,14 +14,14 @@ class PostcardDetails: UIViewController{
     
     var rootController: RootController!
     
-    var postcard: UIImageView = {
-        let image = UIImage(named: "1")
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
+    var pagePostcard: postcard?{
+        didSet{
+            guard let imageStringURL = pagePostcard?.imageStringURL else {return}
+            let imageURL = URL(string: imageStringURL)
+            self.postcardImage.sd_setImage(with: imageURL) { (image, error, cache, url) in}
+            self.headTitle = pagePostcard?.albumName ?? ""
+        }
+    }
     
     // Header
     let Header = UIView()
@@ -46,8 +46,8 @@ class PostcardDetails: UIViewController{
     var headerState: HeaderState = .hidden
     
     override func viewDidLoad() {
-        view.addSubview(postcard)
-        postcard.fillSuperview()
+        view.addSubview(postcardImage)
+        postcardImage.fillSuperview()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.setupHeader()
@@ -81,13 +81,15 @@ class PostcardDetails: UIViewController{
       
         addBackButton()
         
+        addLikeButton()
+        
         Header.frame = CGRect(x: 0, y: -100, width: view.frame.width, height: 100)
         Header.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         Header.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
         
         presentHeader()
         
-        postcard.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapImage)))
+        postcardImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapImage)))
     }
     
     @objc private func handleTapImage(){
@@ -99,15 +101,28 @@ class PostcardDetails: UIViewController{
         }
     }
     
-    func addBackButton(){
+    private func addLikeButton(){
+        Header.addSubview(likeButton)
+        likeButton.rightAnchor == backButton.leftAnchor - 28
+        likeButton.bottomAnchor == backButton.bottomAnchor + 1
+        likeButton.widthAnchor == 25
+        likeButton.heightAnchor == 25
+        likeButton.addTarget(self, action: #selector(handleTapLikeButton), for: .touchUpInside)
+    }
+    
+    private func addBackButton(){
         Header.addSubview(backButton)
         Header.addConstraintsWithFormat(format: "H:[v0(20)]-20-|", views: backButton)
-        Header.addConstraintsWithFormat(format: "V:[v0(20)]-8-|", views: backButton)
+        Header.addConstraintsWithFormat(format: "V:[v0(15)]-15-|", views: backButton)
         
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
     }
     
-    @objc func handleTapBackButton(){
+    @objc private func handleTapLikeButton(){
+        likeButton.setImage(UIImage(named: "like"), for: .normal)
+    }
+    
+    @objc private func handleTapBackButton(){
         self.Header.removeFromSuperview()
         self.rootController.pop(originFrame: nil, animated: true)
     }
@@ -117,6 +132,21 @@ class PostcardDetails: UIViewController{
         let image = UIImage(named: "backButton")
         button.setImage(image, for: .normal)
         return button
+    }()
+    
+    let likeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "likeEmpty"), for: .normal)
+        return button
+    }()
+    
+    var postcardImage: UIImageView = {
+        let image = UIImage(named: "picture")
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
+        return imageView
     }()
     
     override var preferredStatusBarStyle: UIStatusBarStyle{

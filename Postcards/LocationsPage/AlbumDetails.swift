@@ -31,7 +31,7 @@ class AlbumDetails: PinterestPage{
         
         let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
         let postcardDetails = PostcardDetails()
-        postcardDetails.postcard.image = cell.cellImage.image
+        postcardDetails.pagePostcard = postcards[indexPath.item]
         postcardDetails.headTitle = headTitle
         
         let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)

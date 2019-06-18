@@ -98,7 +98,7 @@ class PinterestPage: BasePage{
         
         let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
         let postcardDetails = PostcardDetails()
-        postcardDetails.postcard.image = cell.cellImage.image
+        postcardDetails.pagePostcard = postcards[indexPath.item]
         postcardDetails.headTitle = cell.albumName ?? ""
         let rootController = delegate as! RootController
         postcardDetails.rootController = rootController
