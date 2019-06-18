@@ -11,6 +11,8 @@ import Firebase
 import FirebaseStorage
 
 class PostcardDetails: UIViewController{
+    // database
+    let db: Firestore = Firestore.firestore()
     
     var rootController: RootController!
     
@@ -42,6 +44,14 @@ class PostcardDetails: UIViewController{
         case visible
         case hidden
     }
+    
+    // like state
+    enum LikeState{
+        case like
+        case notLike
+    }
+    
+    var likeState: LikeState = .notLike
     
     var headerState: HeaderState = .hidden
     
@@ -119,12 +129,35 @@ class PostcardDetails: UIViewController{
     }
     
     @objc private func handleTapLikeButton(){
-        likeButton.setImage(UIImage(named: "like"), for: .normal)
+        if likeState == .notLike{
+            likeState = .like
+            likeButton.setImage(UIImage(named: "like"), for: .normal)
+            registerNewFavorite()
+        }
+        else{
+            likeState = .notLike
+            likeButton.setImage(UIImage(named: "likeEmpty"), for: .normal)
+        }
     }
     
     @objc private func handleTapBackButton(){
         self.Header.removeFromSuperview()
         self.rootController.pop(originFrame: nil, animated: true)
+    }
+    
+    private func registerNewFavorite(){
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let doc = db.collection("users").document(user).collection("albums").document("Favorites")
+        doc.getDocument { (snapshot, error) in
+            guard var dictionary = snapshot?.data() as? [String: [String:String]] else {return}
+            let count = "\(dictionary.count)"
+            guard let albumName = self.pagePostcard?.albumName else {return}
+            guard let imageName = self.pagePostcard?.imageName else {return}
+            let path = (albumName == "Alaska" || albumName == "Iceland" || albumName == "Norway") ? "postcards/\(imageName)" : "users/\(user)/\(imageName)"
+            let newEntry = ["album": albumName, "name": imageName, "path": path]
+            dictionary[count] = newEntry
+            doc.setData(dictionary)
+        }
     }
     
     let backButton: UIButton = {
