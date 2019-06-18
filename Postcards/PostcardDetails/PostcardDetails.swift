@@ -148,6 +148,7 @@ class PostcardDetails: UIViewController{
             registerNewFavorite()
             guard let postcard = pagePostcard else {return}
             likeDelegate?.handleNewLike(postcard: postcard)
+            presentAnimation()
         }
         else{
             likeState = .notLike
@@ -198,6 +199,27 @@ class PostcardDetails: UIViewController{
         doc.getDocument { (snapshot, error) in
             guard let dictionary = snapshot?.data() as? [String: [String:String]] else {return}
             completion(dictionary)
+        }
+    }
+    
+    private func presentAnimation(){
+        let imageView = UIImageView(image: UIImage(named: "redHeart"))
+        view.addSubview(imageView)
+        imageView.centerXAnchor == view.centerXAnchor
+        imageView.centerYAnchor == view.centerYAnchor
+        imageView.widthAnchor == view.widthAnchor - 60
+        imageView.heightAnchor == imageView.widthAnchor + 10
+        
+
+        imageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.4, animations: {
+            imageView.transform = .identity
+        }) { (_) in
+            UIView.animate(withDuration: 0.4, animations: {
+                imageView.alpha = 0
+            }, completion: { (_) in
+                imageView.removeFromSuperview()
+            })
         }
     }
     
