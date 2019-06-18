@@ -281,6 +281,9 @@ class RootController: UIViewController{
                     }
                 })
             }
+            if postcards.count == 0{
+                self.favoritesPage.removeActivityIndicator()
+            }
         }
     }
     

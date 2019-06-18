@@ -14,6 +14,9 @@ class PostcardDetails: UIViewController{
     // database
     let db: Firestore = Firestore.firestore()
     
+    // like delegate
+    var likeDelegate: LikeDelegate?
+    
     var rootController: RootController!
     
     var pagePostcard: postcard?{
@@ -22,6 +25,7 @@ class PostcardDetails: UIViewController{
             let imageURL = URL(string: imageStringURL)
             self.postcardImage.sd_setImage(with: imageURL) { (image, error, cache, url) in}
             self.headTitle = pagePostcard?.albumName ?? ""
+            self.determineLikeStatus()
         }
     }
     
@@ -61,6 +65,16 @@ class PostcardDetails: UIViewController{
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.setupHeader()
+        }
+    }
+    
+    private func determineLikeStatus(){
+        guard let imageName = pagePostcard?.imageName else {return}
+        getFavorites { (dictionary) in
+            if dictionary[imageName] != nil{
+                self.likeState = .like
+                self.likeButton.setImage(UIImage(named: "like"), for: .normal)
+            }
         }
     }
     
@@ -124,7 +138,6 @@ class PostcardDetails: UIViewController{
         Header.addSubview(backButton)
         Header.addConstraintsWithFormat(format: "H:[v0(20)]-20-|", views: backButton)
         Header.addConstraintsWithFormat(format: "V:[v0(15)]-15-|", views: backButton)
-        
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
     }
     
@@ -133,6 +146,8 @@ class PostcardDetails: UIViewController{
             likeState = .like
             likeButton.setImage(UIImage(named: "like"), for: .normal)
             registerNewFavorite()
+            guard let postcard = pagePostcard else {return}
+            likeDelegate?.handleNewLike(postcard: postcard)
         }
         else{
             likeState = .notLike
@@ -148,15 +163,23 @@ class PostcardDetails: UIViewController{
     private func registerNewFavorite(){
         guard let user = Auth.auth().currentUser?.email else {return}
         let doc = db.collection("users").document(user).collection("albums").document("Favorites")
-        doc.getDocument { (snapshot, error) in
-            guard var dictionary = snapshot?.data() as? [String: [String:String]] else {return}
-            let count = "\(dictionary.count)"
+        getFavorites { (dictionary) in
+            var dictionary = dictionary
             guard let albumName = self.pagePostcard?.albumName else {return}
             guard let imageName = self.pagePostcard?.imageName else {return}
             let path = (albumName == "Alaska" || albumName == "Iceland" || albumName == "Norway") ? "postcards/\(imageName)" : "users/\(user)/\(imageName)"
             let newEntry = ["album": albumName, "name": imageName, "path": path]
-            dictionary[count] = newEntry
+            dictionary[imageName] = newEntry
             doc.setData(dictionary)
+        }
+    }
+    
+    private func getFavorites(completion: @escaping ([String: [String:String]]) -> ()){
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let doc = db.collection("users").document(user).collection("albums").document("Favorites")
+        doc.getDocument { (snapshot, error) in
+            guard let dictionary = snapshot?.data() as? [String: [String:String]] else {return}
+            completion(dictionary)
         }
     }
     

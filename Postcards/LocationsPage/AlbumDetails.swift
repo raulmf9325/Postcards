@@ -26,26 +26,26 @@ class AlbumDetails: PinterestPage{
         addBackButton()
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if layoutState == .carousel {return}
-        
-        let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
-        let postcardDetails = PostcardDetails()
-        postcardDetails.pagePostcard = postcards[indexPath.item]
-        postcardDetails.headTitle = headTitle
-        
-        let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
-        
-        var selectedFrame: CGRect = .zero
-        
-        if let frame = layoutAttributes?.frame{
-            selectedFrame = collectionView.convert(frame, to: collectionView.superview)
-        }
-        
-        let rootController = delegate as! RootController
-        postcardDetails.rootController = rootController
-        rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
-    }
+//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if layoutState == .carousel {return}
+//
+//        let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
+//        let postcardDetails = PostcardDetails()
+//        postcardDetails.pagePostcard = postcards[indexPath.item]
+//        postcardDetails.headTitle = headTitle
+//
+//        let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
+//
+//        var selectedFrame: CGRect = .zero
+//        
+//        if let frame = layoutAttributes?.frame{
+//            selectedFrame = collectionView.convert(frame, to: collectionView.superview)
+//        }
+//
+//        let rootController = delegate as! RootController
+//        postcardDetails.rootController = rootController
+//        rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
+//    }
     
     func addBackButton(){
         PinterestHeader.addSubview(backButton)

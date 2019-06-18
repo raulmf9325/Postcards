@@ -27,3 +27,14 @@ class FavoritesPage: PinterestPage{
         startActivityIndicator()
     }
 }
+
+protocol LikeDelegate{
+    func handleNewLike(postcard: postcard)
+}
+
+extension FavoritesPage: LikeDelegate{
+    func handleNewLike(postcard: postcard) {
+        self.postcards.append(postcard)
+        self.collectionView.reloadData()
+    }
+}
