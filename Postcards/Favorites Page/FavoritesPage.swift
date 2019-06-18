@@ -30,11 +30,19 @@ class FavoritesPage: PinterestPage{
 
 protocol LikeDelegate{
     func handleNewLike(postcard: postcard)
+    func removeFavorite(postcard: postcard)
 }
 
 extension FavoritesPage: LikeDelegate{
     func handleNewLike(postcard: postcard) {
         self.postcards.append(postcard)
+        collectionView.reloadData()
+    }
+    
+    func removeFavorite(postcard: postcard) {
+        postcards.removeAll { (p) -> Bool in
+            p.imageName == postcard.imageName
+        }
         collectionView.reloadData()
     }
 }

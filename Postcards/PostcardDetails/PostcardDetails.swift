@@ -152,6 +152,9 @@ class PostcardDetails: UIViewController{
         else{
             likeState = .notLike
             likeButton.setImage(UIImage(named: "likeEmpty"), for: .normal)
+            removeFavorite()
+            guard let postcard = pagePostcard else {return}
+            likeDelegate?.removeFavorite(postcard: postcard)
         }
     }
     
@@ -160,9 +163,11 @@ class PostcardDetails: UIViewController{
         self.rootController.pop(originFrame: nil, animated: true)
     }
     
+    // register new favorite
     private func registerNewFavorite(){
         guard let user = Auth.auth().currentUser?.email else {return}
         let doc = db.collection("users").document(user).collection("albums").document("Favorites")
+       
         getFavorites { (dictionary) in
             var dictionary = dictionary
             guard let albumName = self.pagePostcard?.albumName else {return}
@@ -170,6 +175,19 @@ class PostcardDetails: UIViewController{
             let path = (albumName == "Alaska" || albumName == "Iceland" || albumName == "Norway") ? "postcards/\(imageName)" : "users/\(user)/\(imageName)"
             let newEntry = ["album": albumName, "name": imageName, "path": path]
             dictionary[imageName] = newEntry
+            doc.setData(dictionary)
+        }
+    }
+    
+    // remove favorite
+    private func removeFavorite(){
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let doc = db.collection("users").document(user).collection("albums").document("Favorites")
+        
+        getFavorites { (dictionary) in
+            var dictionary = dictionary
+            guard let imageName = self.pagePostcard?.imageName else {return}
+            dictionary.removeValue(forKey: imageName)
             doc.setData(dictionary)
         }
     }
