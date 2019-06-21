@@ -77,6 +77,7 @@ class PopUp: UIView{
         cancelButton.widthAnchor == 0.25 * dialogWindow.widthAnchor
         cancelButton.bottomAnchor == dialogWindow.bottomAnchor - (frame.height * 0.0125)
         cancelButton.topAnchor == horizontalLine.bottomAnchor + (frame.height * 0.0125)
+        cancelButton.addTarget(self, action: #selector(handleTapCancelButton), for: .touchUpInside)
         
         // confirm button
         dialogWindow.addSubview(confirmButton)
@@ -84,19 +85,29 @@ class PopUp: UIView{
         confirmButton.widthAnchor == cancelButton.widthAnchor
         confirmButton.bottomAnchor == cancelButton.bottomAnchor
         confirmButton.topAnchor == cancelButton.topAnchor
-        
+        confirmButton.addTarget(self, action: #selector(handleTapConfirmButton), for: .touchUpInside)
         
         // animate
+        dialogWindow.transform = CGAffineTransform(scaleX: 0, y: 0)
+        self.textField.becomeFirstResponder()
         UIView.animate(withDuration: 0.3, animations: {
             self.dialogWindow.transform = .identity
         }) { (_) in
-            self.textField.becomeFirstResponder()
+            
         }
         
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func handleTapCancelButton(){
+        print("cancel")
+    }
+    
+    @objc private func handleTapConfirmButton(){
+        print("confirm")
     }
     
     @objc private func dismissKeyboard(){
@@ -111,14 +122,14 @@ class PopUp: UIView{
     
     let cancelButton: UIButton = {
         let button = UIButton()
-        let string = NSAttributedString(string: "Cancel", attributes: [NSAttributedString.Key.foregroundColor : UIColor.black, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)])
+        let string = NSAttributedString(string: "Cancel", attributes: [NSAttributedString.Key.foregroundColor : UIColor(red: 203/255, green: 65/255, blue: 84/255, alpha: 1), NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)])
         button.setAttributedTitle(string, for: .normal)
         return button
     }()
     
     let confirmButton: UIButton = {
         let button = UIButton()
-        let string = NSAttributedString(string: "Confirm", attributes: [NSAttributedString.Key.foregroundColor : UIColor.black, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)])
+        let string = NSAttributedString(string: "Confirm", attributes: [NSAttributedString.Key.foregroundColor : UIColor(red: 203/255, green: 65/255, blue: 84/255, alpha: 1), NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)])
         button.setAttributedTitle(string, for: .normal)
         return button
     }()
