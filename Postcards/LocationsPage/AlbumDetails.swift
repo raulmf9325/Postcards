@@ -28,8 +28,8 @@ class AlbumDetails: PinterestPage{
         
     func addBackButton(){
         PinterestHeader.addSubview(backButton)
-        PinterestHeader.addConstraintsWithFormat(format: "H:[v0(20)]-20-|", views: backButton)
-        PinterestHeader.addConstraintsWithFormat(format: "V:[v0(20)]-12-|", views: backButton)
+        PinterestHeader.addConstraintsWithFormat(format: "H:[v0(20)]-25-|", views: backButton)
+        PinterestHeader.addConstraintsWithFormat(format: "V:[v0(15)]-16-|", views: backButton)
         
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
     }
