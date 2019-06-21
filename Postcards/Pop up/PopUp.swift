@@ -30,7 +30,7 @@ class PopUp: UIView{
         dialogWindow.centerXAnchor == centerXAnchor
         dialogWindow.centerYAnchor == centerYAnchor
         dialogWindow.widthAnchor == (0.75) * widthAnchor
-        dialogWindow.heightAnchor == (0.2) * heightAnchor
+        dialogWindow.heightAnchor == (0.25) * heightAnchor
         
         // prompt label
         dialogWindow.addSubview(promptLabel)
@@ -72,7 +72,18 @@ class PopUp: UIView{
         
         // cancel button
         dialogWindow.addSubview(cancelButton)
-        cancelButton.centerXAnchor == dialogWindow.centerXAnchor / 4
+        cancelButton.centerXAnchor == dialogWindow.centerXAnchor / 2
+        cancelButton.widthAnchor == 0.25 * dialogWindow.widthAnchor
+        cancelButton.bottomAnchor == dialogWindow.bottomAnchor - (frame.height * 0.0125)
+        cancelButton.topAnchor == horizontalLine.bottomAnchor + (frame.height * 0.0125)
+        
+        // confirm button
+        dialogWindow.addSubview(confirmButton)
+        confirmButton.centerXAnchor == dialogWindow.centerXAnchor * 1.5
+        confirmButton.widthAnchor == cancelButton.widthAnchor
+        confirmButton.bottomAnchor == cancelButton.bottomAnchor
+        confirmButton.topAnchor == cancelButton.topAnchor
+        
         
         // animate
         dialogWindow.transform = CGAffineTransform(scaleX: 0, y: 0)
@@ -99,11 +110,18 @@ class PopUp: UIView{
         return button
     }()
     
+    let confirmButton: UIButton = {
+        let button = UIButton()
+        let string = NSAttributedString(string: "Confirm", attributes: [NSAttributedString.Key.foregroundColor : UIColor.black, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)])
+        button.setAttributedTitle(string, for: .normal)
+        return button
+    }()
+    
     let promptLabel: UILabel = {
         let label = UILabel()
         label.text = "Please enter name of new album"
         label.numberOfLines = 2
-        label.font = UIFont(name: "AvenirNext-Medium", size: 17)
+        label.font = UIFont(name: "AvenirNext-Heavy", size: 15)
         label.textAlignment = .center
         return label
     }()
