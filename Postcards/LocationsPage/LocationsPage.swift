@@ -25,6 +25,7 @@ class LocationsPage: BasePage{
         layout.scrollDirection = .horizontal
         
         headerSetup()
+        addPlusButton()
         
         homeButton.setImage(UIImage(named: "homeInactive"), for: .normal)
         locationButton.setImage(UIImage(named: "locationsActive"), for: .normal)
@@ -41,6 +42,7 @@ class LocationsPage: BasePage{
     fileprivate func headerSetup(){
         headTitle = "Albums"
         setupHeader()
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

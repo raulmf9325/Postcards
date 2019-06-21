@@ -156,6 +156,16 @@ class BasePage: UICollectionViewController{
         favoritesButton.addTarget(self, action: #selector(handleFavoritesTap), for: .touchUpInside)
     }
     
+    func addPlusButton(){
+        PinterestHeader.addSubview(plusButton)
+        plusButton.addTarget(self, action: #selector(handleTapPlusButton), for: .touchUpInside)
+        
+        plusButton.rightAnchor == PinterestHeader.rightAnchor - 25
+        plusButton.bottomAnchor == PinterestHeader.bottomAnchor - 8
+        plusButton.widthAnchor == 25
+        plusButton.heightAnchor == 25
+    }
+    
     @objc func handleCubeTap(){}
     
     @objc func handleHomeTap(){
@@ -169,6 +179,8 @@ class BasePage: UICollectionViewController{
     @objc func handleFavoritesTap(){
         delegate?.handleTapFavorites()
     }
+    
+    @objc func handleTapPlusButton(){}
     
     let cubeButton: UIButton = {
         let button = UIButton()
@@ -198,5 +210,10 @@ class BasePage: UICollectionViewController{
         return button
     }()
     
+    let plusButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "plus"), for: .normal)
+        return button
+    }()
 }
     
