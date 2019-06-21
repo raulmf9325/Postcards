@@ -17,6 +17,8 @@ class LocationsPage: BasePage{
         }
     }
     
+    var popUp: PopUp!
+    
     override func viewDidLoad() {
         navigationController?.isNavigationBarHidden = true
         collectionView.backgroundView = backgroundView
@@ -33,16 +35,23 @@ class LocationsPage: BasePage{
         setupTabBar()
         
         startActivityIndicator()
+        
+        popUp = PopUp(frame: view.frame)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return albums?.count ?? 0
     }
     
-    fileprivate func headerSetup(){
+    private func headerSetup(){
         headTitle = "Albums"
         setupHeader()
         
+    }
+    
+    override func handleTapPlusButton() {
+        view.addSubview(popUp)
+        popUp.present()
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -78,6 +87,7 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
 }
+
 
 // MARK: Album class
 struct Album{

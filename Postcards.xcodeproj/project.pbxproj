@@ -23,6 +23,7 @@
 		3E5B791A22AC459000A1F90D /* Compatability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B791422AC459000A1F90D /* Compatability.swift */; };
 		3E78A58021F57AF300A9CF2C /* GradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */; };
 		3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78A58121F582CC00A9CF2C /* RoundCorners.swift */; };
+		3EA2083D22BD348400C4129D /* PopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA2083C22BD348400C4129D /* PopUp.swift */; };
 		3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347321FA874D00E1EEE7 /* RootController.swift */; };
 		3EBA347721FA894100E1EEE7 /* BasePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA347621FA894100E1EEE7 /* BasePage.swift */; };
 		3ECD081E21FD1B0500C66319 /* AlbumDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */; };
@@ -55,6 +56,7 @@
 		3E5B791422AC459000A1F90D /* Compatability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compatability.swift; sourceTree = "<group>"; };
 		3E78A57F21F57AF300A9CF2C /* GradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientExtension.swift; sourceTree = "<group>"; };
 		3E78A58121F582CC00A9CF2C /* RoundCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCorners.swift; sourceTree = "<group>"; };
+		3EA2083C22BD348400C4129D /* PopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUp.swift; sourceTree = "<group>"; };
 		3EBA347321FA874D00E1EEE7 /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
 		3EBA347621FA894100E1EEE7 /* BasePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePage.swift; sourceTree = "<group>"; };
 		3ECD081D21FD1B0500C66319 /* AlbumDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetails.swift; sourceTree = "<group>"; };
@@ -162,6 +164,14 @@
 			path = "Anchorage Source";
 			sourceTree = "<group>";
 		};
+		3EA2083B22BD346400C4129D /* Pop up */ = {
+			isa = PBXGroup;
+			children = (
+				3EA2083C22BD348400C4129D /* PopUp.swift */,
+			);
+			path = "Pop up";
+			sourceTree = "<group>";
+		};
 		3EBA347121FA5D7100E1EEE7 /* RootController */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +225,7 @@
 		3EF2B6AE21EFD68000070540 /* Postcards */ = {
 			isa = PBXGroup;
 			children = (
+				3EA2083B22BD346400C4129D /* Pop up */,
 				3E5B790E22AC459000A1F90D /* Anchorage Source */,
 				3EF935AF2201237A008BBB53 /* TransitionAnimator */,
 				3EBA347221FA5D7E00E1EEE7 /* AppDelegate */,
@@ -429,6 +440,7 @@
 				3E78A58221F582CC00A9CF2C /* RoundCorners.swift in Sources */,
 				3EF2B6B021EFD68000070540 /* AppDelegate.swift in Sources */,
 				3E5B791722AC459000A1F90D /* Internal.swift in Sources */,
+				3EA2083D22BD348400C4129D /* PopUp.swift in Sources */,
 				3EBA347421FA874D00E1EEE7 /* RootController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

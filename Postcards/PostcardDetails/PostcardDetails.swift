@@ -202,6 +202,7 @@ class PostcardDetails: UIViewController{
         }
     }
     
+    // present animation
     private func presentAnimation(){
         let imageView = UIImageView(image: UIImage(named: "redHeart"))
         view.addSubview(imageView)
