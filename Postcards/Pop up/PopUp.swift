@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PopupDelegate{
-    func handleUserEntry()
+    func handleUserEntry(albumName: String)
 }
 
 class PopUp: UIView{
@@ -111,7 +111,11 @@ class PopUp: UIView{
     }
     
     @objc private func handleTapConfirmButton(){
-        print("confirm")
+        let albumName = textField.text ?? ""
+        if albumName.count == 0 {return}
+        
+        delegate.handleUserEntry(albumName: albumName)
+        handleTapCancelButton()
     }
     
     @objc private func dismissKeyboard(){

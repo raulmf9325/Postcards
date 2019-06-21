@@ -37,6 +37,7 @@ class LocationsPage: BasePage{
         startActivityIndicator()
         
         popUp = PopUp(frame: view.frame)
+        popUp.delegate = self
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -85,6 +86,17 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    }
+}
+
+extension LocationsPage: PopupDelegate{
+    func handleUserEntry(albumName: String) {
+        guard let user = Auth.auth().currentUser?.email else {return}
+        albums?.append(Album(name: albumName, storageDirectory: "users/\(user)", postcards: nil))
+        collectionView.reloadData()
+        
+        let albumDoc = db.collection("users").document(user).collection("albums").document("\(albumName)")
+        albumDoc.setData([:])
     }
 }
 

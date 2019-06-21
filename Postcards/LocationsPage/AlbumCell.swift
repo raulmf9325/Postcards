@@ -13,21 +13,36 @@ class AlbumCell: UICollectionViewCell{
     
     var album: Album?{
         didSet{
-            guard let album = album, let stringURL = album.postcards?[0].imageStringURL, let albumName = album.name else {return}
-        
+            guard let album = album else {return}
+            let albumName = album.name ?? ""
+            var stringURL = ""
+            if let postcards = album.postcards {
+                if postcards.count > 0{
+                stringURL = postcards[0].imageStringURL
+                }
+            }
+            
+            addSubview(self.albumImageView)
+            albumImageView.fillSuperview()
+            
+            // album name
+            addSubview(self.albumNameLabel)
+            addConstraintsWithFormat(format: "H:|-16-[v0]|", views: self.albumNameLabel)
+            addConstraintsWithFormat(format: "V:[v0(60)]-8-|", views: self.albumNameLabel)
+            
+            let attributedText = NSMutableAttributedString(string: "\(albumName)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
+            attributedText.append(NSAttributedString(string: "\(album.postcards?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
+            
+            self.albumNameLabel.attributedText = attributedText
+            
             let imageURL = URL(string: stringURL)
+            
             albumImageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
-                if  error != nil {return}
-                self.addSubview(self.albumImageView)
-                self.albumImageView.fillSuperview()
-                    
-                let attributedText = NSMutableAttributedString(string: "\(albumName)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
-                    attributedText.append(NSAttributedString(string: "\(album.postcards?.count ?? 0) images", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 17)]))
-                    
-                self.albumNameLabel.attributedText = attributedText
-                self.addSubview(self.albumNameLabel)
-                self.addConstraintsWithFormat(format: "H:|-16-[v0]|", views: self.albumNameLabel)
-                self.addConstraintsWithFormat(format: "V:[v0(60)]-8-|", views: self.albumNameLabel)
+                if  error != nil {
+                    self.albumImageView.image = nil
+                    self.albumImageView.backgroundColor = .lightGray
+                    return
+                }
                 self.imagePlaceholder.stopAnimating()
                 }
             }
@@ -52,7 +67,7 @@ class AlbumCell: UICollectionViewCell{
     let imagePlaceholder = GradientView()
     
     let albumImageView: UIImageView = {
-        let image = UIImage(named: "home")
+        let image = UIImage(named: "picture")
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
