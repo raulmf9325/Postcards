@@ -39,6 +39,9 @@ class PinterestPage: BasePage{
         didSet{
             guard let postcards = album?.postcards else {return}
             self.postcards = postcards
+            let count = postcards.count
+            headSubtitle = "\(count) postcards"
+            setHeaderTitle()
             collectionView.reloadData()
         }
     }

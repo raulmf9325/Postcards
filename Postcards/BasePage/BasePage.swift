@@ -37,6 +37,9 @@ class BasePage: UICollectionViewController{
     // Head title
     var headTitle = "The Latest"
     
+    // head subtitle
+    var headSubtitle = "welcome to postcards"
+    
     // Header Label
     let headerLabel: UILabel = {
         let label = UILabel()
@@ -103,11 +106,15 @@ class BasePage: UICollectionViewController{
         activityIndicatorContainer.removeFromSuperview()
     }
     
-    func setupHeader(carouselAvailable: Bool = false){
+    func setHeaderTitle() {
         // Label
         let attributedText = NSMutableAttributedString(string: "\(headTitle)\n", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
-        attributedText.append(NSAttributedString(string: "welcome to postcards", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Medium", size: 17)]))
+        attributedText.append(NSAttributedString(string: "\(headSubtitle)", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 15)]))
         headerLabel.attributedText = attributedText
+    }
+    
+    func setupHeader(carouselAvailable: Bool = false){
+        setHeaderTitle()
         
         PinterestHeader.addSubview(headerLabel)
         PinterestHeader.addConstraintsWithFormat(format: "H:|-20-[v0]", views: headerLabel)

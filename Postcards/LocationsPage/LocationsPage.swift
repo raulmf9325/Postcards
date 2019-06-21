@@ -13,6 +13,9 @@ class LocationsPage: BasePage{
     
     var albums: [Album]?{
         didSet{
+            guard let count = albums?.count else {return}
+            headSubtitle = "\(count) albums"
+            setHeaderTitle()
             collectionView.reloadData()
         }
     }
@@ -45,9 +48,8 @@ class LocationsPage: BasePage{
     }
     
     private func headerSetup(){
-        headTitle = "Albums"
+        headTitle = "Collections"
         setupHeader()
-        
     }
     
     override func handleTapPlusButton() {
