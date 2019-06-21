@@ -24,11 +24,12 @@ class PopUp: UIView{
         // black overlay
         addSubview(blackOverlay)
         blackOverlay.frame = self.bounds
+        blackOverlay.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         
         // dialog window
         addSubview(dialogWindow)
         dialogWindow.centerXAnchor == centerXAnchor
-        dialogWindow.centerYAnchor == centerYAnchor
+        dialogWindow.centerYAnchor == centerYAnchor * 0.8
         dialogWindow.widthAnchor == (0.75) * widthAnchor
         dialogWindow.heightAnchor == (0.25) * heightAnchor
         
@@ -86,15 +87,20 @@ class PopUp: UIView{
         
         
         // animate
-        dialogWindow.transform = CGAffineTransform(scaleX: 0, y: 0)
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, animations: {
             self.dialogWindow.transform = .identity
+        }) { (_) in
+            self.textField.becomeFirstResponder()
         }
         
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func dismissKeyboard(){
+        endEditing(true)
     }
     
     private func grayThinLine() -> UIView{
