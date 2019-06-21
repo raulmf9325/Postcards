@@ -140,7 +140,9 @@ class PinterestPage: BasePage{
         }
         
         collectionView.reloadData()
-        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
+        if collectionView.numberOfItems(inSection: 0) > 0{
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: false)
+        }
     }
 }
 
