@@ -103,7 +103,11 @@ class PopUp: UIView{
     }
     
     @objc private func handleTapCancelButton(){
-        print("cancel")
+        UIView.animate(withDuration: 0.3, animations: {
+            self.dialogWindow.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
+        }) { (_) in
+            self.removeFromSuperview()
+        }
     }
     
     @objc private func handleTapConfirmButton(){
