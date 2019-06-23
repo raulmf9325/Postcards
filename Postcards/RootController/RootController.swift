@@ -154,7 +154,7 @@ class RootController: UIViewController{
                 postcards.append(postcard(albumName: albumName, imageStringURL: "", imageName: imageName))
             })
             
-            let newAlbum = Album(name: albumName, storageDirectory: storageDirectory, postcards: postcards)
+            let newAlbum = Album(name: albumName, storageDirectory: storageDirectory, postcards: postcards, type: nil)
             albums.append(newAlbum)
         }
         
@@ -171,7 +171,12 @@ class RootController: UIViewController{
         fetchDefaultAlbums { (snapshot) in
             didFinishFetchingDefaultAlbums = true
            
-            let defaultAlbums = self.parseSnapshot(snapshot: snapshot, storageDirectory: "postcards")
+            var defaultAlbums = self.parseSnapshot(snapshot: snapshot, storageDirectory: "postcards")
+            
+            for (i, _) in defaultAlbums.enumerated(){
+                defaultAlbums[i].type = .defaultAlbum
+            }
+            
             allAlbums.append(contentsOf: defaultAlbums)
             
             if didFinishFetchingUserAlbums{
@@ -185,7 +190,12 @@ class RootController: UIViewController{
             
             guard let user = Auth.auth().currentUser?.email else {return}
             let rootDirectory = "users" + "/" + user
-            let userAlbums = self.parseSnapshot(snapshot: snapshot, storageDirectory: rootDirectory)
+            var userAlbums = self.parseSnapshot(snapshot: snapshot, storageDirectory: rootDirectory)
+            
+            for(i, _) in userAlbums.enumerated(){
+                userAlbums[i].type = .userAlbum
+            }
+            
             allAlbums.append(contentsOf: userAlbums)
         }
         

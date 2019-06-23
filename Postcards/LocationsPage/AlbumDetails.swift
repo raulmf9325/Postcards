@@ -11,9 +11,7 @@ import UIKit
 class AlbumDetails: PinterestPage{
     
     override var topInset: CGFloat {
-        get{
-            return 70
-        }
+        get{return 70}
         set {}
     }
     
@@ -26,7 +24,7 @@ class AlbumDetails: PinterestPage{
         addBackButton()
     }
         
-    func addBackButton(){
+   private func addBackButton(){
         PinterestHeader.addSubview(backButton)
         PinterestHeader.addConstraintsWithFormat(format: "H:[v0(20)]-25-|", views: backButton)
         PinterestHeader.addConstraintsWithFormat(format: "V:[v0(15)]-16-|", views: backButton)
@@ -34,7 +32,7 @@ class AlbumDetails: PinterestPage{
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
     }
     
-    @objc func handleTapBackButton(){
+    @objc private func handleTapBackButton(){
         let rootController = delegate as! RootController
         rootController.pop(originFrame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height), animated: true, collapse: true)
     }

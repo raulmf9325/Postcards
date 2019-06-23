@@ -94,7 +94,7 @@ extension LocationsPage: UICollectionViewDelegateFlowLayout{
 extension LocationsPage: PopupDelegate{
     func handleUserEntry(albumName: String) {
         guard let user = Auth.auth().currentUser?.email else {return}
-        albums?.append(Album(name: albumName, storageDirectory: "users/\(user)", postcards: nil))
+        albums?.append(Album(name: albumName, storageDirectory: "users/\(user)", postcards: nil, type: .userAlbum))
         collectionView.reloadData()
         
         let albumDoc = db.collection("users").document(user).collection("albums").document("\(albumName)")
@@ -108,4 +108,12 @@ struct Album{
     var name: String?
     var storageDirectory: String? // directory in cloud storage
     var postcards: [postcard]?
+    
+    // album type
+    enum AlbumType{
+        case defaultAlbum
+        case userAlbum
+    }
+    
+    var type: AlbumType!
 }
