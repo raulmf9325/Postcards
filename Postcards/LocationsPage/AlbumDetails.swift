@@ -22,6 +22,16 @@ class AlbumDetails: PinterestPage{
         collectionView.backgroundView = backgroundView
         setupHeader(carouselAvailable: true)
         addBackButton()
+        addUploadButton()
+    }
+    
+    private func addUploadButton(){
+        if album?.type == .defaultAlbum {return}
+        PinterestHeader.addSubview(uploadButton)
+        uploadButton.rightAnchor == cubeButton.leftAnchor - 30
+        uploadButton.bottomAnchor == backButton.bottomAnchor
+        uploadButton.widthAnchor == 25
+        uploadButton.heightAnchor == 25
     }
         
    private func addBackButton(){
@@ -44,4 +54,10 @@ class AlbumDetails: PinterestPage{
         return button
     }()
     
+    
+    let uploadButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "upload"), for: .normal)
+        return button
+    }()
 }

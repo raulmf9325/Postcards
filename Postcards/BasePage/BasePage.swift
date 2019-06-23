@@ -124,8 +124,8 @@ class BasePage: UICollectionViewController{
             PinterestHeader.addSubview(cubeButton)
             cubeButton.bottomAnchor == PinterestHeader.bottomAnchor - 10
             cubeButton.rightAnchor == PinterestHeader.rightAnchor - 75
-            cubeButton.widthAnchor == 40
-            cubeButton.heightAnchor == 40
+            cubeButton.widthAnchor == 35
+            cubeButton.heightAnchor == 35
             cubeButton.addTarget(self, action: #selector(handleCubeTap), for: .touchUpInside)
         }
         
