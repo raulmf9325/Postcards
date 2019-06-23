@@ -23,16 +23,32 @@ class ImagePicker: UICollectionViewController {
         }
     }
     
+    // navigation delegate
+    var navigationDelegate: RootController!
+    
     // wallpaper
     let wallpaper = getWallpaper()
     
+    // navigation bar
+    let navBar: UIView = {
+        let bar = UIView()
+        bar.backgroundColor = UIColor(white: 0, alpha: 0.6)
+        return bar
+    }()
+    
+    // back button
+    let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "backButton"), for: .normal)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: "CellId")
         
-        // add wallpaper
         addWallpaper()
+        addNavigationBar()
         
         // Load Photos
         PHPhotoLibrary.requestAuthorization { (status) in
@@ -50,6 +66,27 @@ class ImagePicker: UICollectionViewController {
             }
         }
         
+    }
+    
+    @objc private func handleTapBackButton(){
+       navigationDelegate.pop(originFrame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height), animated: true, collapse: true)
+    }
+    
+    private func addNavigationBar(){
+        view.addSubview(navBar)
+        navBar.topAnchor == view.topAnchor
+        navBar.leftAnchor == view.leftAnchor
+        navBar.rightAnchor == view.rightAnchor
+        navBar.heightAnchor == 85
+        navBar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 85)
+        navBar.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
+        
+        navBar.addSubview(backButton)
+        backButton.leftAnchor == navBar.leftAnchor + 30
+        backButton.bottomAnchor == navBar.bottomAnchor - 10
+        backButton.widthAnchor == 20
+        backButton.heightAnchor == 15
+        backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
     }
     
     private func addWallpaper(){
@@ -83,6 +120,7 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 100, left: 10, bottom: 20, right: 10)
     }
+    
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell

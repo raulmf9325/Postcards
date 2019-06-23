@@ -48,8 +48,9 @@ class AlbumDetails: PinterestPage{
         let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
         
         let rootController = delegate as! RootController
-        rootController.pushController(selectedFrame: selectedFrame, vc: imagePicker)
+        imagePicker.navigationDelegate = rootController
         
+        rootController.pushController(selectedFrame: selectedFrame, vc: imagePicker)
     }
     
     @objc private func handleTapBackButton(){

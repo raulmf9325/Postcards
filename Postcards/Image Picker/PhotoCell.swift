@@ -30,6 +30,7 @@ class PhotoCell: UICollectionViewCell{
         imageView.backgroundColor = .lightGray
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 }
