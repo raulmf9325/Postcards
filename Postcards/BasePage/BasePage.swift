@@ -56,17 +56,7 @@ class BasePage: UICollectionViewController{
 
     
     // background view
-    let backgroundView: UIImageView = {
-        let image = UIImage(named: "wallpaper")
-        let imageView = UIImageView(image: image)
-        
-        let blackOverlay = UIView()
-        blackOverlay.backgroundColor = .black
-        blackOverlay.alpha = 0.7
-        imageView.addSubview(blackOverlay)
-        blackOverlay.fillSuperview()
-        return imageView
-    }()
+    let backgroundView = getWallpaper()
     
     // activity indicator
     var activityIndicator: NVActivityIndicatorView!
@@ -222,5 +212,25 @@ class BasePage: UICollectionViewController{
         button.setImage(UIImage(named: "plus"), for: .normal)
         return button
     }()
+}
+
+
+// global functions
+
+func getWallpaper() -> UIImageView{
+    // background view
+    let backgroundView: UIImageView = {
+        let image = UIImage(named: "wallpaper")
+        let imageView = UIImageView(image: image)
+        
+        let blackOverlay = UIView()
+        blackOverlay.backgroundColor = .black
+        blackOverlay.alpha = 0.7
+        imageView.addSubview(blackOverlay)
+        blackOverlay.fillSuperview()
+        return imageView
+    }()
+    
+    return backgroundView
 }
     

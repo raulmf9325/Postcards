@@ -32,6 +32,7 @@ class AlbumDetails: PinterestPage{
         uploadButton.bottomAnchor == backButton.bottomAnchor
         uploadButton.widthAnchor == 25
         uploadButton.heightAnchor == 25
+        uploadButton.addTarget(self, action: #selector(handleTapUploadButton), for: .touchUpInside)
     }
         
    private func addBackButton(){
@@ -40,6 +41,15 @@ class AlbumDetails: PinterestPage{
         PinterestHeader.addConstraintsWithFormat(format: "V:[v0(15)]-16-|", views: backButton)
         
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+    }
+    
+    @objc private func handleTapUploadButton(){
+        let imagePicker = ImagePicker(collectionViewLayout: UICollectionViewFlowLayout())
+        let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
+        
+        let rootController = delegate as! RootController
+        rootController.pushController(selectedFrame: selectedFrame, vc: imagePicker)
+        
     }
     
     @objc private func handleTapBackButton(){
