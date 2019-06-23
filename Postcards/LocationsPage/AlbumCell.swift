@@ -39,8 +39,8 @@ class AlbumCell: UICollectionViewCell{
             
             albumImageView.sd_setImage(with: imageURL) { (image, error, cache, url) in
                 if  error != nil {
-                    self.albumImageView.image = nil
-                    self.albumImageView.backgroundColor = .lightGray
+                    self.albumImageView.image = UIImage(named: "picture")
+                    //self.albumImageView.backgroundColor = .lightGray
                     return
                 }
                 self.imagePlaceholder.stopAnimating()

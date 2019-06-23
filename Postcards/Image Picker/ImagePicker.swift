@@ -56,7 +56,7 @@ class ImagePicker: UICollectionViewController {
             case .authorized:
                 
                 let fetchOptions = PHFetchOptions()
-                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
                 self.photos = PHAsset.fetchAssets(with: fetchOptions)
                 
             case .denied, .restricted:
@@ -96,7 +96,6 @@ class ImagePicker: UICollectionViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
-    
 }
 
 extension ImagePicker: UICollectionViewDelegateFlowLayout{
@@ -107,7 +106,8 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PhotoCell
         let asset = photos?.object(at: indexPath.item)
-        cell.photo.fetchImage(asset: asset!, contentMode: .aspectFit, targetSize: CGSize(width: 800, height: 800))
+        cell.photo.image = UIImage(named: "picture")
+        cell.asset = asset
         return cell
     }
     
