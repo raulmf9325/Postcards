@@ -146,15 +146,15 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell
-        zoomedPhoto.image = cell.photo.image
+        guard let asset = cell.asset else {return}
+        let width: CGFloat = view.frame.width
+        let height: CGFloat = width + 60
+        zoomedPhoto.fetchImage(asset: asset, contentMode: .aspectFill, targetSize: CGSize(width: width, height: height))
         
         view.addSubview(blackOverlay)
         blackOverlay.widthAnchor == view.widthAnchor
         blackOverlay.heightAnchor == view.heightAnchor
         blackOverlay.addSubview(zoomedPhotoContainer)
-        
-        let width: CGFloat = view.frame.width
-        let height: CGFloat = width + 60
         
         zoomedPhotoContainer.centerXAnchor == view.centerXAnchor
         zoomedPhotoContainer.centerYAnchor == view.centerYAnchor
@@ -190,8 +190,7 @@ extension UIImageView{
     func fetchImage(asset: PHAsset, contentMode: PHImageContentMode, targetSize: CGSize) {
         let options = PHImageRequestOptions()
         options.version = .original
-        options.deliveryMode = .highQualityFormat
-        
+      //  options.deliveryMode = .highQualityFormat
         PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: contentMode, options: options) { image, _ in
             guard let image = image else { return }
             self.image = image
