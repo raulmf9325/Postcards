@@ -32,7 +32,7 @@ class ImagePicker: UICollectionViewController {
     // navigation bar
     let navBar: UIView = {
         let bar = UIView()
-        bar.backgroundColor = UIColor(white: 0, alpha: 0.6)
+        bar.backgroundColor = UIColor(white: 0, alpha: 0.7)
         return bar
     }()
     
@@ -46,13 +46,22 @@ class ImagePicker: UICollectionViewController {
     // zoomed photo
     let zoomedPhoto: UIImageView = {
         let imageView = UIImageView(image: nil)
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
         return imageView
     }()
     
-    // zoomed photo container
+    let zoomedPhotoContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    // black overlay
     let blackOverlay: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         return view
     }()
     
@@ -142,28 +151,37 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
         view.addSubview(blackOverlay)
         blackOverlay.widthAnchor == view.widthAnchor
         blackOverlay.heightAnchor == view.heightAnchor
-        blackOverlay.addSubview(zoomedPhoto)
+        blackOverlay.addSubview(zoomedPhotoContainer)
         
-        zoomedPhoto.frame = cell.frame
-        let center = view.center
-        let width: CGFloat = view.frame.width - 60
-        let height: CGFloat = width + 30
-        let origin = CGPoint(x: center.x - width / 2, y: center.y - height / 2)
+        let width: CGFloat = view.frame.width
+        let height: CGFloat = width + 60
+        
+        zoomedPhotoContainer.centerXAnchor == view.centerXAnchor
+        zoomedPhotoContainer.centerYAnchor == view.centerYAnchor
+        zoomedPhotoContainer.widthAnchor == width
+        zoomedPhotoContainer.heightAnchor == height
+        
+        zoomedPhotoContainer.addSubview(zoomedPhoto)
+        zoomedPhoto.widthAnchor == zoomedPhotoContainer.widthAnchor
+        zoomedPhoto.heightAnchor == zoomedPhotoContainer.heightAnchor
+        zoomedPhotoContainer.alpha = 0
         
         UIView.animate(withDuration: 0.3, animations: {
-            self.zoomedPhoto.frame = CGRect(origin: origin, size: CGSize(width: width, height: height))
+            self.zoomedPhotoContainer.alpha = 1
         }) { (_) in
             [self.blackOverlay, self.zoomedPhoto].forEach{$0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissZoomedImage)))}
         }
     }
     
     @objc private func dismissZoomedImage(){
-        UIView.animate(withDuration: 0.2, animations: {
-            self.zoomedPhoto.frame = CGRect(origin: self.view.center, size: .zero)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.zoomedPhotoContainer.alpha = 0
+            self.blackOverlay.alpha = 0
         }) { (_) in
             self.blackOverlay.removeFromSuperview()
+            self.zoomedPhotoContainer.alpha = 1
+            self.blackOverlay.alpha = 1
         }
-        
     }
     
 }
