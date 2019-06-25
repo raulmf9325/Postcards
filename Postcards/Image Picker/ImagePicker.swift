@@ -9,10 +9,17 @@
 import UIKit
 import Photos
 
+protocol ImagePickerDelegate{
+    func uploadPhotos(assets: [PHAsset])
+}
+
 class ImagePicker: UICollectionViewController {
     
     /*  Stored Properties
      */
+    
+    // delegate
+    var delegate: ImagePickerDelegate!
     
     // photos
     var photos: PHFetchResult<PHAsset>?{
@@ -292,7 +299,9 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     }
     
     @objc private func handleTapUploadButton(){
-        
+        let assets: [PHAsset] = selectedPhotos.values.map{return $0}
+        delegate.uploadPhotos(assets: assets)
+        handleTapBackButton()
     }
     
     @objc private func dismissZoomedImage(){
