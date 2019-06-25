@@ -24,7 +24,7 @@ class ImagePicker: UICollectionViewController {
     }
     
     // selected photos
-    var selectedPhotos = [PHAsset]()
+    var selectedPhotos = [Int : PHAsset]()
     
     // navigation delegate
     var navigationDelegate: RootController!
@@ -166,9 +166,13 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
         cell.photo.image = UIImage(named: "picture")
         cell.asset = asset
         
-        if indexPath.item > selectedPhotos{
-            selectedPhotos.app
+        if selectedPhotos[indexPath.item] != nil{
+            cell.cellWasSelected()
         }
+        else{
+            cell.cellWasDeselected()
+        }
+        
         return cell
     }
     
@@ -214,7 +218,15 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
             }
         }
         else{
-            cell.cellWasSelected()
+            if selectedPhotos[indexPath.item] != nil{
+                cell.cellWasDeselected()
+                selectedPhotos.removeValue(forKey: indexPath.item)
+            }
+            else{
+                cell.cellWasSelected()
+                selectedPhotos[indexPath.item] = cell.asset
+            }
+            
         }
     }
     
