@@ -46,6 +46,13 @@ class ImagePicker: UICollectionViewController {
         return button
     }()
     
+    // upload button
+    let uploadButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "upload"), for: .normal)
+        return button
+    }()
+    
     // selection state
     enum SelectionState{
         case select
@@ -122,6 +129,32 @@ class ImagePicker: UICollectionViewController {
        navigationDelegate.pop(originFrame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height), animated: true, collapse: true)
     }
     
+    private func addBackButton() {
+        navBar.addSubview(backButton)
+        backButton.leftAnchor == navBar.leftAnchor + 30
+        backButton.bottomAnchor == navBar.bottomAnchor - 14
+        backButton.widthAnchor == 20
+        backButton.heightAnchor == 15
+        backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+    }
+    
+    private func removeBackButton(){
+        backButton.removeFromSuperview()
+    }
+    
+    private func addUploadButton(){
+        navBar.addSubview(uploadButton)
+        uploadButton.leftAnchor == navBar.leftAnchor + 30
+        uploadButton.bottomAnchor == navBar.bottomAnchor - 14
+        uploadButton.widthAnchor == 25
+        uploadButton.heightAnchor == 25
+        uploadButton.addTarget(self, action: #selector(handleTapUploadButton), for: .touchUpInside)
+    }
+    
+    private func removeUploadButton(){
+        uploadButton.removeFromSuperview()
+    }
+    
     private func addNavigationBar(){
         view.addSubview(navBar)
         navBar.topAnchor == view.topAnchor
@@ -131,12 +164,7 @@ class ImagePicker: UICollectionViewController {
         navBar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 85)
         navBar.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
         
-        navBar.addSubview(backButton)
-        backButton.leftAnchor == navBar.leftAnchor + 30
-        backButton.bottomAnchor == navBar.bottomAnchor - 14
-        backButton.widthAnchor == 20
-        backButton.heightAnchor == 15
-        backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+        addBackButton()
         
         navBar.addSubview(selectButton)
         selectButton.bottomAnchor == navBar.bottomAnchor - 4
@@ -221,9 +249,15 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
             if selectedPhotos[indexPath.item] != nil{
                 cell.cellWasDeselected()
                 selectedPhotos.removeValue(forKey: indexPath.item)
+                if selectedPhotos.values.count == 0{
+                    removeUploadButton()
+                }
             }
             else{
                 cell.cellWasSelected()
+                if selectedPhotos.values.count == 0{
+                    addUploadButton()
+                }
                 selectedPhotos[indexPath.item] = cell.asset
             }
             
@@ -241,13 +275,24 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
            label.bottomAnchor == selectButton.bottomAnchor
            label.widthAnchor == 150
            label.heightAnchor == 35
+            
+           removeBackButton()
         }
         else{
             selectState = .select
             label.removeFromSuperview()
             let title = titleForButton(title: "Select")
             selectButton.setAttributedTitle(title, for: .normal)
+            selectedPhotos.removeAll()
+            addBackButton()
+            removeUploadButton()
+            
+            collectionView.reloadData()
         }
+    }
+    
+    @objc private func handleTapUploadButton(){
+        
     }
     
     @objc private func dismissZoomedImage(){
