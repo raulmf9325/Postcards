@@ -23,6 +23,9 @@ class ImagePicker: UICollectionViewController {
         }
     }
     
+    // selected photos
+    var selectedPhotos = [PHAsset]()
+    
     // navigation delegate
     var navigationDelegate: RootController!
     
@@ -40,6 +43,31 @@ class ImagePicker: UICollectionViewController {
     let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "backButton"), for: .normal)
+        return button
+    }()
+    
+    // selection state
+    enum SelectionState{
+        case select
+        case cancel
+    }
+    
+    var selectState: SelectionState = .select
+    
+    // label
+    let label: UILabel = {
+        let label = UILabel()
+        let labelTitle =  NSAttributedString(string: "Select Items", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 20)])
+        label.attributedText = labelTitle
+        return label
+    }()
+
+    
+    // select button
+    let selectButton: UIButton = {
+        let button = UIButton(type: .system)
+        let title = NSAttributedString(string: "Select", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 20)])
+        button.setAttributedTitle(title, for: .normal)
         return button
     }()
     
@@ -105,10 +133,17 @@ class ImagePicker: UICollectionViewController {
         
         navBar.addSubview(backButton)
         backButton.leftAnchor == navBar.leftAnchor + 30
-        backButton.bottomAnchor == navBar.bottomAnchor - 10
+        backButton.bottomAnchor == navBar.bottomAnchor - 14
         backButton.widthAnchor == 20
         backButton.heightAnchor == 15
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+        
+        navBar.addSubview(selectButton)
+        selectButton.bottomAnchor == navBar.bottomAnchor - 4
+        selectButton.rightAnchor == navBar.rightAnchor - 30
+        selectButton.widthAnchor == 70
+        selectButton.heightAnchor == 35
+        selectButton.addTarget(self, action: #selector(handleTapSelectButton), for: .touchUpInside)
     }
     
     private func addWallpaper(){
@@ -130,6 +165,10 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
         let asset = photos?.object(at: indexPath.item)
         cell.photo.image = UIImage(named: "picture")
         cell.asset = asset
+        
+        if indexPath.item > selectedPhotos{
+            selectedPhotos.app
+        }
         return cell
     }
     
@@ -146,30 +185,56 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell
-        guard let asset = cell.asset else {return}
-        let width: CGFloat = view.frame.width
-        let height: CGFloat = width + 60
-        zoomedPhoto.fetchImage(asset: asset, contentMode: .aspectFill, targetSize: CGSize(width: width, height: height))
         
-        view.addSubview(blackOverlay)
-        blackOverlay.widthAnchor == view.widthAnchor
-        blackOverlay.heightAnchor == view.heightAnchor
-        blackOverlay.addSubview(zoomedPhotoContainer)
+        if selectState == .select{
+            guard let asset = cell.asset else {return}
+            let width: CGFloat = view.frame.width
+            let height: CGFloat = width + 60
+            zoomedPhoto.fetchImage(asset: asset, contentMode: .aspectFill, targetSize: CGSize(width: width, height: height))
+            
+            view.addSubview(blackOverlay)
+            blackOverlay.widthAnchor == view.widthAnchor
+            blackOverlay.heightAnchor == view.heightAnchor
+            blackOverlay.addSubview(zoomedPhotoContainer)
+            
+            zoomedPhotoContainer.centerXAnchor == view.centerXAnchor
+            zoomedPhotoContainer.centerYAnchor == view.centerYAnchor
+            zoomedPhotoContainer.widthAnchor == width
+            zoomedPhotoContainer.heightAnchor == height
+            
+            zoomedPhotoContainer.addSubview(zoomedPhoto)
+            zoomedPhoto.widthAnchor == zoomedPhotoContainer.widthAnchor
+            zoomedPhoto.heightAnchor == zoomedPhotoContainer.heightAnchor
+            zoomedPhotoContainer.alpha = 0
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                self.zoomedPhotoContainer.alpha = 1
+            }) { (_) in
+                [self.blackOverlay, self.zoomedPhoto].forEach{$0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissZoomedImage)))}
+            }
+        }
+        else{
+            cell.cellWasSelected()
+        }
+    }
+    
+    @objc private func handleTapSelectButton(){
+        if selectState == .select{
+           selectState = .cancel
+           let title = titleForButton(title: "Cancel")
+           selectButton.setAttributedTitle(title, for: .normal)
         
-        zoomedPhotoContainer.centerXAnchor == view.centerXAnchor
-        zoomedPhotoContainer.centerYAnchor == view.centerYAnchor
-        zoomedPhotoContainer.widthAnchor == width
-        zoomedPhotoContainer.heightAnchor == height
-        
-        zoomedPhotoContainer.addSubview(zoomedPhoto)
-        zoomedPhoto.widthAnchor == zoomedPhotoContainer.widthAnchor
-        zoomedPhoto.heightAnchor == zoomedPhotoContainer.heightAnchor
-        zoomedPhotoContainer.alpha = 0
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.zoomedPhotoContainer.alpha = 1
-        }) { (_) in
-            [self.blackOverlay, self.zoomedPhoto].forEach{$0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissZoomedImage)))}
+           navBar.addSubview(label)
+           label.centerXAnchor == navBar.centerXAnchor
+           label.bottomAnchor == selectButton.bottomAnchor
+           label.widthAnchor == 150
+           label.heightAnchor == 35
+        }
+        else{
+            selectState = .select
+            label.removeFromSuperview()
+            let title = titleForButton(title: "Select")
+            selectButton.setAttributedTitle(title, for: .normal)
         }
     }
     
@@ -182,6 +247,12 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
             self.zoomedPhotoContainer.alpha = 1
             self.blackOverlay.alpha = 1
         }
+    }
+    
+    private func titleForButton(title: String) -> NSAttributedString{
+        let title = NSAttributedString(string: "\(title)", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 20)])
+        
+        return title
     }
     
 }

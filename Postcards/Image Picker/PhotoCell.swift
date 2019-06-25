@@ -33,6 +33,35 @@ class PhotoCell: UICollectionViewCell{
         photo.heightAnchor == heightAnchor
     }
     
+    func cellWasSelected(){
+        addSubview(whiteOverlay)
+        whiteOverlay.widthAnchor == widthAnchor
+        whiteOverlay.heightAnchor == heightAnchor
+        
+        addSubview(checkMark)
+        checkMark.topAnchor == topAnchor + 8
+        checkMark.leftAnchor == leftAnchor + 8
+        checkMark.widthAnchor == 25
+        checkMark.heightAnchor == 25
+    }
+    
+    func cellWasDeselected(){
+        [checkMark, whiteOverlay].forEach{$0.removeFromSuperview()}
+    }
+    
+    let checkMark: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "checkmark"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    let whiteOverlay: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 1, alpha: 0.2)
+        return view
+    }()
+    
     let photo: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "picture"))
         imageView.backgroundColor = .lightGray
