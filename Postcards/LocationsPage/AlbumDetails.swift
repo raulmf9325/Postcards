@@ -98,46 +98,66 @@ extension AlbumDetails: ImagePickerDelegate{
         
         presentUploadDialog()
         
-        let previousNumberOfPostcards = self.postcards.count
+        var numberOfElementsToUpload = assets.count
+
+        var dictionary = [String:String]()
         
-        for (i, asset) in assets.enumerated(){
-            let identifier = asset.localIdentifier
-            let startIndex = identifier.startIndex
-            let endIndex = identifier.index(identifier.startIndex, offsetBy: 36)
-            let imageName = String(identifier[startIndex..<endIndex]) + ".png"
+        let albumDoc = self.db.collection("users").document(user).collection("albums").document(self.album!.name!)
+        albumDoc.getDocument(completion: { (snapshot, error) in
+            guard let info = snapshot?.data() as? [String:String] else {return}
+            dictionary = info
             
-            let imageRef = storageRef.child("users/\(user)/\(imageName)")
-            
-            let options = PHImageRequestOptions()
-            options.version = .original
-            options.deliveryMode = .highQualityFormat
-            PHImageManager.default().requestImage(for: asset, targetSize: .init(width: 2000, height: 2000), contentMode: .aspectFit, options: options) { image, _ in
-                guard let image = image else { return }
-                guard let data = image.pngData() else {return}
-                imageRef.putData(data, metadata: nil, completion: { (metadata, error) in
-                    if error == nil{
-                        let albumDoc = self.db.collection("users").document(user).collection("albums").document(self.album!.name!)
-                        albumDoc.getDocument(completion: { (snapshot, error) in
-                            guard var dictionary = snapshot?.data() as? [String:String] else {return}
-                            let count = "\(dictionary.values.count + 1)"
-                            dictionary[count] = imageName
-                            albumDoc.setData(dictionary)
-  
-                        })
-                        imageRef.downloadURL(completion: { (url, error) in
-                            if let url = url{
-                                self.postcards.append(postcard(albumName: self.album!.name!, imageStringURL: url.absoluteString, imageName: imageName))
-                            }
-                            if self.postcards.count == previousNumberOfPostcards + assets.count{
-                                self.collectionView.reloadData()
-                                self.dismissUploadDialog()
-                            }
+            for (_, asset) in assets.enumerated(){
+                let identifier = asset.localIdentifier
+                let startIndex = identifier.startIndex
+                let endIndex = identifier.index(identifier.startIndex, offsetBy: 36)
+                let imageName = String(identifier[startIndex..<endIndex]) + ".png"
+                
+                if dictionary[imageName] != nil {
+                    numberOfElementsToUpload -= 1
+                    if numberOfElementsToUpload == 0{
+                        albumDoc.setData(dictionary, completion: { (error) in
+                            self.uploadDidFinish()
                         })
                     }
-                })
+                    continue
+                }
+                
+                let imageRef = storageRef.child("users/\(user)/\(imageName)")
+                
+                let options = PHImageRequestOptions()
+                options.version = .original
+                options.deliveryMode = .highQualityFormat
+                PHImageManager.default().requestImage(for: asset, targetSize: .init(width: 2000, height: 2000), contentMode: .aspectFit, options: options) { image, _ in
+                    guard let image = image else { return }
+                    guard let data = image.pngData() else {return}
+                    imageRef.putData(data, metadata: nil, completion: { (metadata, error) in
+                        if error == nil{
+                            dictionary[imageName] = imageName
+                            imageRef.downloadURL(completion: { (url, error) in
+                                if let url = url{
+                                    self.postcards.append(postcard(albumName: self.album!.name!, imageStringURL: url.absoluteString, imageName: imageName))
+                                }
+                                numberOfElementsToUpload -= 1
+                                if numberOfElementsToUpload == 0{
+                                    albumDoc.setData(dictionary, completion: { (error) in
+                                        self.uploadDidFinish()
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
             }
-        }
+        })
     }
+    
+    private func uploadDidFinish(){
+        collectionView.reloadData()
+        dismissUploadDialog()
+    }
+    
+    
     
     private func presentUploadDialog(){
         view.addSubview(blackOverlay)
