@@ -82,6 +82,8 @@ extension AlbumDetails: ImagePickerDelegate{
         guard let user = Auth.auth().currentUser?.email else {return}
         let storageRef = storage.reference()
         
+        startActivityIndicator()
+        
         for (i, asset) in assets.enumerated(){
             let identifier = asset.localIdentifier
             let startIndex = identifier.startIndex
@@ -92,7 +94,7 @@ extension AlbumDetails: ImagePickerDelegate{
             
             let options = PHImageRequestOptions()
             options.version = .original
-            //  options.deliveryMode = .highQualityFormat
+            options.deliveryMode = .highQualityFormat
             PHImageManager.default().requestImage(for: asset, targetSize: .init(width: 2000, height: 2000), contentMode: .aspectFit, options: options) { image, _ in
                 guard let image = image else { return }
                 guard let data = image.pngData() else {return}
@@ -104,8 +106,15 @@ extension AlbumDetails: ImagePickerDelegate{
                             let count = "\(dictionary.values.count + 1)"
                             dictionary[count] = imageName
                             albumDoc.setData(dictionary)
+  
+                        })
+                        imageRef.downloadURL(completion: { (url, error) in
+                            if let url = url{
+                                self.postcards.append(postcard(albumName: self.album!.name!, imageStringURL: url.absoluteString, imageName: imageName))
+                            }
                             if i == assets.count - 1{
                                 self.collectionView.reloadData()
+                                self.removeActivityIndicator()
                             }
                         })
                     }
