@@ -79,42 +79,15 @@ class AlbumDetails: PinterestPage{
 
 extension AlbumDetails: ImagePickerDelegate{
     func uploadPhotos(assets: [PHAsset]) {
-//        // reference to storage
-//        let storageRef = Storage.storage().reference()
-//        // reference to file you want to upload
-        
-//        let winterRef = storageRef.child("image/winter.png")
-//
-//        guard let winterImage = UIImage(named: "winter") else {return}
-//
-//        guard let data = winterImage.pngData() else {return}
-//
-//        winterRef.putData(data, metadata: nil) { (metadata, error) in
-//            if error == nil{
-//                self.ref.child("games/1/image").setValue("winter.png")
-//            }
-//            else{
-//                print(error)
-//            }
-//
-//            guard let metadata = metadata else{return}
-//
-//            let size = metadata.size
-//            print(size)
-//
-//            // download url
-//            winterRef.downloadURL(completion: { (url, error) in
-//                guard let url = url else {
-//                    print(error)
-//                    return
-//                }
-//            })
-//        }
         guard let user = Auth.auth().currentUser?.email else {return}
         let storageRef = storage.reference()
         
-        assets.forEach { (asset) in
-            let imageName = asset.localIdentifier + ".png"
+        for (i, asset) in assets.enumerated(){
+            let identifier = asset.localIdentifier
+            let startIndex = identifier.startIndex
+            let endIndex = identifier.index(identifier.startIndex, offsetBy: 36)
+            let imageName = String(identifier[startIndex..<endIndex]) + ".png"
+            
             let imageRef = storageRef.child("users/\(user)/\(imageName)")
             
             let options = PHImageRequestOptions()
@@ -126,7 +99,15 @@ extension AlbumDetails: ImagePickerDelegate{
                 imageRef.putData(data, metadata: nil, completion: { (metadata, error) in
                     if error == nil{
                         let albumDoc = self.db.collection("users").document(user).collection("albums").document(self.album!.name!)
-                        
+                        albumDoc.getDocument(completion: { (snapshot, error) in
+                            guard var dictionary = snapshot?.data() as? [String:String] else {return}
+                            let count = "\(dictionary.values.count + 1)"
+                            dictionary[count] = imageName
+                            albumDoc.setData(dictionary)
+                            if i == assets.count - 1{
+                                self.collectionView.reloadData()
+                            }
+                        })
                     }
                 })
             }
