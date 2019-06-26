@@ -98,6 +98,7 @@ extension AlbumDetails: ImagePickerDelegate{
         
         presentUploadDialog()
         
+        let previousNumberOfPostcards = self.postcards.count
         
         for (i, asset) in assets.enumerated(){
             let identifier = asset.localIdentifier
@@ -127,7 +128,7 @@ extension AlbumDetails: ImagePickerDelegate{
                             if let url = url{
                                 self.postcards.append(postcard(albumName: self.album!.name!, imageStringURL: url.absoluteString, imageName: imageName))
                             }
-                            if i == assets.count - 1{
+                            if self.postcards.count == previousNumberOfPostcards + assets.count{
                                 self.collectionView.reloadData()
                                 self.dismissUploadDialog()
                             }
