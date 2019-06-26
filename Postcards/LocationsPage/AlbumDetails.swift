@@ -75,6 +75,20 @@ class AlbumDetails: PinterestPage{
         button.setImage(UIImage(named: "upload"), for: .normal)
         return button
     }()
+    
+    let blackOverlay: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.7)
+        return view
+    }()
+    
+    let uploadingLabel: UILabel = {
+        let label = UILabel()
+        let attributedText = NSMutableAttributedString(string: "Uploading", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font : UIFont(name: "AvenirNext-Heavy", size: 26)])
+        label.attributedText = attributedText
+        label.textAlignment = .center
+        return label
+    }()
 }
 
 extension AlbumDetails: ImagePickerDelegate{
@@ -82,7 +96,8 @@ extension AlbumDetails: ImagePickerDelegate{
         guard let user = Auth.auth().currentUser?.email else {return}
         let storageRef = storage.reference()
         
-        startActivityIndicator()
+        presentUploadDialog()
+        
         
         for (i, asset) in assets.enumerated(){
             let identifier = asset.localIdentifier
@@ -114,12 +129,32 @@ extension AlbumDetails: ImagePickerDelegate{
                             }
                             if i == assets.count - 1{
                                 self.collectionView.reloadData()
-                                self.removeActivityIndicator()
+                                self.dismissUploadDialog()
                             }
                         })
                     }
                 })
             }
         }
+    }
+    
+    private func presentUploadDialog(){
+        view.addSubview(blackOverlay)
+        blackOverlay.widthAnchor == view.widthAnchor
+        blackOverlay.heightAnchor == view.heightAnchor
+        
+        view.addSubview(uploadingLabel)
+        uploadingLabel.centerXAnchor == view.centerXAnchor
+        uploadingLabel.centerYAnchor == view.centerYAnchor - 60
+        uploadingLabel.widthAnchor == 200
+        uploadingLabel.heightAnchor == 40
+        
+        startActivityIndicator()
+    }
+    
+    private func dismissUploadDialog(){
+        uploadingLabel.removeFromSuperview()
+        blackOverlay.removeFromSuperview()
+        removeActivityIndicator()
     }
 }
