@@ -60,6 +60,7 @@ class PostcardDetails: UIViewController{
     var headerState: HeaderState = .hidden
     
     override func viewDidLoad() {
+        view.backgroundColor = .white
         view.addSubview(postcardImage)
         postcardImage.fillSuperview()
         

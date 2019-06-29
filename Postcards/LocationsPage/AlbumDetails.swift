@@ -26,22 +26,32 @@ class AlbumDetails: PinterestPage{
         setupHeader(carouselAvailable: true)
         addBackButton()
         addUploadButton()
+        addTrashButton()
+    }
+    
+    private func addTrashButton(){
+        if album?.type == .defaultAlbum {return}
+        PinterestHeader.addSubview(trashButton)
+        trashButton.rightAnchor == uploadButton.leftAnchor - 25
+        trashButton.bottomAnchor == uploadButton.bottomAnchor
+        trashButton.widthAnchor == 20
+        trashButton.heightAnchor == 20
     }
     
     private func addUploadButton(){
         if album?.type == .defaultAlbum {return}
         PinterestHeader.addSubview(uploadButton)
-        uploadButton.rightAnchor == cubeButton.leftAnchor - 30
+        uploadButton.rightAnchor == cubeButton.leftAnchor - 25
         uploadButton.bottomAnchor == backButton.bottomAnchor
-        uploadButton.widthAnchor == 25
-        uploadButton.heightAnchor == 25
+        uploadButton.widthAnchor == 20
+        uploadButton.heightAnchor == 20
         uploadButton.addTarget(self, action: #selector(handleTapUploadButton), for: .touchUpInside)
     }
         
    private func addBackButton(){
         PinterestHeader.addSubview(backButton)
-        PinterestHeader.addConstraintsWithFormat(format: "H:[v0(20)]-25-|", views: backButton)
-        PinterestHeader.addConstraintsWithFormat(format: "V:[v0(15)]-16-|", views: backButton)
+        PinterestHeader.addConstraintsWithFormat(format: "H:[v0(20)]-15-|", views: backButton)
+        PinterestHeader.addConstraintsWithFormat(format: "V:[v0(15)]-5-|", views: backButton)
         
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
     }
@@ -88,6 +98,12 @@ class AlbumDetails: PinterestPage{
         label.attributedText = attributedText
         label.textAlignment = .center
         return label
+    }()
+    
+    let trashButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "garbage"), for: .normal)
+        return button
     }()
 }
 

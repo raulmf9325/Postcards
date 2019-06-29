@@ -112,10 +112,10 @@ class BasePage: UICollectionViewController{
         
         if carouselAvailable{
             PinterestHeader.addSubview(cubeButton)
-            cubeButton.bottomAnchor == PinterestHeader.bottomAnchor - 10
-            cubeButton.rightAnchor == PinterestHeader.rightAnchor - 75
-            cubeButton.widthAnchor == 35
-            cubeButton.heightAnchor == 35
+            cubeButton.bottomAnchor == PinterestHeader.bottomAnchor - 1
+            cubeButton.rightAnchor == PinterestHeader.rightAnchor - 60
+            cubeButton.widthAnchor == 28
+            cubeButton.heightAnchor == 28
             cubeButton.addTarget(self, action: #selector(handleCubeTap), for: .touchUpInside)
         }
         
