@@ -62,6 +62,7 @@ class LocationsPage: BasePage{
         albumDetails.delegate = self.delegate
         albumDetails.headTitle = albums?[indexPath.item].name ?? ""
         albumDetails.album = albums?[indexPath.item]
+        albumDetails.locationsPage = self
         
         let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
         
@@ -99,6 +100,61 @@ extension LocationsPage: PopupDelegate{
         
         let albumDoc = db.collection("users").document(user).collection("albums").document("\(albumName)")
         albumDoc.setData([:])
+    }
+}
+
+
+// Album delegate
+extension LocationsPage{
+    
+    func albumWasUpdated(postcards: [postcard]){
+        guard var collections = albums else {return}
+        for(i, album) in collections.enumerated(){
+            if collections[i].name == album.name{
+                collections[i].postcards = postcards
+                break
+            }
+        }
+        self.albums = collections
+       // collectionView.reloadData()
+    }
+    
+    func albumWasDeleted(album: Album){
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let albumDoc = self.db.collection("users").document(user).collection("albums").document(album.name!)
+        let storageRef = storage.reference()
+        
+        // remove references from database
+        albumDoc.delete()
+        
+        // update local albums
+        albums?.removeAll(where: { (collection) -> Bool in
+            return collection.name == album.name
+        })
+        
+        album.postcards?.forEach({ (postcard) in
+            let name = postcard.imageName
+            var imageIsReferencedInAnotherAlbum = false
+            
+            albums?.forEach({ (collection) in
+                if collection.type != .defaultAlbum && collection.name != album.name{
+                    let images = collection.postcards?.map({ (postcard) -> String in
+                        return postcard.imageName
+                    })
+                    if images?.contains(name) ?? false{
+                        imageIsReferencedInAnotherAlbum = true
+                    }
+                }
+            })
+            // delete images from cloud storage only if they're not referenced in another album
+            if !imageIsReferencedInAnotherAlbum{
+                let imageRef = storageRef.child("users/\(user)/\(name)")
+                imageRef.delete(completion: nil)
+            }
+        })
+    
+        // refresh locations page
+        collectionView.reloadData()
     }
 }
 

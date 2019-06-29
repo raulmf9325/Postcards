@@ -62,21 +62,14 @@ class AlbumDetails: PinterestPage{
     
     @objc private func handleTapTrashButton(){
         let alert = UIAlertController(title: "Are you sure you want to delete the album?", message: "The album will be permanently deleted. This action cannot be undone", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Delete Album", style: .destructive, handler: nil))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Delete Album", style: .destructive, handler: {(_) in
+            self.locationsPage.albumWasDeleted(album: self.album!)
+            self.handleTapBackButton()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
+            return
+        }))
         self.present(alert, animated: true)
-        
-        return
-        // erase album info from firestore
-        guard let user = Auth.auth().currentUser?.email else {return}
-        let albumDoc = self.db.collection("users").document(user).collection("albums").document(self.album!.name!)
-        
-        
-        // delete images from cloud storage only if they're not referenced in another album
-        
-        
-        // pop page
-        // refresh locations page
     }
     
     @objc private func handleTapUploadButton(){
@@ -194,6 +187,7 @@ extension AlbumDetails: ImagePickerDelegate{
     private func uploadDidFinish(){
         collectionView.reloadData()
         dismissUploadDialog()
+        locationsPage.albumWasUpdated(postcards: self.postcards)
     }
     
     
