@@ -13,6 +13,9 @@ import Firebase
 
 class AlbumDetails: PinterestPage{
     
+    // delegate for albumn deletion
+    var locationsPage: LocationsPage!
+    
     override var topInset: CGFloat {
         get{return 70}
         set {}
@@ -36,6 +39,7 @@ class AlbumDetails: PinterestPage{
         trashButton.bottomAnchor == uploadButton.bottomAnchor
         trashButton.widthAnchor == 20
         trashButton.heightAnchor == 20
+        trashButton.addTarget(self, action: #selector(handleTapTrashButton), for: .touchUpInside)
     }
     
     private func addUploadButton(){
@@ -54,6 +58,25 @@ class AlbumDetails: PinterestPage{
         PinterestHeader.addConstraintsWithFormat(format: "V:[v0(15)]-5-|", views: backButton)
         
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+    }
+    
+    @objc private func handleTapTrashButton(){
+        let alert = UIAlertController(title: "Are you sure you want to delete the album?", message: "The album will be permanently deleted. This action cannot be undone", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Delete Album", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+        
+        return
+        // erase album info from firestore
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let albumDoc = self.db.collection("users").document(user).collection("albums").document(self.album!.name!)
+        
+        
+        // delete images from cloud storage only if they're not referenced in another album
+        
+        
+        // pop page
+        // refresh locations page
     }
     
     @objc private func handleTapUploadButton(){
