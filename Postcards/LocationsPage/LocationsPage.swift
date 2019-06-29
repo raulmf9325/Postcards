@@ -103,20 +103,18 @@ extension LocationsPage: PopupDelegate{
     }
 }
 
-
 // Album delegate
 extension LocationsPage{
     
-    func albumWasUpdated(postcards: [postcard]){
+    func albumWasUpdated(updatedAlbum: Album){
         guard var collections = albums else {return}
-        for(i, album) in collections.enumerated(){
-            if collections[i].name == album.name{
-                collections[i].postcards = postcards
+        for(i, collection) in collections.enumerated(){
+            if collection.name == updatedAlbum.name{
+                collections[i].postcards = updatedAlbum.postcards
                 break
             }
         }
         self.albums = collections
-       // collectionView.reloadData()
     }
     
     func albumWasDeleted(album: Album){

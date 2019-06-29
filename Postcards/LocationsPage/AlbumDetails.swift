@@ -187,7 +187,8 @@ extension AlbumDetails: ImagePickerDelegate{
     private func uploadDidFinish(){
         collectionView.reloadData()
         dismissUploadDialog()
-        locationsPage.albumWasUpdated(postcards: self.postcards)
+        self.album?.postcards = postcards
+        locationsPage.albumWasUpdated(updatedAlbum: self.album!)
     }
     
     

@@ -121,6 +121,7 @@ class RootController: UIViewController{
     // fetch default albums
     private func fetchDefaultAlbums(_ completion: @escaping (QuerySnapshot) -> ()) {
         db.collection("postcards").getDocuments { (snapshot, error) in
+            print("default albums fetched")
             if error != nil {return}
             guard let snapshot = snapshot else {return}
             completion(snapshot)
@@ -132,6 +133,7 @@ class RootController: UIViewController{
         guard let user = Auth.auth().currentUser?.email else {return}
         let albumsCollection = db.collection("users").document(user).collection("albums")
         albumsCollection.getDocuments { (snapshot, error) in
+            print("user albums fetched")
             if error != nil {return}
             guard let snapshot = snapshot else {return}
             completion(snapshot)
@@ -197,16 +199,16 @@ class RootController: UIViewController{
             }
             
             allAlbums.append(contentsOf: userAlbums)
-        }
-        
-        if didFinishFetchingDefaultAlbums{
-            self.downloadImagesURLForAlbums(albums: allAlbums)
+            if didFinishFetchingDefaultAlbums{
+                self.downloadImagesURLForAlbums(albums: allAlbums)
+            }
         }
     }
     
     
     
     private func downloadImagesURLForAlbums(albums: [Album]){
+        print("will download images URLs")
         var albums = albums
         var urlsDownloaded = 0
         var totalNumberOfImageURL = 0
@@ -240,6 +242,7 @@ class RootController: UIViewController{
                         }
                         
                         if urlsDownloaded == totalNumberOfImageURL{
+                            print("download complete")
                             self.pinterestPage.albums = albums
                             self.locationsPage.albums = albums
                             self.pinterestPage.removeActivityIndicator()
