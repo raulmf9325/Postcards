@@ -105,6 +105,7 @@ class PinterestPage: BasePage{
         let rootController = delegate as! RootController
         postcardDetails.rootController = rootController
         postcardDetails.likeDelegate = rootController.favoritesPage
+        postcardDetails.locationsPage = rootController.locationsPage
         
         let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
        

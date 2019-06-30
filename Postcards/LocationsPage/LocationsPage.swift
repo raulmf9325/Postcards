@@ -156,6 +156,50 @@ extension LocationsPage{
     }
 }
 
+extension LocationsPage{
+    func imageWasDeleted(imageName: String, albumName: String){
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let albumDoc = self.db.collection("users").document(user).collection("albums").document(albumName)
+        let storageRef = storage.reference()
+        
+        // remove reference from database
+        albumDoc.getDocument { (snapshot, error) in
+            guard var dict = snapshot?.data() as? [String:String] else {return}
+            dict.removeValue(forKey: imageName)
+            albumDoc.setData(dict)
+        }
+        
+        // remove local reference
+        guard var albums = albums else {return}
+        for (i, album) in albums.enumerated(){
+            if album.name == albumName{
+                albums[i].postcards?.removeAll(where: { (postcard) -> Bool in
+                    return postcard.imageName == imageName
+                })
+            }
+        }
+        // reload local albums
+        self.albums = albums
+        
+        var imageIsReferencedInAnotherAlbum = false
+        self.albums?.forEach({ (collection) in
+            if collection.name != albumName{
+                let images = collection.postcards?.map({ (postcard) -> String in
+                    return postcard.imageName
+                })
+                if images?.contains(imageName) ?? false{
+                    imageIsReferencedInAnotherAlbum = true
+                }
+            }
+        })
+        
+        if !imageIsReferencedInAnotherAlbum{
+            let imageRef = storageRef.child("users/\(user)/\(imageName)")
+            imageRef.delete(completion: nil)
+        }
+    }
+}
+
 
 // MARK: Album class
 struct Album{

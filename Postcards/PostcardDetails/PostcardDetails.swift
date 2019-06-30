@@ -17,6 +17,9 @@ class PostcardDetails: UIViewController{
     // like delegate
     var likeDelegate: LikeDelegate?
     
+    // remove delegate
+    var locationsPage: LocationsPage!
+    
     var rootController: RootController!
     
     var pagePostcard: postcard?{
@@ -108,6 +111,8 @@ class PostcardDetails: UIViewController{
         
         addLikeButton()
         
+        addTrashButton()
+        
         Header.frame = CGRect(x: 0, y: -100, width: view.frame.width, height: 100)
         Header.setBackgroundGradient(colorOne: .darkGray, colorTwo: .black)
         Header.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 12)
@@ -126,6 +131,16 @@ class PostcardDetails: UIViewController{
         }
     }
     
+    private func addTrashButton(){
+        if pagePostcard?.albumName == "Alaska" || pagePostcard?.albumName == "Iceland" || pagePostcard?.albumName == "Norway" {return}
+        Header.addSubview(trashButton)
+        trashButton.rightAnchor == likeButton.leftAnchor - 25
+        trashButton.bottomAnchor == likeButton.bottomAnchor
+        trashButton.widthAnchor == 25
+        trashButton.heightAnchor == 25
+        trashButton.addTarget(self, action: #selector(handleTapTrashButton), for: .touchUpInside)
+    }
+    
     private func addLikeButton(){
         Header.addSubview(likeButton)
         likeButton.rightAnchor == backButton.leftAnchor - 28
@@ -140,6 +155,11 @@ class PostcardDetails: UIViewController{
         Header.addConstraintsWithFormat(format: "H:[v0(20)]-20-|", views: backButton)
         Header.addConstraintsWithFormat(format: "V:[v0(15)]-15-|", views: backButton)
         backButton.addTarget(self, action: #selector(handleTapBackButton), for: .touchUpInside)
+    }
+    
+    @objc private func handleTapTrashButton(){
+        guard let postcard = pagePostcard else {return}
+        locationsPage.imageWasDeleted(imageName: postcard.imageName, albumName: postcard.albumName)
     }
     
     @objc private func handleTapLikeButton(){
@@ -235,6 +255,12 @@ class PostcardDetails: UIViewController{
     let likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "likeEmpty"), for: .normal)
+        return button
+    }()
+    
+    let trashButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "garbage"), for: .normal)
         return button
     }()
     
