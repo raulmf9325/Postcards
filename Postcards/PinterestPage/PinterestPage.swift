@@ -96,7 +96,7 @@ class PinterestPage: BasePage{
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func itemWasSelected(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
         if layoutState == .carousel {return}
         
         let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
@@ -108,14 +108,22 @@ class PinterestPage: BasePage{
         postcardDetails.locationsPage = rootController.locationsPage
         
         let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
-       
+        
         var selectedFrame: CGRect = .zero
         
         if let frame = layoutAttributes?.frame{
             selectedFrame = collectionView.convert(frame, to: collectionView.superview)
         }
-
+        
         rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        itemWasSelected(collectionView, indexPath)
+    }
+    
+    func itemWasSelected(){
+        
     }
     
     func postcardsForCarousellCellAt(indexPath: IndexPath) -> [postcard]{

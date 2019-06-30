@@ -196,6 +196,8 @@ extension LocationsPage{
         if !imageIsReferencedInAnotherAlbum{
             let imageRef = storageRef.child("users/\(user)/\(imageName)")
             imageRef.delete(completion: nil)
+            let rootController = delegate as! RootController
+           // rootController.pinterestPage
         }
     }
 }

@@ -17,6 +17,9 @@ class PostcardDetails: UIViewController{
     // like delegate
     var likeDelegate: LikeDelegate?
     
+    // delete delegate
+    var deleteDelegate: DeleteDelegate!
+    
     // remove delegate
     var locationsPage: LocationsPage!
     
@@ -158,8 +161,17 @@ class PostcardDetails: UIViewController{
     }
     
     @objc private func handleTapTrashButton(){
-        guard let postcard = pagePostcard else {return}
-        locationsPage.imageWasDeleted(imageName: postcard.imageName, albumName: postcard.albumName)
+        let alert = UIAlertController(title: "Are you sure you want to delete the postcard?", message: "The postcard will be permanently deleted", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Delete Postcard", style: .destructive, handler: { (_) in
+            guard let postcard = self.pagePostcard else {return}
+            self.locationsPage.imageWasDeleted(imageName: postcard.imageName, albumName: postcard.albumName)
+            self.deleteDelegate.postcardWasDeleted(postcard: self.pagePostcard!)
+            self.handleTapBackButton()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
+            return
+        }))
+        self.present(alert, animated: true)
     }
     
     @objc private func handleTapLikeButton(){
