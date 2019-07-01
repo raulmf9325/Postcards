@@ -165,7 +165,7 @@ class PostcardDetails: UIViewController{
         alert.addAction(UIAlertAction(title: "Delete Postcard", style: .destructive, handler: { (_) in
             guard let postcard = self.pagePostcard else {return}
             self.locationsPage.imageWasDeleted(imageName: postcard.imageName, albumName: postcard.albumName)
-            self.deleteDelegate.postcardWasDeleted(postcard: self.pagePostcard!)
+            self.deleteDelegate.postcardWasDeleted(postcards: [self.pagePostcard!])
             self.handleTapBackButton()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in

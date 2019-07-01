@@ -11,6 +11,9 @@ import Firebase
 
 class LocationsPage: BasePage{
     
+    // delete delegate
+    var deleteDelegate: DeleteDelegate!
+    
     var albums: [Album]?{
         didSet{
             guard let count = albums?.count else {return}
@@ -130,6 +133,8 @@ extension LocationsPage{
             return collection.name == album.name
         })
         
+        var postcardsToBeRemovedFromPinterestPage = [postcard]()
+        
         album.postcards?.forEach({ (postcard) in
             let name = postcard.imageName
             var imageIsReferencedInAnotherAlbum = false
@@ -148,8 +153,11 @@ extension LocationsPage{
             if !imageIsReferencedInAnotherAlbum{
                 let imageRef = storageRef.child("users/\(user)/\(name)")
                 imageRef.delete(completion: nil)
+                postcardsToBeRemovedFromPinterestPage.append(postcard)
             }
         })
+        
+        deleteDelegate.postcardWasDeleted(postcards: postcardsToBeRemovedFromPinterestPage)
     
         // refresh locations page
         collectionView.reloadData()
@@ -196,8 +204,7 @@ extension LocationsPage{
         if !imageIsReferencedInAnotherAlbum{
             let imageRef = storageRef.child("users/\(user)/\(imageName)")
             imageRef.delete(completion: nil)
-            let rootController = delegate as! RootController
-           // rootController.pinterestPage
+            deleteDelegate.postcardWasDeleted(postcards: [postcard(albumName: albumName, imageStringURL: "", imageName: imageName)])
         }
     }
 }

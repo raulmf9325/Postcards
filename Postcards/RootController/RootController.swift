@@ -80,6 +80,7 @@ class RootController: UIViewController{
         pinterestView = pinterestPage.view
         
         locationsPage.delegate = self
+        locationsPage.deleteDelegate = pinterestPage
         locationsView = locationsPage.view
         
         favoritesPage.delegate = self

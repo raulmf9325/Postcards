@@ -213,38 +213,31 @@ extension AlbumDetails: ImagePickerDelegate{
 }
 
 protocol DeleteDelegate{
-    func postcardWasDeleted(postcard: postcard)
+    func postcardWasDeleted(postcards: [postcard])
 }
 
-extension AlbumDetails: DeleteDelegate{
-    func postcardWasDeleted(postcard: postcard) {
-        postcards.removeAll { (localPostcard) -> Bool in
-            return localPostcard.imageName == postcard.imageName
-        }
-        collectionView.reloadData()
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if layoutState == .carousel {return}
-        
-        let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
-        let postcardDetails = PostcardDetails()
-        postcardDetails.pagePostcard = postcards[indexPath.item]
-        let rootController = delegate as! RootController
-        postcardDetails.rootController = rootController
-        postcardDetails.likeDelegate = rootController.favoritesPage
-        postcardDetails.locationsPage = rootController.locationsPage
-        postcardDetails.deleteDelegate = self
-        
-        let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
-        
-        var selectedFrame: CGRect = .zero
-        
-        if let frame = layoutAttributes?.frame{
-            selectedFrame = collectionView.convert(frame, to: collectionView.superview)
-        }
-        
-        rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
-    }
-    
-}
+//extension AlbumDetails{
+//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if layoutState == .carousel {return}
+//
+//        let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
+//        let postcardDetails = PostcardDetails()
+//        postcardDetails.pagePostcard = postcards[indexPath.item]
+//        let rootController = delegate as! RootController
+//        postcardDetails.rootController = rootController
+//        postcardDetails.likeDelegate = rootController.favoritesPage
+//        postcardDetails.locationsPage = rootController.locationsPage
+//        postcardDetails.deleteDelegate = self
+//
+//        let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
+//
+//        var selectedFrame: CGRect = .zero
+//
+//        if let frame = layoutAttributes?.frame{
+//            selectedFrame = collectionView.convert(frame, to: collectionView.superview)
+//        }
+//
+//        rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
+//    }
+//
+//}

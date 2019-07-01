@@ -96,7 +96,7 @@ class PinterestPage: BasePage{
         }
     }
     
-    func itemWasSelected(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if layoutState == .carousel {return}
         
         let cell = collectionView.cellForItem(at: indexPath) as! PinterestCell
@@ -106,6 +106,7 @@ class PinterestPage: BasePage{
         postcardDetails.rootController = rootController
         postcardDetails.likeDelegate = rootController.favoritesPage
         postcardDetails.locationsPage = rootController.locationsPage
+        postcardDetails.deleteDelegate = self
         
         let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
         
@@ -116,14 +117,6 @@ class PinterestPage: BasePage{
         }
         
         rootController.pushController(selectedFrame: selectedFrame, vc: postcardDetails)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        itemWasSelected(collectionView, indexPath)
-    }
-    
-    func itemWasSelected(){
-        
     }
     
     func postcardsForCarousellCellAt(indexPath: IndexPath) -> [postcard]{
@@ -172,6 +165,24 @@ extension PinterestPage: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 50
+    }
+    
+}
+
+extension PinterestPage: DeleteDelegate{
+    func postcardWasDeleted(postcards: [postcard]) {
+        postcards.forEach { (postcard) in
+            self.postcards.removeAll { (localPostcard) -> Bool in
+                return localPostcard.imageName == postcard.imageName
+            }
+        }
+        
+        // page is Album Details
+        if album != nil{
+            headSubtitle = "\(self.postcards.count) postcards"
+            setHeaderTitle()
+        }
+        collectionView.reloadData()
     }
     
 }
