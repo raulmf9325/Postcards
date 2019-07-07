@@ -16,6 +16,9 @@ class PopUp: UIView{
     
     var delegate: PopupDelegate!
     
+    var title = "Please enter name of new album"
+    var placeholder = " new album name"
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -38,7 +41,8 @@ class PopUp: UIView{
         promptLabel.topAnchor == dialogWindow.topAnchor + 8
         promptLabel.leftAnchor == dialogWindow.leftAnchor + 8
         promptLabel.rightAnchor == dialogWindow.rightAnchor - 8
-        promptLabel.heightAnchor == 25
+        promptLabel.heightAnchor == 50
+        promptLabel.text = title
         
         // text field
         dialogWindow.addSubview(textField)
@@ -46,6 +50,7 @@ class PopUp: UIView{
         textField.leftAnchor == dialogWindow.leftAnchor + 20
         textField.rightAnchor == dialogWindow.rightAnchor - 20
         textField.heightAnchor == 35
+        textField.placeholder = placeholder
         
         // division line
         let textFieldLine = grayThinLine()
@@ -154,6 +159,8 @@ class PopUp: UIView{
     let textField: UITextField = {
         let field = UITextField()
         field.placeholder = " new album name"
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         return field
     }()
     

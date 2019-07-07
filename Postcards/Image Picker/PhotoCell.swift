@@ -18,6 +18,12 @@ class PhotoCell: UICollectionViewCell{
         }
     }
     
+    var imageURL: URL?{
+        didSet{
+            photo.sd_setImage(with: imageURL) { (image, error, cache, url) in}
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()

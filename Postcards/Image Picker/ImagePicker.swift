@@ -27,7 +27,6 @@ class ImagePicker: UICollectionViewController {
     // delegate
     var delegate: ImagePickerDelegate!
     
- 
     var source: Source = .local
     
     // local photos
@@ -78,6 +77,9 @@ class ImagePicker: UICollectionViewController {
         case cancel
     }
     
+    // pop-up view
+    var popUp: PopUp!
+    
     var selectState: SelectionState = .select
     
     // label
@@ -126,12 +128,18 @@ class ImagePicker: UICollectionViewController {
         addWallpaper()
         addNavigationBar()
         
+        popUp = PopUp(frame: view.bounds)
+        popUp.delegate = self
+        
         if source == .local {fetchLocalPhotos()}
         else {fetchInstagramImages()}
     }
     
     private func fetchInstagramImages(){
-        
+        view.addSubview(popUp)
+        popUp.title = "Please enter Instagram account name (must be public)"
+        popUp.placeholder = " account name"
+        popUp.present()
     }
     
     private func fetchLocalPhotos(){
@@ -218,9 +226,17 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! PhotoCell
-        let asset = photos?.object(at: indexPath.item)
+        
         cell.photo.image = UIImage(named: "picture")
-        cell.asset = asset
+        
+        if source == .local{
+            let asset = photos?.object(at: indexPath.item)
+            cell.asset = asset
+        }
+        else{
+            let imageURL = images[indexPath.item]
+            cell.imageURL = imageURL
+        }
         
         if selectedPhotos[indexPath.item] != nil{
             cell.cellWasSelected()
@@ -246,11 +262,17 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell
         
+        let width: CGFloat = view.frame.width
+        let height: CGFloat = width + 60
+        
         if selectState == .select{
-            guard let asset = cell.asset else {return}
-            let width: CGFloat = view.frame.width
-            let height: CGFloat = width + 60
-            zoomedPhoto.fetchImage(asset: asset, contentMode: .aspectFill, targetSize: CGSize(width: width, height: height))
+            if source == .local{
+                guard let asset = cell.asset else {return}
+                zoomedPhoto.fetchImage(asset: asset, contentMode: .aspectFill, targetSize: CGSize(width: width, height: height))
+            }
+            else{
+                zoomedPhoto.image = cell.photo.image
+            }
             
             view.addSubview(blackOverlay)
             blackOverlay.widthAnchor == view.widthAnchor
@@ -288,7 +310,6 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
                 }
                 selectedPhotos[indexPath.item] = cell.asset
             }
-            
         }
     }
     
@@ -344,6 +365,62 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     
 }
 
+extension ImagePicker: PopupDelegate{
+    func handleUserEntry(albumName: String) {
+        fetchURL(username: albumName)
+    }
+    
+    private func fetchURL(username: String){
+        let urlString = "https://www.instagram.com/\(username)/"
+        guard let url = URL(string: urlString) else {return}
+        var html = ""
+        do{
+            html = try String(contentsOf: url)
+        }
+        catch let error{
+            print(error.localizedDescription)
+        }
+        
+        // let regex = "window._sharedData = (.*);</script>"
+        
+        if let jsonString = html.slice(from: "window._sharedData = ", to: ";</script>"){
+            //print(jsonString)
+            
+            let data = Data(jsonString.utf8)
+            do {
+                // make sure this JSON is in the format we expect
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    // try to read out a string array
+                    if let entry = json["entry_data"] as? [String: Any] {
+                        if let profile = entry["ProfilePage"] as? [[String: Any]]{
+                            if let graphql = profile[0]["graphql"] as? [String: Any]{
+                                if let user = graphql["user"] as? [String: Any]{
+                                    if let owner = user["edge_owner_to_timeline_media"] as? [String: Any]{
+                                        if let edges = owner["edges"] as? [[String: Any]]{
+                                            edges.forEach { (edge) in
+                                                if let node = edge["node"] as? [String: Any]{
+                                                    let image = node["display_url"] as! String
+                                                    if let url = URL(string: image){
+                                                        self.images.append(url)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                collectionView.reloadData()
+            } catch let error as NSError {
+                print("Failed to load: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+}
+
 extension UIImageView{
     func fetchImage(asset: PHAsset, contentMode: PHImageContentMode, targetSize: CGSize) {
         let options = PHImageRequestOptions()
@@ -352,6 +429,18 @@ extension UIImageView{
         PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: contentMode, options: options) { image, _ in
             guard let image = image else { return }
             self.image = image
+        }
+    }
+}
+
+extension String {
+    
+    func slice(from: String, to: String) -> String? {
+        
+        return (range(of: from)?.upperBound).flatMap { substringFrom in
+            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
+                String(self[substringFrom..<substringTo])
+            }
         }
     }
 }
