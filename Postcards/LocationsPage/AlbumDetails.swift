@@ -140,6 +140,58 @@ class AlbumDetails: PinterestPage{
 }
 
 extension AlbumDetails: ImagePickerDelegate{
+    func uploadImages(images: [UIImage]) {
+        guard let user = Auth.auth().currentUser?.email else {return}
+        let storageRef = storage.reference()
+        
+        presentUploadDialog()
+        
+        var numberOfElementsToUpload = images.count
+        
+        var dictionary = [String:String]()
+
+        let albumDoc = self.db.collection("users").document(user).collection("albums").document(self.album!.name!)
+        albumDoc.getDocument(completion: { (snapshot, error) in
+            guard let info = snapshot?.data() as? [String:String] else {return}
+            dictionary = info
+            
+            for (_, image) in images.enumerated(){
+                let imageName = String(image.hashValue) + ".png"
+                
+                if dictionary[imageName] != nil {
+                    numberOfElementsToUpload -= 1
+                    if numberOfElementsToUpload == 0{
+                        albumDoc.setData(dictionary, completion: { (error) in
+                            self.uploadDidFinish()
+                        })
+                    }
+                    continue
+                }
+                
+                let imageRef = storageRef.child("users/\(user)/\(imageName)")
+                guard let data = image.pngData() else {return}
+                imageRef.putData(data, metadata: nil, completion: { (metadata, error) in
+                    if error == nil{
+                        dictionary[imageName] = imageName
+                        imageRef.downloadURL(completion: { (url, error) in
+                            if let url = url{
+                                self.postcards.append(postcard(albumName: self.album!.name!, imageStringURL: url.absoluteString, imageName: imageName))
+                            }
+                            numberOfElementsToUpload -= 1
+                            if numberOfElementsToUpload == 0{
+                                albumDoc.setData(dictionary, completion: { (error) in
+                                    self.uploadDidFinish()
+                                })
+                            }
+                            
+                        })
+                    }
+                })
+            }
+        })
+        
+    }
+    
     func uploadPhotos(assets: [PHAsset]) {
         guard let user = Auth.auth().currentUser?.email else {return}
         let storageRef = storage.reference()

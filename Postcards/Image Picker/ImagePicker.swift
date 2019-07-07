@@ -11,6 +11,7 @@ import Photos
 
 protocol ImagePickerDelegate{
     func uploadPhotos(assets: [PHAsset])
+    func uploadImages(images: [UIImage])
 }
 
 // image source
@@ -43,6 +44,9 @@ class ImagePicker: UICollectionViewController {
     
     // selected photos
     var selectedPhotos = [Int : PHAsset]()
+    
+    // selected Instagram images
+    var selectedImages = [Int : UIImage]()
     
     // navigation delegate
     var navigationDelegate: RootController!
@@ -296,20 +300,25 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
             }
         }
         else{
-            if selectedPhotos[indexPath.item] != nil{
+            var dictionary: [Int : Any] = (source == .local) ? selectedPhotos : selectedImages
+            
+            if dictionary[indexPath.item] != nil{
                 cell.cellWasDeselected()
-                selectedPhotos.removeValue(forKey: indexPath.item)
-                if selectedPhotos.values.count == 0{
+                dictionary.removeValue(forKey: indexPath.item)
+                if dictionary.values.count == 0{
                     removeUploadButton()
                 }
             }
             else{
                 cell.cellWasSelected()
-                if selectedPhotos.values.count == 0{
+                if dictionary.values.count == 0{
                     addUploadButton()
                 }
-                selectedPhotos[indexPath.item] = cell.asset
+                dictionary[indexPath.item] = (source == .local) ? cell.asset : cell.photo.image
             }
+            
+            if source == .local {selectedPhotos = (dictionary as! [Int : PHAsset])}
+            else {selectedImages = (dictionary as! [Int : UIImage])}
         }
     }
     
@@ -341,6 +350,17 @@ extension ImagePicker: UICollectionViewDelegateFlowLayout{
     }
     
     @objc private func handleTapUploadButton(){
+        if source == .local {uploadAssets()}
+        else {uploadImages()}
+    }
+    
+    private func uploadImages(){
+        let images: [UIImage] = selectedImages.values.map{return $0}
+        delegate.uploadImages(images: images)
+        handleTapBackButton()
+    }
+    
+    private func uploadAssets(){
         let assets: [PHAsset] = selectedPhotos.values.map{return $0}
         delegate.uploadPhotos(assets: assets)
         handleTapBackButton()
