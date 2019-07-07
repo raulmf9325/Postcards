@@ -13,6 +13,12 @@ protocol ImagePickerDelegate{
     func uploadPhotos(assets: [PHAsset])
 }
 
+// image source
+enum Source{
+    case local
+    case instagram
+}
+
 class ImagePicker: UICollectionViewController {
     
     /*  Stored Properties
@@ -21,7 +27,10 @@ class ImagePicker: UICollectionViewController {
     // delegate
     var delegate: ImagePickerDelegate!
     
-    // photos
+ 
+    var source: Source = .local
+    
+    // local photos
     var photos: PHFetchResult<PHAsset>?{
         didSet{
             DispatchQueue.main.async {
@@ -29,6 +38,9 @@ class ImagePicker: UICollectionViewController {
             }
         }
     }
+    
+    // instagram images
+    var images = [URL]()
     
     // selected photos
     var selectedPhotos = [Int : PHAsset]()
@@ -114,6 +126,15 @@ class ImagePicker: UICollectionViewController {
         addWallpaper()
         addNavigationBar()
         
+        if source == .local {fetchLocalPhotos()}
+        else {fetchInstagramImages()}
+    }
+    
+    private func fetchInstagramImages(){
+        
+    }
+    
+    private func fetchLocalPhotos(){
         // Load Photos
         PHPhotoLibrary.requestAuthorization { (status) in
             switch status {
@@ -129,7 +150,6 @@ class ImagePicker: UICollectionViewController {
                 print("Not determined yet")
             }
         }
-        
     }
     
     @objc private func handleTapBackButton(){
@@ -192,7 +212,8 @@ class ImagePicker: UICollectionViewController {
 
 extension ImagePicker: UICollectionViewDelegateFlowLayout{
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos?.count ?? 0
+        let count = (source == .local) ? (photos?.count ?? 0) : images.count
+        return count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -73,14 +73,30 @@ class AlbumDetails: PinterestPage{
     }
     
     @objc private func handleTapUploadButton(){
-        let imagePicker = ImagePicker(collectionViewLayout: UICollectionViewFlowLayout())
-        let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
+        let alert = UIAlertController(title: "Where do you want to pull the pictures from?", message: "You can upload your pictures from the camera roll, or pull images from Instagram", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera Roll", style: .default, handler: { (_) in
+            self.presentImagePickerWithSource(source: .local)
+        }))
+        alert.addAction(UIAlertAction(title: "Instagram", style: .default, handler: { (_) in
+            self.presentImagePickerWithSource(source: .instagram)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (_) in
+            return
+        }))
         
-        let rootController = delegate as! RootController
-        imagePicker.navigationDelegate = rootController
-        imagePicker.delegate = self
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func presentImagePickerWithSource(source: Source){
+                let imagePicker = ImagePicker(collectionViewLayout: UICollectionViewFlowLayout())
+                let selectedFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
         
-        rootController.pushController(selectedFrame: selectedFrame, vc: imagePicker)
+                let rootController = delegate as! RootController
+                imagePicker.navigationDelegate = rootController
+                imagePicker.delegate = self
+                imagePicker.source = source
+        
+                rootController.pushController(selectedFrame: selectedFrame, vc: imagePicker)
     }
     
     @objc private func handleTapBackButton(){
