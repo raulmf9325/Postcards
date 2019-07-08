@@ -169,7 +169,7 @@ extension PinterestPage: UICollectionViewDelegateFlowLayout{
     
 }
 
-extension PinterestPage: DeleteDelegate{
+extension PinterestPage: ModifiedAlbumDelegate{
     func postcardWasDeleted(postcards: [postcard]) {
         postcards.forEach { (postcard) in
             self.postcards.removeAll { (localPostcard) -> Bool in
@@ -182,6 +182,11 @@ extension PinterestPage: DeleteDelegate{
             headSubtitle = "\(self.postcards.count) postcards"
             setHeaderTitle()
         }
+        collectionView.reloadData()
+    }
+    
+    func postcardWasAdded(postcards: [postcard]){
+        self.postcards = postcards
         collectionView.reloadData()
     }
     

@@ -280,6 +280,7 @@ extension AlbumDetails: ImagePickerDelegate{
     }
 }
 
-protocol DeleteDelegate{
+protocol ModifiedAlbumDelegate{
     func postcardWasDeleted(postcards: [postcard])
+    func postcardWasAdded(postcards: [postcard])
 }

@@ -12,7 +12,7 @@ import Firebase
 class LocationsPage: BasePage{
     
     // delete delegate
-    var deleteDelegate: DeleteDelegate!
+    var deleteDelegate: ModifiedAlbumDelegate!
     
     var albums: [Album]?{
         didSet{
@@ -118,6 +118,14 @@ extension LocationsPage{
             }
         }
         self.albums = collections
+        var postcards = [postcard]()
+        collections.forEach { (collection) in
+            if let albumPostcards = collection.postcards{
+                postcards.append(contentsOf: albumPostcards)
+            }
+        }
+        
+        deleteDelegate.postcardWasAdded(postcards: postcards)
     }
     
     func albumWasDeleted(album: Album){

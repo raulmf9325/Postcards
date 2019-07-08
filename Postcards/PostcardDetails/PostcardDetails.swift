@@ -18,7 +18,7 @@ class PostcardDetails: UIViewController{
     var likeDelegate: LikeDelegate?
     
     // delete delegate
-    var deleteDelegate: DeleteDelegate!
+    var deleteDelegate: ModifiedAlbumDelegate!
     
     // remove delegate
     var locationsPage: LocationsPage!
