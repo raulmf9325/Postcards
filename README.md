@@ -12,4 +12,4 @@ A photos app that implements:
 - Favorite and unfavorite photos, custom albums and more
 
 ## Demo
-![](postacards.gif)
+![](postcards.gif)
