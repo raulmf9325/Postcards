@@ -135,7 +135,7 @@ class PostcardDetails: UIViewController{
     }
     
     private func addTrashButton(){
-        if pagePostcard?.albumName == "Alaska" || pagePostcard?.albumName == "Iceland" || pagePostcard?.albumName == "Norway" {return}
+//        if pagePostcard?.albumName == "Alaska" || pagePostcard?.albumName == "Camaguey" {return}
         Header.addSubview(trashButton)
         trashButton.rightAnchor == likeButton.leftAnchor - 25
         trashButton.bottomAnchor == likeButton.bottomAnchor
@@ -206,7 +206,7 @@ class PostcardDetails: UIViewController{
             var dictionary = dictionary
             guard let albumName = self.pagePostcard?.albumName else {return}
             guard let imageName = self.pagePostcard?.imageName else {return}
-            let path = (albumName == "Alaska" || albumName == "Iceland" || albumName == "Norway") ? "postcards/\(imageName)" : "users/\(user)/\(imageName)"
+            let path = (albumName == "Alaska" || albumName == "Camaguey") ? "postcards/\(imageName)" : "users/\(user)/\(imageName)"
             let newEntry = ["album": albumName, "name": imageName, "path": path]
             dictionary[imageName] = newEntry
             doc.setData(dictionary)
